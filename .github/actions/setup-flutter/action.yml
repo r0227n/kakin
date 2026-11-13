@@ -1,0 +1,17 @@
+name: "Setup Flutter"
+description: "Resolve the workspace with the SDK installed by mise"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache pub dependencies
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+      with:
+        path: ~/.pub-cache
+        key: pub-${{ runner.os }}-${{ hashFiles('pubspec.lock') }}
+        restore-keys: |
+          pub-${{ runner.os }}-
+
+    - name: Install workspace dependencies
+      shell: bash
+      run: flutter pub get --enforce-lockfile

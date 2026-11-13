@@ -1,0 +1,63 @@
+[tools]
+flutter = "3.44.6"
+dprint = "0.49.0"
+
+[tasks.setup]
+description = "Install workspace dependencies and generate source"
+run = """
+flutter pub get
+dart run melos run gen
+"""
+
+[tasks.dev]
+description = "Generate and validate the workspace"
+run = """
+dart run melos run gen
+mise run quality
+"""
+
+[tasks.quality]
+description = "Check formatting, analysis, translations, and tests"
+run = """
+dart run melos run ci:format
+dart run melos run analyze
+dart run melos run analyze:slang
+dart run melos run test
+mise run check:dprint
+"""
+
+[tasks.ci-check]
+description = "Run the same checks as CI without changing source"
+run = "mise run quality"
+
+[tasks.analyze]
+description = "Analyze all workspace packages"
+run = "dart run melos run analyze"
+
+[tasks.analyze-slang]
+description = "Validate translations"
+run = "dart run melos run analyze:slang"
+
+[tasks.test]
+description = "Test all workspace packages"
+run = "dart run melos run test"
+
+[tasks.skills]
+description = "Manage project skills with the Dart skills CLI"
+run = "dart run skills@1.0.4"
+dir = "{{config_root}}"
+
+[tasks.format]
+description = "Format source and documentation"
+run = """
+dart run melos run format
+mise run format:dprint
+"""
+
+[tasks."check:dprint"]
+description = "Check Markdown, YAML, TOML, and CSS formatting"
+run = "dprint check"
+
+[tasks."format:dprint"]
+description = "Format Markdown, YAML, TOML, and CSS"
+run = "dprint fmt"

@@ -1,0 +1,46 @@
+name: PR Check
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+concurrency:
+  group: check-pr-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Generate, analyze, test, and format
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+
+      - name: Setup mise
+        uses: jdx/mise-action@146a28175021df8ca24f8ee1828cc2a60f980bd5 # v3.5.1
+        with:
+          install: true
+          cache: true
+
+      - name: Setup Flutter
+        uses: ./.github/actions/setup-flutter
+
+      - name: Generate source
+        run: |
+          dart run melos run gen
+          dart run melos run gen:slang
+
+      - name: Verify committed generated source
+        run: |
+          git diff --exit-code -- app/lib packages/design_system/lib
+          test -z "$(git ls-files --others --exclude-standard app/lib packages/design_system/lib)"
+
+      - name: Run workspace checks
+        run: mise run quality
+
+      - name: Build web starter
+        working-directory: app
+        run: flutter build web --no-pub --dart-define-from-file=.dart_define/sample.json

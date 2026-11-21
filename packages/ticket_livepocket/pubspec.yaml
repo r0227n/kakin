@@ -1,0 +1,17 @@
+name: ticket_livepocket
+description: Extracts ticket event information from LivePocket emails.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+resolution: workspace
+
+dependencies:
+  ticket_platform_interface:
+    path: ../ticket_platform_interface
+
+dev_dependencies:
+  test: ^1.25.0
+  very_good_analysis: ^10.1.0

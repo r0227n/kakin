@@ -53,3 +53,5 @@ node_modules/
 
 # Test results
 **/test-report.json
+
+.claude/settings.local.json

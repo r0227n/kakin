@@ -1,0 +1,25 @@
+name: gmail_ticket_cli
+description: Gmail からチケットサービスのメールを取得し公演情報の抽出を確認する CLI.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+resolution: workspace
+
+dependencies:
+  args: ^2.7.0
+  googleapis: ^19.0.0
+  googleapis_auth: ^2.3.7
+  http: ^1.2.2
+  ticket_eplus:
+    path: ../../packages/ticket_eplus
+  ticket_livepocket:
+    path: ../../packages/ticket_livepocket
+  ticket_platform_interface:
+    path: ../../packages/ticket_platform_interface
+
+dev_dependencies:
+  test: ^1.25.0
+  very_good_analysis: ^10.1.0

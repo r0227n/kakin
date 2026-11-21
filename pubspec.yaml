@@ -12,6 +12,10 @@ dev_dependencies:
 workspace:
   - app
   - packages/design_system
+  - packages/ticket_platform_interface
+  - packages/ticket_eplus
+  - packages/ticket_livepocket
+  - clis/gmail_ticket_cli
 
 melos:
   name: flutter_template_project
@@ -47,7 +51,15 @@ melos:
 
     test:
       description: Run all workspace tests
-      run: dart run melos exec --fail-fast --concurrency=1 --dir-exists=test -- "flutter test"
+      run: dart run melos exec --fail-fast --concurrency=1 --dir-exists=test --flutter -- "flutter test"
+
+    test:dart:
+      description: Run tests of pure Dart packages
+      run: dart run melos exec --fail-fast --concurrency=1 --dir-exists=test --no-flutter -- "dart test"
+
+    cli:gmail_ticket:
+      description: Run the gmail_ticket_cli with the given arguments
+      run: dart run melos exec --scope=gmail_ticket_cli -- "dart run bin/gmail_ticket_cli.dart"
 
   environment:
     sdk: ">=3.12.0 <4.0.0"

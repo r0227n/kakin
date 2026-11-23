@@ -43,45 +43,27 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen>
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
-          key: AppKeys.settingsScroll,
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.m,
-            AppSpacing.ml,
-            AppSpacing.m,
-            AppSpacing.xl,
-          ),
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: AppSpacing.xs,
-                bottom: AppSpacing.ml - 2,
-              ),
-              child: Semantics(
-                header: true,
-                child: Text(
-                  t.tabs.settings,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-            const GmailReauthBanner(),
-            const BudgetSettings(),
-            const SizedBox(height: AppSpacing.l),
-            const GmailSettings(),
-            const SizedBox(height: AppSpacing.l),
-            const ReminderSettings(),
-            const SizedBox(height: AppSpacing.l),
-            const DisplaySettings(),
-            const SizedBox(height: AppSpacing.l),
-            const DefaultBasisSettings(),
-          ],
+      appBar: AppBar(title: Text(t.tabs.settings)),
+      body: ListView(
+        key: AppKeys.settingsScroll,
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.m,
+          AppSpacing.s,
+          AppSpacing.m,
+          AppSpacing.xl,
         ),
+        children: const [
+          GmailReauthBanner(),
+          BudgetSettings(),
+          SizedBox(height: AppSpacing.l),
+          GmailSettings(),
+          SizedBox(height: AppSpacing.l),
+          ReminderSettings(),
+          SizedBox(height: AppSpacing.l),
+          DisplaySettings(),
+          SizedBox(height: AppSpacing.l),
+          DefaultBasisSettings(),
+        ],
       ),
     );
   }

@@ -81,136 +81,119 @@ class _UpcomingScreenState extends ConsumerState<UpcomingScreen>
     final value = overview.value;
     final change = _lastChange;
     return Scaffold(
-      body: SafeArea(
-        bottom: false,
-        child: ListView(
-          key: AppKeys.upcomingScroll,
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.m,
-            AppSpacing.ml,
-            AppSpacing.m,
-            AppSpacing.l,
+      appBar: AppBar(
+        title: Text(t.tabs.upcoming),
+        actions: [
+          FilledButton.icon(
+            key: AppKeys.addApplication,
+            style: FilledButton.styleFrom(
+              minimumSize: const Size(0, 40),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm + 2,
+              ),
+              shape: const StadiumBorder(),
+              textStyle: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            onPressed: () =>
+                const NewTicketApplicationRoute().push<void>(context),
+            icon: const Icon(Icons.add, size: 18),
+            label: Text(t.upcoming.addApplication),
           ),
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: AppSpacing.xs),
-                    child: Semantics(
-                      header: true,
-                      child: Text(
-                        t.tabs.upcoming,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
-                        ),
+          const SizedBox(width: AppSpacing.s),
+        ],
+      ),
+      body: ListView(
+        key: AppKeys.upcomingScroll,
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.m,
+          AppSpacing.s,
+          AppSpacing.m,
+          AppSpacing.l,
+        ),
+        children: [
+          if (permission == NotificationPermission.denied) ...[
+            SurfaceCard(
+              key: AppKeys.notificationsDenied,
+              color: palette.warningSoft,
+              border: Border.all(color: palette.warningBorder),
+              padding: const EdgeInsets.all(AppSpacing.sm),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                spacing: AppSpacing.s,
+                children: [
+                  Icon(
+                    Icons.notifications_off_outlined,
+                    size: 18,
+                    color: palette.warningInk,
+                  ),
+                  Expanded(
+                    child: Text(
+                      t.upcoming.notificationsDenied,
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1.5,
+                        color: palette.warningInk,
                       ),
                     ),
                   ),
-                ),
-                FilledButton.icon(
-                  key: AppKeys.addApplication,
-                  style: FilledButton.styleFrom(
-                    minimumSize: const Size(0, 40),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.sm + 2,
-                    ),
-                    shape: const StadiumBorder(),
-                    textStyle: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  onPressed: () =>
-                      const NewTicketApplicationRoute().push<void>(context),
-                  icon: const Icon(Icons.add, size: 18),
-                  label: Text(t.upcoming.addApplication),
-                ),
-              ],
+                ],
+              ),
             ),
             const SizedBox(height: AppSpacing.ml - 2),
-            if (permission == NotificationPermission.denied) ...[
-              SurfaceCard(
-                key: AppKeys.notificationsDenied,
-                color: palette.warningSoft,
-                border: Border.all(color: palette.warningBorder),
-                padding: const EdgeInsets.all(AppSpacing.sm),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  spacing: AppSpacing.s,
-                  children: [
-                    Icon(
-                      Icons.notifications_off_outlined,
-                      size: 18,
-                      color: palette.warningInk,
-                    ),
-                    Expanded(
-                      child: Text(
-                        t.upcoming.notificationsDenied,
-                        style: TextStyle(
-                          fontSize: 12,
-                          height: 1.5,
-                          color: palette.warningInk,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+          ],
+          SectionHeader(
+            title: t.upcoming.todo,
+            trailing: Text(
+              t.upcoming.todoOrder,
+              style: TextStyle(fontSize: 12, color: palette.textSecondary),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.s),
+          if (change != null) ...[
+            _UndoBanner(
+              text: t.upcoming.stageChanged(
+                title: change.performanceTitle,
+                stage: change.to.label(t),
               ),
-              const SizedBox(height: AppSpacing.ml - 2),
-            ],
-            SectionHeader(
-              title: t.upcoming.todo,
-              trailing: Text(
-                t.upcoming.todoOrder,
-                style: TextStyle(fontSize: 12, color: palette.textSecondary),
-              ),
+              onUndo: _undo,
             ),
             const SizedBox(height: AppSpacing.s),
-            if (change != null) ...[
-              _UndoBanner(
-                text: t.upcoming.stageChanged(
-                  title: change.performanceTitle,
-                  stage: change.to.label(t),
+          ],
+          if (value == null)
+            const Padding(
+              padding: EdgeInsets.all(AppSpacing.l),
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else ...[
+            if (value.todos.isEmpty)
+              SurfaceCard(
+                padding: const EdgeInsets.all(AppSpacing.sm + 2),
+                child: Text(
+                  t.upcoming.noTodo,
+                  key: AppKeys.noTodo,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: palette.textSecondary,
+                  ),
                 ),
-                onUndo: _undo,
+              ),
+            for (final todo in value.todos) ...[
+              TodoCard(
+                todo: todo,
+                now: ref.read(clockProvider).now(),
+                onAction: (action) => _advance(todo, action),
               ),
               const SizedBox(height: AppSpacing.s),
             ],
-            if (value == null)
-              const Padding(
-                padding: EdgeInsets.all(AppSpacing.l),
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else ...[
-              if (value.todos.isEmpty)
-                SurfaceCard(
-                  padding: const EdgeInsets.all(AppSpacing.sm + 2),
-                  child: Text(
-                    t.upcoming.noTodo,
-                    key: AppKeys.noTodo,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: palette.textSecondary,
-                    ),
-                  ),
-                ),
-              for (final todo in value.todos) ...[
-                TodoCard(
-                  todo: todo,
-                  now: ref.read(clockProvider).now(),
-                  onAction: (action) => _advance(todo, action),
-                ),
-                const SizedBox(height: AppSpacing.s),
-              ],
-              const SizedBox(height: AppSpacing.sm),
-              SectionHeader(title: t.upcoming.performances),
-              const SizedBox(height: AppSpacing.s + 2),
-              UpcomingPerformanceList(performances: value.performances),
-            ],
+            const SizedBox(height: AppSpacing.sm),
+            SectionHeader(title: t.upcoming.performances),
+            const SizedBox(height: AppSpacing.s + 2),
+            UpcomingPerformanceList(performances: value.performances),
           ],
-        ),
+        ],
       ),
     );
   }

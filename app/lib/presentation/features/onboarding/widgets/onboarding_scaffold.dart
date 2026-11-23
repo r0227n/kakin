@@ -27,8 +27,21 @@ class OnboardingScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final palette = context.palette;
+    final step = this.step;
     return Scaffold(
+      appBar: step == null
+          ? null
+          : AppBar(
+              automaticallyImplyLeading: false,
+              leading: onBack == null
+                  ? null
+                  : IconButton(
+                      tooltip: Translations.of(context).common.back,
+                      onPressed: onBack,
+                      icon: const Icon(Icons.chevron_left),
+                    ),
+              title: _StepProgress(step: step),
+            ),
       body: SafeArea(
         child: LayoutBuilder(
           builder: (context, constraints) => SingleChildScrollView(
@@ -47,41 +60,6 @@ class OnboardingScaffold extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   spacing: AppSpacing.l,
                   children: [
-                    if (step != null)
-                      SizedBox(
-                        height: 44,
-                        child: Row(
-                          children: [
-                            if (onBack != null)
-                              IconButton(
-                                tooltip: Translations.of(context).common.back,
-                                onPressed: onBack,
-                                icon: const Icon(Icons.chevron_left),
-                              ),
-                            const Spacer(),
-                            ExcludeSemantics(
-                              child: Row(
-                                spacing: 6,
-                                children: [
-                                  for (var i = 0; i < 2; i++)
-                                    Container(
-                                      width: 24,
-                                      height: 6,
-                                      decoration: BoxDecoration(
-                                        color: i <= step!
-                                            ? palette.accent
-                                            : palette.border,
-                                        borderRadius: BorderRadius.circular(3),
-                                      ),
-                                    ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            if (onBack != null) const SizedBox(width: 48),
-                          ],
-                        ),
-                      ),
                     ...children,
                     const Spacer(),
                     Column(
@@ -95,6 +73,35 @@ class OnboardingScaffold extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// 2段階のうち [step] までを塗った進捗。
+class _StepProgress extends StatelessWidget {
+  const _StepProgress({required this.step});
+
+  final int step;
+
+  @override
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    return ExcludeSemantics(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        spacing: 6,
+        children: [
+          for (var i = 0; i < 2; i++)
+            Container(
+              width: 24,
+              height: 6,
+              decoration: BoxDecoration(
+                color: i <= step ? palette.accent : palette.border,
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+        ],
       ),
     );
   }

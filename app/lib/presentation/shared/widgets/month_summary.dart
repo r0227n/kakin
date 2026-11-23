@@ -12,10 +12,13 @@ import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// 月の移動と計上基準の切り替え。カレンダーとリストの上部に置く。
-class MonthHeader extends ConsumerWidget {
+/// 表示中の月と前後の月への移動。カレンダーとリストの [AppBar]。
+class MonthAppBar extends ConsumerWidget implements PreferredSizeWidget {
   /// 表示中の月は [LedgerViewController] が所有する。
-  const MonthHeader({super.key});
+  const MonthAppBar({super.key});
+
+  @override
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,56 +26,67 @@ class MonthHeader extends ConsumerWidget {
     final view = ref.watch(ledgerViewControllerProvider);
     final controller = ref.read(ledgerViewControllerProvider.notifier);
     final title = KakinFormats.yearMonth(view.month.year, view.month.month);
-    return Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      runSpacing: AppSpacing.xs,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              key: AppKeys.monthPrevious,
-              tooltip: t.calendar.previousMonth,
-              onPressed: controller.showPreviousMonth,
-              icon: const Icon(Icons.chevron_left),
-            ),
-            Flexible(
-              child: Semantics(
-                header: true,
-                liveRegion: true,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    title,
-                    key: AppKeys.monthTitle,
-                    style: AppTypography.numeric(
-                      fontSize: 19,
-                      fontWeight: FontWeight.w700,
-                    ),
+    return AppBar(
+      title: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            key: AppKeys.monthPrevious,
+            tooltip: t.calendar.previousMonth,
+            onPressed: controller.showPreviousMonth,
+            icon: const Icon(Icons.chevron_left),
+          ),
+          Flexible(
+            child: Semantics(
+              liveRegion: true,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  title,
+                  key: AppKeys.monthTitle,
+                  style: AppTypography.numeric(
+                    fontSize: 19,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
             ),
-            IconButton(
-              key: AppKeys.monthNext,
-              tooltip: t.calendar.nextMonth,
-              onPressed: controller.showNextMonth,
-              icon: const Icon(Icons.chevron_right),
-            ),
-          ],
-        ),
-        SegmentToggle<AccountingBasis>(
-          key: AppKeys.basisToggle,
-          semanticLabel: t.basis.label,
-          value: view.basis,
-          options: {
-            AccountingBasis.paidOn: t.basis.paidOn,
-            AccountingBasis.performanceDate: t.basis.performanceDate,
-          },
-          onChanged: controller.setBasis,
-        ),
-      ],
+          ),
+          IconButton(
+            key: AppKeys.monthNext,
+            tooltip: t.calendar.nextMonth,
+            onPressed: controller.showNextMonth,
+            icon: const Icon(Icons.chevron_right),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 計上基準の切り替え。カレンダーとリストの本文の先頭に置く。
+class BasisToggle extends ConsumerWidget {
+  /// 計上基準は [LedgerViewController] が所有する。
+  const BasisToggle({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final t = Translations.of(context);
+    final basis = ref.watch(
+      ledgerViewControllerProvider.select((view) => view.basis),
+    );
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: SegmentToggle<AccountingBasis>(
+        key: AppKeys.basisToggle,
+        semanticLabel: t.basis.label,
+        value: basis,
+        options: {
+          AccountingBasis.paidOn: t.basis.paidOn,
+          AccountingBasis.performanceDate: t.basis.performanceDate,
+        },
+        onChanged: ref.read(ledgerViewControllerProvider.notifier).setBasis,
+      ),
     );
   }
 }

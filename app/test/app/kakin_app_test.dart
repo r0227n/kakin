@@ -95,8 +95,13 @@ void main() {
     await tester.ensureVisible(theme);
     await tester.pumpAndSettle();
     await tester.tap(
-      find.descendant(of: theme, matching: find.text('ダーク')),
+      find.descendant(
+        of: theme,
+        matching: find.byType(DropdownButton<ThemeMode>),
+      ),
     );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(AppKeys.dropdownOption(ThemeMode.dark)));
     await _settle(tester);
     expect(test.preferences.getString('app.theme'), 'dark');
     expect(
@@ -104,7 +109,17 @@ void main() {
       ThemeMode.dark,
     );
 
-    await tester.tap(find.text('English'));
+    final language = find.byKey(AppKeys.settingsLanguage);
+    await tester.ensureVisible(language);
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.descendant(
+        of: language,
+        matching: find.byType(DropdownButton<AppLocale>),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(AppKeys.dropdownOption(AppLocale.en)));
     await _settle(tester);
     expect(test.preferences.getString('app.language'), 'en');
     expect(find.text('Settings'), findsWidgets);
@@ -177,7 +192,14 @@ void main() {
     final theme = find.byKey(AppKeys.settingsTheme);
     await tester.ensureVisible(theme);
     await tester.pumpAndSettle();
-    await tester.tap(find.descendant(of: theme, matching: find.text('ライト')));
+    await tester.tap(
+      find.descendant(
+        of: theme,
+        matching: find.byType(DropdownButton<ThemeMode>),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(AppKeys.dropdownOption(ThemeMode.light)));
     await tester.pump();
     final container = ProviderScope.containerOf(
       tester.element(find.byType(KakinApp)),

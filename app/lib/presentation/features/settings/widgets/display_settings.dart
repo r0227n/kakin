@@ -122,6 +122,7 @@ class DefaultBasisSettings extends ConsumerWidget {
   }
 }
 
+/// ラベルと、選択肢をドロップダウンで選ぶボタンの行。
 class _ChoiceRow<T> extends StatelessWidget {
   const _ChoiceRow({
     required this.label,
@@ -137,22 +138,66 @@ class _ChoiceRow<T> extends StatelessWidget {
   final ValueChanged<T> onChanged;
 
   @override
-  Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
-    child: Wrap(
-      alignment: WrapAlignment.spaceBetween,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      spacing: AppSpacing.s,
-      runSpacing: AppSpacing.s,
-      children: [
-        Text(label, style: const TextStyle(fontSize: 14)),
-        SegmentToggle<T>(
-          semanticLabel: label,
-          value: value,
-          options: options,
-          onChanged: onChanged,
-        ),
-      ],
-    ),
-  );
+  Widget build(BuildContext context) {
+    final palette = context.palette;
+    final entries = options.entries.toList();
+    const textStyle = TextStyle(fontSize: 14);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      child: Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        crossAxisAlignment: WrapCrossAlignment.center,
+        spacing: AppSpacing.s,
+        runSpacing: AppSpacing.s,
+        children: [
+          Text(label, style: textStyle),
+          Semantics(
+            label: label,
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border.all(color: palette.border),
+                borderRadius: BorderRadius.circular(AppRadius.m),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  left: AppSpacing.sm,
+                  right: AppSpacing.xs,
+                ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<T>(
+                    value: value,
+                    isDense: true,
+                    borderRadius: BorderRadius.circular(AppRadius.m),
+                    dropdownColor: palette.surface,
+                    style: textStyle.copyWith(color: palette.textPrimary),
+                    icon: Icon(
+                      Icons.expand_more,
+                      color: palette.textSecondary,
+                    ),
+                    onChanged: (selected) {
+                      if (selected != null && selected != value) {
+                        onChanged(selected);
+                      }
+                    },
+                    // ボタン側は key なしで描き、選択肢の key をメニューだけに置く。
+                    selectedItemBuilder: (context) => [
+                      for (final entry in entries) Text(entry.value),
+                    ],
+                    items: [
+                      for (final entry in entries)
+                        DropdownMenuItem<T>(
+                          key: AppKeys.dropdownOption(entry.key),
+                          value: entry.key,
+                          child: Text(entry.value),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

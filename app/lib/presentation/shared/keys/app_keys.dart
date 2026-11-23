@@ -111,6 +111,9 @@ abstract final class AppKeys {
   /// `delete_performance`。
   static const deletePerformance = Key('delete_performance');
 
+  /// ドロップダウンの選択肢。
+  static Key dropdownOption(Object? value) => ValueKey('dropdown_$value');
+
   /// `duplicate_badge_…`。
   static Key duplicateBadge(int expenseId) => Key('duplicate_badge_$expenseId');
 

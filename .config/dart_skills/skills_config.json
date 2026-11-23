@@ -295,6 +295,64 @@
             "path": "skills/melos-workspace-setup"
           }
         ]
+      },
+      "https://github.com/r0227n/marionette_agent": {
+        "skills": [
+          {
+            "name": "core",
+            "installedAt": "2026-11-23T10:19:47.519977Z",
+            "isInstalled": false,
+            "path": "skill-data/core"
+          },
+          {
+            "name": "simulator-verify",
+            "installedAt": "2026-11-23T10:19:47.519978Z",
+            "isInstalled": false,
+            "path": "skill-data/simulator-verify"
+          },
+          {
+            "name": "dogfood",
+            "installedAt": "2026-11-23T10:19:47.519978Z",
+            "isInstalled": false,
+            "path": "skill-data/dogfood"
+          },
+          {
+            "name": "marionette-agent",
+            "installedAt": "2026-11-23T10:19:47.522307Z",
+            "contentHash": "WyiP6zY/JWWkmKGYeTq0pQ==",
+            "path": "skills/marionette-agent"
+          }
+        ]
+      }
+    },
+    "claude": {
+      "https://github.com/r0227n/marionette_agent": {
+        "skills": [
+          {
+            "name": "core",
+            "installedAt": "2026-11-23T10:19:47.522398Z",
+            "isInstalled": false,
+            "path": "skill-data/core"
+          },
+          {
+            "name": "simulator-verify",
+            "installedAt": "2026-11-23T10:19:47.522398Z",
+            "isInstalled": false,
+            "path": "skill-data/simulator-verify"
+          },
+          {
+            "name": "dogfood",
+            "installedAt": "2026-11-23T10:19:47.522398Z",
+            "isInstalled": false,
+            "path": "skill-data/dogfood"
+          },
+          {
+            "name": "marionette-agent",
+            "installedAt": "2026-11-23T10:19:47.524955Z",
+            "contentHash": "S8+PsRQ7C0EGb2Uoa/nCCg==",
+            "path": "skills/marionette-agent"
+          }
+        ]
       }
     }
   },

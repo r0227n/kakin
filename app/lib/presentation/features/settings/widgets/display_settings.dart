@@ -143,7 +143,7 @@ class _ChoiceRow<T> extends StatelessWidget {
     final entries = options.entries.toList();
     const textStyle = TextStyle(fontSize: 14);
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Wrap(
         alignment: WrapAlignment.spaceBetween,
         crossAxisAlignment: WrapCrossAlignment.center,
@@ -153,46 +153,56 @@ class _ChoiceRow<T> extends StatelessWidget {
           Text(label, style: textStyle),
           Semantics(
             label: label,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border.all(color: palette.border),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<T>(
+                value: value,
+                alignment: AlignmentDirectional.centerEnd,
                 borderRadius: BorderRadius.circular(AppRadius.m),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: AppSpacing.sm,
-                  right: AppSpacing.xs,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<T>(
-                    value: value,
-                    isDense: true,
-                    borderRadius: BorderRadius.circular(AppRadius.m),
-                    dropdownColor: palette.surface,
-                    style: textStyle.copyWith(color: palette.textPrimary),
-                    icon: Icon(
-                      Icons.expand_more,
-                      color: palette.textSecondary,
-                    ),
-                    onChanged: (selected) {
-                      if (selected != null && selected != value) {
-                        onChanged(selected);
-                      }
-                    },
-                    // ボタン側は key なしで描き、選択肢の key をメニューだけに置く。
-                    selectedItemBuilder: (context) => [
-                      for (final entry in entries) Text(entry.value),
-                    ],
-                    items: [
-                      for (final entry in entries)
-                        DropdownMenuItem<T>(
-                          key: AppKeys.dropdownOption(entry.key),
-                          value: entry.key,
-                          child: Text(entry.value),
-                        ),
-                    ],
+                dropdownColor: palette.surface,
+                elevation: 4,
+                style: textStyle.copyWith(color: palette.textPrimary),
+                icon: Padding(
+                  padding: const EdgeInsets.only(left: AppSpacing.xxs),
+                  child: Icon(
+                    Icons.unfold_more,
+                    size: 18,
+                    color: palette.textSecondary,
                   ),
                 ),
+                onChanged: (selected) {
+                  if (selected != null && selected != value) {
+                    onChanged(selected);
+                  }
+                },
+                // ボタン側は key なしで描き、選択肢の key をメニューだけに置く。
+                selectedItemBuilder: (context) => [
+                  for (final entry in entries)
+                    Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Text(
+                        entry.value,
+                        style: textStyle.copyWith(
+                          color: palette.textSecondary,
+                        ),
+                      ),
+                    ),
+                ],
+                items: [
+                  for (final entry in entries)
+                    DropdownMenuItem<T>(
+                      key: AppKeys.dropdownOption(entry.key),
+                      value: entry.key,
+                      child: Text(
+                        entry.value,
+                        style: entry.key == value
+                            ? textStyle.copyWith(
+                                color: palette.accentStrong,
+                                fontWeight: FontWeight.w700,
+                              )
+                            : null,
+                      ),
+                    ),
+                ],
               ),
             ),
           ),

@@ -153,6 +153,32 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('tapping the amount field takes focus back from the note', (
+    tester,
+  ) async {
+    await pumpApp(tester, prefs: {'onboarding.completed': true});
+    await _tapKey(tester, AppKeys.addExpense);
+    await _settle(tester);
+    String? focused() => FocusManager.instance.primaryFocus?.debugLabel;
+    expect(focused(), 'amount', reason: 'focused when the editor opens');
+
+    await _tapKey(tester, AppKeys.expenseNote);
+    expect(focused(), isNot('amount'));
+    expect(tester.testTextInput.isVisible, isTrue);
+
+    await _tapKey(tester, AppKeys.expenseAmountField);
+    expect(focused(), 'amount');
+    expect(tester.testTextInput.isVisible, isFalse);
+
+    await _tapKey(tester, AppKeys.expenseNote);
+    await _tapKey(tester, AppKeys.keypad('5'));
+    expect(focused(), 'amount', reason: 'the keypad moves focus back');
+    expect(
+      tester.widget<Text>(find.byKey(AppKeys.expenseAmount)).data,
+      '¥5',
+    );
+  });
+
   testWidgets('a failed save keeps the previous value and reports once', (
     tester,
   ) async {

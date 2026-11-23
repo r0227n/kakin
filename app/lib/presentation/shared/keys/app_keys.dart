@@ -83,6 +83,9 @@ abstract final class AppKeys {
   /// `expense_amount`。
   static const expenseAmount = Key('expense_amount');
 
+  /// `expense_amount_field`。
+  static const expenseAmountField = Key('expense_amount_field');
+
   /// `expense_delete`。
   static const expenseDelete = Key('expense_delete');
 

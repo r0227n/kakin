@@ -5,6 +5,7 @@ import 'package:app/core/formatting/kakin_formats.dart';
 import 'package:app/core/gen/slang.g.dart';
 import 'package:app/domain/domain.dart';
 import 'package:app/presentation/dependencies/application_providers.dart';
+import 'package:app/presentation/features/expense_editor/widgets/amount_field.dart';
 import 'package:app/presentation/features/expense_editor/widgets/amount_keypad.dart';
 import 'package:app/presentation/features/expense_editor/widgets/category_grid.dart';
 import 'package:app/presentation/features/expense_editor/widgets/cheki_partner_rows.dart';
@@ -69,6 +70,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
   bool _drinkPrefilled = false;
   final _chekiCounts = <int, int>{};
   final _note = TextEditingController();
+  final _amountFocus = FocusNode(debugLabel: 'amount');
   Expense? _editing;
   bool _loading = false;
   bool _saving = false;
@@ -93,6 +95,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
   @override
   void dispose() {
     _note.dispose();
+    _amountFocus.dispose();
     super.dispose();
   }
 
@@ -155,6 +158,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
   }
 
   void _appendDigits(String digits) {
+    _amountFocus.requestFocus();
     final next = (_digits + digits).replaceFirst(RegExp('^0+'), '');
     if (next.length > _maxDigits) return;
     setState(() {
@@ -164,6 +168,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
   }
 
   void _backspace() {
+    _amountFocus.requestFocus();
     if (_digits.isEmpty) return;
     setState(() {
       _digits = _digits.substring(0, _digits.length - 1);
@@ -405,22 +410,14 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
                 color: palette.textSecondary,
               ),
             ),
-            Semantics(
-              liveRegion: true,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  KakinFormats.yen(amount),
-                  key: AppKeys.expenseAmount,
-                  style: AppTypography.numeric(
-                    fontSize: isCheki ? 30 : 44,
-                    fontWeight: FontWeight.w700,
-                    color: _amount == null ? palette.textDisabled : null,
-                    height: 1.1,
-                  ),
-                ),
-              ),
+            AmountField(
+              text: KakinFormats.yen(amount),
+              isEmpty: _amount == null,
+              fontSize: isCheki ? 30 : 44,
+              label: isCheki ? t.expense.unitPrice : t.expense.amount,
+              focusNode: _amountFocus,
+              onDigits: _appendDigits,
+              onBackspace: _backspace,
             ),
             if (hint != null)
               Text(
@@ -440,10 +437,13 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
                       ),
-                      onPressed: () => setState(() {
-                        _digits = '$preset';
-                        _drinkPrefilled = false;
-                      }),
+                      onPressed: () {
+                        _amountFocus.requestFocus();
+                        setState(() {
+                          _digits = '$preset';
+                          _drinkPrefilled = false;
+                        });
+                      },
                     ),
                 ],
               ),

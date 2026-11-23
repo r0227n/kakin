@@ -1,0 +1,154 @@
+import 'package:app/domain/domain.dart';
+
+/// Gmail のメールの種類。
+enum TicketMailKind {
+  /// 申込受付。
+  application,
+
+  /// 当選。
+  win,
+
+  /// 落選。
+  lose,
+
+  /// 決済完了。
+  payment;
+
+  /// このメールで進める申込段階。
+  TicketApplicationStage get targetStage => switch (this) {
+    application => TicketApplicationStage.awaitingResult,
+    win => TicketApplicationStage.awaitingPayment,
+    lose => TicketApplicationStage.lost,
+    payment => TicketApplicationStage.secured,
+  };
+}
+
+/// 公演情報を読み取れたチケットサービスのメール。本文は持たない。
+final class TicketMail {
+  /// 読み取った値を保持する。
+  const TicketMail({
+    required this.messageId,
+    required this.receivedAt,
+    required this.subject,
+    required this.service,
+    required this.kind,
+    required this.title,
+    required this.startsAt,
+    this.venue,
+    this.priceYen,
+    this.referenceNo,
+    this.resultAt,
+    this.paymentDeadlineAt,
+  });
+
+  /// Gmail のメッセージ ID。
+  final String messageId;
+
+  /// Gmail の受信日時（UTC）。
+  final DateTime receivedAt;
+
+  /// 件名。
+  final String subject;
+
+  /// チケットサービス（eplus かライブポケット）。
+  final TicketServiceKind service;
+
+  /// メールの種類。
+  final TicketMailKind kind;
+
+  /// 公演名。
+  final String title;
+
+  /// 公演の開始日時（UTC）。
+  final DateTime startsAt;
+
+  /// 会場名。
+  final String? venue;
+
+  /// 支払った金額。決済完了メールだけが持つ。
+  final int? priceYen;
+
+  /// 受付番号。
+  final String? referenceNo;
+
+  /// 当落発表日時。
+  final DateTime? resultAt;
+
+  /// 入金期限。
+  final DateTime? paymentDeadlineAt;
+}
+
+/// 同期の失敗の種類。
+enum GmailFailureKind {
+  /// 認証の期限切れなどで再連携が必要。
+  reauthRequired,
+
+  /// それ以外の失敗。
+  other,
+}
+
+/// Gmail 連携の状態。
+final class GmailConnection {
+  /// 保存済みの同期状態。
+  const GmailConnection({
+    required this.accountEmail,
+    required this.connectedAt,
+    this.lastFetchedAt,
+    this.lastMessageReceivedAt,
+    this.lastFailedAt,
+    this.lastFailureKind,
+  });
+
+  /// 連携したアカウント。
+  final String accountEmail;
+
+  /// 連携した日時。初回同期の取得範囲の基準。
+  final DateTime connectedAt;
+
+  /// 最後に同期が成功した日時。
+  final DateTime? lastFetchedAt;
+
+  /// 取り込んだメールの受信日時の最大値。
+  final DateTime? lastMessageReceivedAt;
+
+  /// 最後に同期が失敗した日時。成功すると null に戻る。
+  final DateTime? lastFailedAt;
+
+  /// 最後の失敗の種類。
+  final GmailFailureKind? lastFailureKind;
+
+  /// 次の同期で取得するメールの受信日時の下限。
+  DateTime get fetchAfter {
+    final watermark = lastMessageReceivedAt;
+    if (watermark != null) return watermark.subtract(const Duration(days: 3));
+    final c = connectedAt.toUtc();
+    return DateTime.utc(c.year, c.month - 3, c.day, c.hour, c.minute);
+  }
+}
+
+/// Gmail 連携の表示用の状態。
+final class GmailStatus {
+  /// 連携先の種類と連携の状態を持つ。
+  const GmailStatus({required this.isDemo, this.connection});
+
+  /// モックデータで動いているか。
+  final bool isDemo;
+
+  /// 連携の状態。未連携なら null。
+  final GmailConnection? connection;
+}
+
+/// 1回の同期の結果。
+final class GmailSyncResult {
+  /// 取り込んだ件数を持つ。
+  const GmailSyncResult({
+    required this.importedMailCount,
+    required this.createdExpenseCount,
+  });
+
+  /// 取り込んだメールの数。
+  final int importedMailCount;
+
+  /// 登録したチケット代の数。
+  final int createdExpenseCount;
+}

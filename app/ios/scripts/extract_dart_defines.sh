@@ -7,7 +7,7 @@ output_file="${SRCROOT}/Flutter/DartDefines.xcconfig"
 {
   echo "APP_ID=com.example.app"
   echo "APP_ID_SUFFIX="
-  echo "APP_NAME=Flutter Template"
+  echo "APP_NAME=Kakin"
 } >"${output_file}"
 
 decode_base64() {

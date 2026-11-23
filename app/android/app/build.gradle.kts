@@ -21,11 +21,12 @@ val dartDefines = if (project.hasProperty("dart-defines")) {
 }
 
 val appId = dartDefines["APP_ID"] ?: "com.example.app"
-val appName = dartDefines["APP_NAME"] ?: "Flutter Template"
+val appName = dartDefines["APP_NAME"] ?: "Kakin"
 
 android {
     namespace = "com.example.app"
-    compileSdk = flutter.compileSdkVersion
+    // flutter_local_notifications 23 は compileSdk 37 以上を求める。
+    compileSdk = maxOf(flutter.compileSdkVersion, 37)
     ndkVersion = flutter.ndkVersion
 
     buildFeatures {
@@ -33,6 +34,8 @@ android {
     }
 
     compileOptions {
+        // 予約通知の後方互換のため flutter_local_notifications が desugaring を求める。
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -53,6 +56,13 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         resValue("string", "app_name", appName)
+        // Patrol の E2E は各テストの前にアプリのデータを消して独立させる。
+        testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    }
+
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     buildTypes {
@@ -72,4 +82,9 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    androidTestUtil("androidx.test:orchestrator:1.5.1")
 }

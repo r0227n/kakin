@@ -24,6 +24,10 @@
 	<string>????</string>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>NSCameraUsageDescription</key>
+	<string>チェキ相手のアイコンにする写真を撮影します。</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>チェキ相手のアイコンにする画像を選びます。</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIApplicationSceneManifest</key>

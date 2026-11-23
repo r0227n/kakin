@@ -1,4 +1,14 @@
 import 'package:app/app/bootstrap.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
+import 'package:marionette_flutter/marionette_flutter.dart';
 
-/// アプリの初期化を composition root へ委譲する。
-Future<void> main() => bootstrap();
+/// 開発中は Marionette で操作できる binding を使い、初期化を委譲する。
+Future<void> main() async {
+  if (kDebugMode) {
+    MarionetteBinding.ensureInitialized();
+  } else {
+    WidgetsFlutterBinding.ensureInitialized();
+  }
+  await bootstrap();
+}

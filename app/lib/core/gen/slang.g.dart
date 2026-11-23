@@ -4,7 +4,7 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 32 (16 per locale)
+/// Strings: 676 (338 per locale)
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -129,11 +129,7 @@ extension BuildContextTranslationsExtension on BuildContext {
 /// Manages all translation instances and the current locale
 class LocaleSettings
     extends BaseFlutterLocaleSettings<AppLocale, Translations> {
-  LocaleSettings._()
-    : super(
-        utils: AppLocaleUtils.instance,
-        lazy: false,
-      );
+  LocaleSettings._() : super(utils: AppLocaleUtils.instance, lazy: false);
 
   static final instance = LocaleSettings._();
 
@@ -196,10 +192,7 @@ class LocaleSettings
 /// Provides utility functions without any side effects.
 class AppLocaleUtils extends BaseAppLocaleUtils<AppLocale, Translations> {
   AppLocaleUtils._()
-    : super(
-        baseLocale: AppLocale.ja,
-        locales: AppLocale.values,
-      );
+    : super(baseLocale: AppLocale.ja, locales: AppLocale.values);
 
   static final instance = AppLocaleUtils._();
 

@@ -45,7 +45,7 @@ final class AppPreferencesControllerProvider
 }
 
 String _$appPreferencesControllerHash() =>
-    r'678741168af9ad5b03089c03fa6ebeb703de0d5a';
+    r'92a01c9f4bfe742851418f9505e633129d99faa3';
 
 /// 設定変更を操作順に保存し、成功した値だけを画面へ公開する。
 

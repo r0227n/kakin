@@ -12,18 +12,24 @@ part of 'app_spacing_theme.dart';
 mixin _$AppSpacingTheme on ThemeExtension<AppSpacingTheme> {
   @override
   ThemeExtension<AppSpacingTheme> copyWith({
+    double? xxs,
     double? xs,
     double? s,
+    double? sm,
     double? m,
+    double? ml,
     double? l,
     double? xl,
   }) {
     final _this = (this as AppSpacingTheme);
 
     return AppSpacingTheme(
+      xxs: xxs ?? _this.xxs,
       xs: xs ?? _this.xs,
       s: s ?? _this.s,
+      sm: sm ?? _this.sm,
       m: m ?? _this.m,
+      ml: ml ?? _this.ml,
       l: l ?? _this.l,
       xl: xl ?? _this.xl,
     );
@@ -41,9 +47,12 @@ mixin _$AppSpacingTheme on ThemeExtension<AppSpacingTheme> {
     final _this = (this as AppSpacingTheme);
 
     return AppSpacingTheme(
+      xxs: lerpDouble$(_this.xxs, other.xxs, t)!,
       xs: lerpDouble$(_this.xs, other.xs, t)!,
       s: lerpDouble$(_this.s, other.s, t)!,
+      sm: lerpDouble$(_this.sm, other.sm, t)!,
       m: lerpDouble$(_this.m, other.m, t)!,
+      ml: lerpDouble$(_this.ml, other.ml, t)!,
       l: lerpDouble$(_this.l, other.l, t)!,
       xl: lerpDouble$(_this.xl, other.xl, t)!,
     );
@@ -62,9 +71,12 @@ mixin _$AppSpacingTheme on ThemeExtension<AppSpacingTheme> {
     final _this = (this as AppSpacingTheme);
     final _other = (other as AppSpacingTheme);
 
-    return _other.xs == _this.xs &&
+    return _other.xxs == _this.xxs &&
+        _other.xs == _this.xs &&
         _other.s == _this.s &&
+        _other.sm == _this.sm &&
         _other.m == _this.m &&
+        _other.ml == _this.ml &&
         _other.l == _this.l &&
         _other.xl == _this.xl;
   }
@@ -75,9 +87,12 @@ mixin _$AppSpacingTheme on ThemeExtension<AppSpacingTheme> {
 
     return Object.hash(
       runtimeType,
+      _this.xxs,
       _this.xs,
       _this.s,
+      _this.sm,
       _this.m,
+      _this.ml,
       _this.l,
       _this.xl,
     );

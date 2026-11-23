@@ -10,6 +10,8 @@ resolution: workspace
 
 dependencies:
   args: ^2.7.0
+  gmail_ticket_source:
+    path: ../../packages/gmail_ticket_source
   googleapis: ^19.0.0
   googleapis_auth: ^2.3.7
   http: ^1.2.2

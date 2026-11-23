@@ -1,0 +1,19 @@
+name: month_calendar
+description: 月単位のカレンダーグリッド。各日のセルの中身は利用側が builder で描く.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+  flutter: 3.44.6
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  very_good_analysis: ^10.1.0

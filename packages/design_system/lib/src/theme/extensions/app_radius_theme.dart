@@ -15,6 +15,9 @@ class AppRadiusTheme extends ThemeExtension<AppRadiusTheme>
   const AppRadiusTheme({
     this.xs = AppRadius.xs,
     this.s = AppRadius.s,
+    this.m = AppRadius.m,
+    this.l = AppRadius.l,
+    this.xl = AppRadius.xl,
   });
 
   /// Extra small radius.
@@ -22,4 +25,13 @@ class AppRadiusTheme extends ThemeExtension<AppRadiusTheme>
 
   /// Small radius.
   final double s;
+
+  /// Medium radius.
+  final double m;
+
+  /// Large radius.
+  final double l;
+
+  /// Extra large radius.
+  final double xl;
 }

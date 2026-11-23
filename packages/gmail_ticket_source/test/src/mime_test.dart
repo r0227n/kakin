@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:gmail_ticket_cli/src/mime.dart';
+import 'package:gmail_ticket_source/gmail_ticket_source.dart';
 import 'package:googleapis/gmail/v1.dart' as gmail;
 import 'package:test/test.dart';
 

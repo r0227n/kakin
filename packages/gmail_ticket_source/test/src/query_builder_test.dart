@@ -1,4 +1,4 @@
-import 'package:gmail_ticket_cli/src/query_builder.dart';
+import 'package:gmail_ticket_source/gmail_ticket_source.dart';
 import 'package:test/test.dart';
 import 'package:ticket_eplus/ticket_eplus.dart';
 import 'package:ticket_livepocket/ticket_livepocket.dart';

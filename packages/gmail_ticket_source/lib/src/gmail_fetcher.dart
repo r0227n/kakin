@@ -1,15 +1,25 @@
-import 'package:gmail_ticket_cli/src/mime.dart';
+import 'package:gmail_ticket_source/src/mime.dart';
 import 'package:googleapis/gmail/v1.dart' as gmail;
 
 /// 取得したメールの内容。
 class FetchedEmail {
   const FetchedEmail({
+    required this.id,
+    required this.receivedAt,
     required this.from,
     required this.subject,
     required this.date,
     required this.dateRaw,
     required this.bodyText,
   });
+
+  /// Gmail のメッセージ ID。取り込み済みメールの照合に使う。
+  final String id;
+
+  /// Gmail が受信した日時(internalDate)。取得できない場合は null。
+  ///
+  /// 送信者側の時計に依存しないため、同期の基準には Date ヘッダでなくこれを使う。
+  final DateTime? receivedAt;
 
   /// From ヘッダの値。
   final String from;
@@ -89,7 +99,12 @@ class GmailFetcher {
 
     final rawDate = header('date');
     final html = findHtml(payload);
+    final internalDate = int.tryParse(message.internalDate ?? '');
     return FetchedEmail(
+      id: message.id ?? '',
+      receivedAt: internalDate == null
+          ? null
+          : DateTime.fromMillisecondsSinceEpoch(internalDate, isUtc: true),
       from: header('from'),
       subject: decodeSubject(header('subject')),
       date: rawDate.isEmpty ? null : parseRfc2822Date(rawDate),

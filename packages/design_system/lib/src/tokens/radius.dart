@@ -7,4 +7,16 @@ final class AppRadius {
 
   /// Small radius (8px).
   static const double s = 8;
+
+  /// Medium radius (12px). Inputs and keys.
+  static const double m = 12;
+
+  /// Large radius (16px). Buttons and cards.
+  static const double l = 16;
+
+  /// Extra large radius (20px). Sections.
+  static const double xl = 20;
+
+  /// Fully rounded ends for chips.
+  static const double pill = 999;
 }

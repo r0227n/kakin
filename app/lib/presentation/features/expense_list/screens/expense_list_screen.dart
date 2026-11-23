@@ -7,7 +7,6 @@ import 'package:app/presentation/features/expense_list/widgets/compact_summary.d
 import 'package:app/presentation/features/expense_list/widgets/list_expense_row.dart';
 import 'package:app/presentation/navigation/routes.dart';
 import 'package:app/presentation/shared/controllers/app_preferences_controller.dart';
-import 'package:app/presentation/shared/controllers/gmail_refresh.dart';
 import 'package:app/presentation/shared/controllers/ledger_view_controller.dart';
 import 'package:app/presentation/shared/controllers/local_data.dart';
 import 'package:app/presentation/shared/keys/app_keys.dart';
@@ -51,84 +50,80 @@ class _ExpenseListScreenState extends ConsumerState<ExpenseListScreen> {
         onPressed: () => NewExpenseRoute(category: _filter).push<void>(context),
         child: const Icon(Icons.add, size: 28),
       ),
-      body: RefreshIndicator(
-        onRefresh: () => refreshFromGmail(context, ref),
-        child: CustomScrollView(
-          key: AppKeys.expenseListScroll,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
+      body: CustomScrollView(
+        key: AppKeys.expenseListScroll,
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.m,
+              AppSpacing.s,
+              AppSpacing.m,
+              0,
+            ),
+            sliver: SliverList.list(
+              children: [
+                const BasisToggle(),
+                const SizedBox(height: AppSpacing.s + 2),
+                if (value != null)
+                  CompactSummary(overview: value, hidden: hidden),
+                const SizedBox(height: AppSpacing.s + 2),
+              ],
+            ),
+          ),
+          SliverToBoxAdapter(
+            child: CategoryFilterBar(
+              selected: _filter,
+              totals: value?.spendByCategory ?? const {},
+              hidden: hidden,
+              onSelected: (category) => setState(() => _filter = category),
+            ),
+          ),
+          if (overview.hasError && value == null)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(child: Text(t.errors.recordStorage)),
+            )
+          else if (value == null)
+            const SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(child: CircularProgressIndicator()),
+            )
+          else if (groups.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.only(top: AppSpacing.l),
+                child: Text(
+                  _filter == null ? t.list.emptyMonth : t.list.emptyCategory,
+                  key: AppKeys.expenseListEmpty,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: palette.textSecondary,
+                  ),
+                ),
+              ),
+            )
+          else
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacing.m,
                 AppSpacing.s,
                 AppSpacing.m,
-                0,
+                96,
               ),
-              sliver: SliverList.list(
-                children: [
-                  const BasisToggle(),
-                  const SizedBox(height: AppSpacing.s + 2),
-                  if (value != null)
-                    CompactSummary(overview: value, hidden: hidden),
-                  const SizedBox(height: AppSpacing.s + 2),
-                ],
+              sliver: SliverList.separated(
+                itemCount: groups.length,
+                separatorBuilder: (_, _) =>
+                    const SizedBox(height: AppSpacing.sm + 2),
+                itemBuilder: (context, index) => _DaySection(
+                  group: groups[index],
+                  overview: value,
+                  hidden: hidden,
+                ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: CategoryFilterBar(
-                selected: _filter,
-                totals: value?.spendByCategory ?? const {},
-                hidden: hidden,
-                onSelected: (category) => setState(() => _filter = category),
-              ),
-            ),
-            if (overview.hasError && value == null)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: Text(t.errors.recordStorage)),
-              )
-            else if (value == null)
-              const SliverFillRemaining(
-                hasScrollBody: false,
-                child: Center(child: CircularProgressIndicator()),
-              )
-            else if (groups.isEmpty)
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: AppSpacing.l),
-                  child: Text(
-                    _filter == null ? t.list.emptyMonth : t.list.emptyCategory,
-                    key: AppKeys.expenseListEmpty,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: palette.textSecondary,
-                    ),
-                  ),
-                ),
-              )
-            else
-              SliverPadding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacing.m,
-                  AppSpacing.s,
-                  AppSpacing.m,
-                  96,
-                ),
-                sliver: SliverList.separated(
-                  itemCount: groups.length,
-                  separatorBuilder: (_, _) =>
-                      const SizedBox(height: AppSpacing.sm + 2),
-                  itemBuilder: (context, index) => _DaySection(
-                    group: groups[index],
-                    overview: value,
-                    hidden: hidden,
-                  ),
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

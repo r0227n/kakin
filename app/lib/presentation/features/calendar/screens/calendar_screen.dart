@@ -6,7 +6,6 @@ import 'package:app/presentation/features/calendar/widgets/calendar_day_cell.dar
 import 'package:app/presentation/features/calendar/widgets/day_records.dart';
 import 'package:app/presentation/navigation/routes.dart';
 import 'package:app/presentation/shared/controllers/app_preferences_controller.dart';
-import 'package:app/presentation/shared/controllers/gmail_refresh.dart';
 import 'package:app/presentation/shared/controllers/ledger_view_controller.dart';
 import 'package:app/presentation/shared/controllers/local_data.dart';
 import 'package:app/presentation/shared/keys/app_keys.dart';
@@ -58,84 +57,80 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
             NewExpenseRoute(date: selected.toIso()).push<void>(context),
         child: const Icon(Icons.add, size: 28),
       ),
-      body: RefreshIndicator(
-        onRefresh: () => refreshFromGmail(context, ref),
-        child: CustomScrollView(
-          key: AppKeys.calendarScroll,
-          physics: const AlwaysScrollableScrollPhysics(),
-          slivers: [
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(
-                AppSpacing.m,
-                AppSpacing.s,
-                AppSpacing.m,
-                AppSpacing.s + 2,
-              ),
-              sliver: SliverList.list(
-                children: [
-                  const BasisToggle(),
-                  const SizedBox(height: AppSpacing.s + 2),
-                  switch (overview) {
-                    AsyncData(:final value) => MonthSummaryCard(
-                      overview: value,
-                    ),
-                    AsyncError() => const _LoadFailed(),
-                    _ => const SizedBox(
-                      height: 160,
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                  },
-                  const SizedBox(height: AppSpacing.s + 2),
-                  Semantics(
-                    label: t.tabs.calendar,
-                    container: true,
-                    child: MonthCalendarGrid(
-                      key: AppKeys.monthCalendar,
-                      month: CalendarMonth(view.month.year, view.month.month),
-                      weekdayLabels: [weekdays[6], ...weekdays.take(6)],
-                      weekdayStyle: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                        color: palette.textSecondary,
-                      ),
-                      onSwipePrevious: controller.showPreviousMonth,
-                      onSwipeNext: controller.showNextMonth,
-                      dayBuilder: (context, day) {
-                        final date = LocalDate(
-                          view.month.year,
-                          view.month.month,
-                          day,
-                        );
-                        final value = overview.value;
-                        return CalendarDayCell(
-                          key: AppKeys.calendarDay(date),
-                          date: date,
-                          spendYen: value == null
-                              ? 0
-                              : _sum(value.expensesOn(date)),
-                          hasPerformance:
-                              value?.performancesOn(date).isNotEmpty ?? false,
-                          isSelected: date == selected,
-                          isToday: date == today,
-                          hidden: hidden,
-                          onTap: () => setState(() => _picked = date),
-                        );
-                      },
-                    ),
+      body: CustomScrollView(
+        key: AppKeys.calendarScroll,
+        slivers: [
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.m,
+              AppSpacing.s,
+              AppSpacing.m,
+              AppSpacing.s + 2,
+            ),
+            sliver: SliverList.list(
+              children: [
+                const BasisToggle(),
+                const SizedBox(height: AppSpacing.s + 2),
+                switch (overview) {
+                  AsyncData(:final value) => MonthSummaryCard(
+                    overview: value,
                   ),
-                ],
-              ),
+                  AsyncError() => const _LoadFailed(),
+                  _ => const SizedBox(
+                    height: 160,
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                },
+                const SizedBox(height: AppSpacing.s + 2),
+                Semantics(
+                  label: t.tabs.calendar,
+                  container: true,
+                  child: MonthCalendarGrid(
+                    key: AppKeys.monthCalendar,
+                    month: CalendarMonth(view.month.year, view.month.month),
+                    weekdayLabels: [weekdays[6], ...weekdays.take(6)],
+                    weekdayStyle: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                      color: palette.textSecondary,
+                    ),
+                    onSwipePrevious: controller.showPreviousMonth,
+                    onSwipeNext: controller.showNextMonth,
+                    dayBuilder: (context, day) {
+                      final date = LocalDate(
+                        view.month.year,
+                        view.month.month,
+                        day,
+                      );
+                      final value = overview.value;
+                      return CalendarDayCell(
+                        key: AppKeys.calendarDay(date),
+                        date: date,
+                        spendYen: value == null
+                            ? 0
+                            : _sum(value.expensesOn(date)),
+                        hasPerformance:
+                            value?.performancesOn(date).isNotEmpty ?? false,
+                        isSelected: date == selected,
+                        isToday: date == today,
+                        hidden: hidden,
+                        onTap: () => setState(() => _picked = date),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: DayRecords(
-                date: selected,
-                overview: overview.value,
-                hidden: hidden,
-              ),
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: DayRecords(
+              date: selected,
+              overview: overview.value,
+              hidden: hidden,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

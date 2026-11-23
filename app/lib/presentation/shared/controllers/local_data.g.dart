@@ -351,137 +351,52 @@ final class PartnersProvider
 
 String _$partnersHash() => r'ab8e777486d24facb1fb39d86de76da44616e687';
 
-/// やることと今後の公演。
+/// 今後の公演。開始日時の早い順。
 
-@ProviderFor(upcomingOverview)
-final upcomingOverviewProvider = UpcomingOverviewProvider._();
+@ProviderFor(upcomingPerformances)
+final upcomingPerformancesProvider = UpcomingPerformancesProvider._();
 
-/// やることと今後の公演。
+/// 今後の公演。開始日時の早い順。
 
-final class UpcomingOverviewProvider
+final class UpcomingPerformancesProvider
     extends
         $FunctionalProvider<
-          AsyncValue<UpcomingOverview>,
-          UpcomingOverview,
-          FutureOr<UpcomingOverview>
+          AsyncValue<List<UpcomingPerformance>>,
+          List<UpcomingPerformance>,
+          FutureOr<List<UpcomingPerformance>>
         >
-    with $FutureModifier<UpcomingOverview>, $FutureProvider<UpcomingOverview> {
-  /// やることと今後の公演。
-  UpcomingOverviewProvider._()
+    with
+        $FutureModifier<List<UpcomingPerformance>>,
+        $FutureProvider<List<UpcomingPerformance>> {
+  /// 今後の公演。開始日時の早い順。
+  UpcomingPerformancesProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
-        name: r'upcomingOverviewProvider',
+        name: r'upcomingPerformancesProvider',
         isAutoDispose: true,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
 
   @override
-  String debugGetCreateSourceHash() => _$upcomingOverviewHash();
+  String debugGetCreateSourceHash() => _$upcomingPerformancesHash();
 
   @$internal
   @override
-  $FutureProviderElement<UpcomingOverview> $createElement(
+  $FutureProviderElement<List<UpcomingPerformance>> $createElement(
     $ProviderPointer pointer,
   ) => $FutureProviderElement(pointer);
 
   @override
-  FutureOr<UpcomingOverview> create(Ref ref) {
-    return upcomingOverview(ref);
+  FutureOr<List<UpcomingPerformance>> create(Ref ref) {
+    return upcomingPerformances(ref);
   }
 }
 
-String _$upcomingOverviewHash() => r'099626697e54a1d7d92cbaed4438c5f5a8db027c';
-
-/// [performanceId] のチケット申込。
-
-@ProviderFor(performanceApplications)
-final performanceApplicationsProvider = PerformanceApplicationsFamily._();
-
-/// [performanceId] のチケット申込。
-
-final class PerformanceApplicationsProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<List<TicketApplication>>,
-          List<TicketApplication>,
-          FutureOr<List<TicketApplication>>
-        >
-    with
-        $FutureModifier<List<TicketApplication>>,
-        $FutureProvider<List<TicketApplication>> {
-  /// [performanceId] のチケット申込。
-  PerformanceApplicationsProvider._({
-    required PerformanceApplicationsFamily super.from,
-    required int super.argument,
-  }) : super(
-         retry: null,
-         name: r'performanceApplicationsProvider',
-         isAutoDispose: true,
-         dependencies: null,
-         $allTransitiveDependencies: null,
-       );
-
-  @override
-  String debugGetCreateSourceHash() => _$performanceApplicationsHash();
-
-  @override
-  String toString() {
-    return r'performanceApplicationsProvider'
-        ''
-        '($argument)';
-  }
-
-  @$internal
-  @override
-  $FutureProviderElement<List<TicketApplication>> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<List<TicketApplication>> create(Ref ref) {
-    final argument = this.argument as int;
-    return performanceApplications(ref, argument);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is PerformanceApplicationsProvider &&
-        other.argument == argument;
-  }
-
-  @override
-  int get hashCode {
-    return argument.hashCode;
-  }
-}
-
-String _$performanceApplicationsHash() =>
-    r'a83fe778cda7df5d1a161da1926e2c58f5d079b0';
-
-/// [performanceId] のチケット申込。
-
-final class PerformanceApplicationsFamily extends $Family
-    with $FunctionalFamilyOverride<FutureOr<List<TicketApplication>>, int> {
-  PerformanceApplicationsFamily._()
-    : super(
-        retry: null,
-        name: r'performanceApplicationsProvider',
-        dependencies: null,
-        $allTransitiveDependencies: null,
-        isAutoDispose: true,
-      );
-
-  /// [performanceId] のチケット申込。
-
-  PerformanceApplicationsProvider call(int performanceId) =>
-      PerformanceApplicationsProvider._(argument: performanceId, from: this);
-
-  @override
-  String toString() => r'performanceApplicationsProvider';
-}
+String _$upcomingPerformancesHash() =>
+    r'7e2896dff7e516a5f6bc1e4e99ff3549aab1633d';
 
 /// Gmail 連携の状態。
 
@@ -526,50 +441,3 @@ final class GmailStatusProvider
 }
 
 String _$gmailStatusHash() => r'bd00c05fb83e17c1413a05848bb7df1ca26e0401';
-
-/// OS の通知の許可の状態。画面に戻ったときは呼び出し側が invalidate する。
-
-@ProviderFor(notificationPermission)
-final notificationPermissionProvider = NotificationPermissionProvider._();
-
-/// OS の通知の許可の状態。画面に戻ったときは呼び出し側が invalidate する。
-
-final class NotificationPermissionProvider
-    extends
-        $FunctionalProvider<
-          AsyncValue<NotificationPermission>,
-          NotificationPermission,
-          FutureOr<NotificationPermission>
-        >
-    with
-        $FutureModifier<NotificationPermission>,
-        $FutureProvider<NotificationPermission> {
-  /// OS の通知の許可の状態。画面に戻ったときは呼び出し側が invalidate する。
-  NotificationPermissionProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'notificationPermissionProvider',
-        isAutoDispose: true,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$notificationPermissionHash();
-
-  @$internal
-  @override
-  $FutureProviderElement<NotificationPermission> $createElement(
-    $ProviderPointer pointer,
-  ) => $FutureProviderElement(pointer);
-
-  @override
-  FutureOr<NotificationPermission> create(Ref ref) {
-    return notificationPermission(ref);
-  }
-}
-
-String _$notificationPermissionHash() =>
-    r'2f6a1ada42b6f8d8f7b63c84c10cdee17aff528a';

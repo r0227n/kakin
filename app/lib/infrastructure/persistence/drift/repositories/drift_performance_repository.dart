@@ -49,18 +49,11 @@ final class DriftPerformanceRepository implements PerformanceRepository {
                 e.category.equalsValue(ExpenseCategory.ticket),
           ),
         );
-        final hasApplication = existsQuery(
-          _db.select(_db.ticketApplications)..where(
-            (a) =>
-                a.performanceId.equalsExp(_db.performances.id) &
-                a.stage.equalsValue(TicketApplicationStage.lost).not(),
-          ),
-        );
         final query = _db.select(_db.performances)
           ..where(
             (p) =>
                 p.startsAt.isBiggerOrEqualValue(JapanTime.instantOf(today)) &
-                (hasTicket | hasApplication),
+                hasTicket,
           )
           ..orderBy([(p) => OrderingTerm.asc(p.startsAt)]);
         return [for (final row in await query.get()) row.toModel()];
@@ -120,16 +113,10 @@ final class DriftPerformanceRepository implements PerformanceRepository {
             _db.expenses.performanceId.equals(id) &
                 _db.expenses.category.isInValues(_requiredCategories),
           );
-        final expenseRow = await expenses.getSingle();
-        final applicationCount = _db.ticketApplications.id.count();
-        final applications = _db.selectOnly(_db.ticketApplications)
-          ..addColumns([applicationCount])
-          ..where(_db.ticketApplications.performanceId.equals(id));
+        final row = await expenses.getSingle();
         return PerformanceDeletionImpact(
-          expenseCount: expenseRow.read(count) ?? 0,
-          expenseTotalYen: expenseRow.read(total) ?? 0,
-          applicationCount:
-              (await applications.getSingle()).read(applicationCount) ?? 0,
+          expenseCount: row.read(count) ?? 0,
+          expenseTotalYen: row.read(total) ?? 0,
         );
       });
 

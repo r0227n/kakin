@@ -17,7 +17,6 @@ part 'app_database.g.dart';
     Partners,
     EmailImports,
     GmailSyncStates,
-    TicketApplications,
   ],
 )
 final class AppDatabase extends _$AppDatabase {

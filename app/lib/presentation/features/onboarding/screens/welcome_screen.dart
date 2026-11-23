@@ -60,10 +60,10 @@ class WelcomeScreen extends StatelessWidget {
                 body: t.onboarding.featureRecordBody,
               ),
               _Feature(
-                icon: Icons.notifications_none,
+                icon: Icons.mail_outline,
                 tone: palette.amberTone,
-                title: t.onboarding.featureReminderTitle,
-                body: t.onboarding.featureReminderBody,
+                title: t.onboarding.featureGmailTitle,
+                body: t.onboarding.featureGmailBody,
               ),
             ],
           ),

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:app/app/bootstrap_failure_app.dart';
 import 'package:app/app/dependency_graph.dart';
 import 'package:app/app/kakin_app.dart';
-import 'package:app/app/notification_responses.dart';
 import 'package:app/core/gen/slang.g.dart';
 import 'package:app/core/localization/app_locale_resolver.dart';
 import 'package:app/core/logger/talker_integration.dart';
@@ -14,7 +13,7 @@ import 'package:go_router/go_router.dart';
 import 'package:talker/talker.dart';
 import 'package:talker_riverpod_logger/talker_riverpod_logger.dart';
 
-/// 端末内の DB・通知・設定を初期化して起動する。
+/// 端末内の DB と設定を初期化して起動する。
 ///
 /// binding は呼び出し元で初期化済みでもよい。
 Future<void> bootstrap() async {
@@ -46,11 +45,7 @@ Future<LaunchedKakinApp> openKakinApp({
   required Talker talker,
   List<ProviderObserver> observers = const [],
 }) async {
-  final responses = NotificationResponses();
-  final graph = await AppDependencyGraph.open(
-    talker: talker,
-    onNotification: responses.add,
-  );
+  final graph = await AppDependencyGraph.open(talker: talker);
   try {
     await LocaleSettings.setLocale(
       resolveAppLocale(
@@ -58,14 +53,11 @@ Future<LaunchedKakinApp> openKakinApp({
         WidgetsBinding.instance.platformDispatcher.locales,
       ),
     );
-    final launch = await graph.launchTap();
     return (
       root: graph.attach(
         observers: observers,
         child: _AppRoot(
           onboardingCompleted: graph.initialAppPreferences.onboardingCompleted,
-          responses: responses,
-          launchResponse: launch,
         ),
       ),
       graph: graph,
@@ -79,11 +71,6 @@ Future<LaunchedKakinApp> openKakinApp({
 /// 起動を待たせない後片付け。失敗は報告して続ける。
 Future<void> _afterLaunch(AppDependencyGraph graph, Talker talker) async {
   try {
-    await graph.reminders.rebuild();
-  } on Object catch (error, stackTrace) {
-    talker.handle(error, stackTrace, 'Rebuilding reminders on launch failed');
-  }
-  try {
     await graph.partner.cleanUpIcons();
   } on Object catch (error, stackTrace) {
     talker.handle(error, stackTrace, 'Cleaning up partner icons failed');
@@ -91,15 +78,9 @@ Future<void> _afterLaunch(AppDependencyGraph graph, Talker talker) async {
 }
 
 class _AppRoot extends StatefulWidget {
-  const _AppRoot({
-    required this.onboardingCompleted,
-    required this.responses,
-    required this.launchResponse,
-  });
+  const _AppRoot({required this.onboardingCompleted});
 
   final bool onboardingCompleted;
-  final NotificationResponses responses;
-  final ReminderTap? launchResponse;
 
   @override
   State<_AppRoot> createState() => _AppRootState();
@@ -109,17 +90,9 @@ class _AppRootState extends State<_AppRoot> {
   late final GoRouter _router = buildAppRouter(
     onboardingCompleted: widget.onboardingCompleted,
   );
-  late final List<ReminderTap> _pending = [
-    ?widget.launchResponse,
-    ...widget.responses.drainPending(),
-  ];
 
   @override
-  Widget build(BuildContext context) => KakinApp(
-    router: _router,
-    notificationResponses: widget.responses.stream,
-    pendingResponses: _pending,
-  );
+  Widget build(BuildContext context) => KakinApp(router: _router);
 
   @override
   void dispose() {

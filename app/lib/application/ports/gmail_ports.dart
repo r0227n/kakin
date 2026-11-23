@@ -13,7 +13,7 @@ abstract interface class GmailMailbox {
   /// 前回の連携を操作なしで復元する。復元できなければ null。
   Future<String?> restore();
 
-  /// [after] 以降に受信した対象メールのうち、公演情報を読み取れたもの。
+  /// [after] 以降に受信した決済完了メールのうち、公演情報を読み取れたもの。
   ///
   /// 再連携が必要な失敗は GmailReauthRequiredException、
   /// それ以外は GmailSyncException を投げる。
@@ -42,9 +42,6 @@ abstract interface class GmailImportRepository {
 
   /// 取り込んだメールを記録して ID を返す。
   Future<int> recordImport(String accountEmail, TicketMail mail);
-
-  /// 取り込み履歴にチケット申込を結びつける。
-  Future<void> linkApplication(int importId, int applicationId);
 
   /// 同期の成功を記録する。
   Future<void> recordSuccess(

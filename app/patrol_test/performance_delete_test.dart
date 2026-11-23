@@ -22,16 +22,10 @@ void main() {
     await $(AppKeys.expenseSave).tap();
 
     await $(AppKeys.dayPerformance(1)).tap();
-    await $(AppKeys.addApplicationForPerformance).tap();
-    await $(AppKeys.applicationSave).tap();
     await $(AppKeys.deletePerformance).tap();
-    await $(AppKeys.confirmBody)
-        .which<Text>(
-          (text) =>
-              text.data!.contains('1件（¥700）') &&
-              text.data!.contains('チケット申込 1件'),
-        )
-        .waitUntilVisible();
+    await $(
+      AppKeys.confirmBody,
+    ).which<Text>((text) => text.data!.contains('1件（¥700）')).waitUntilVisible();
     await $(AppKeys.confirmOk).tap();
     await $(AppKeys.tabList).tap();
 

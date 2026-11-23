@@ -10,14 +10,12 @@ void main() {
   late AppDatabase db;
   late DriftPerformanceRepository performances;
   late DriftExpenseRepository expenses;
-  late DriftTicketApplicationRepository applications;
   late int partnerId;
 
   setUp(() async {
     db = AppDatabase(NativeDatabase.memory());
     performances = DriftPerformanceRepository(db);
     expenses = DriftExpenseRepository(db);
-    applications = DriftTicketApplicationRepository(db);
     partnerId = await DriftPartnerRepository(
       db,
     ).create(const PartnerDraft(name: 'A'));
@@ -40,13 +38,6 @@ void main() {
     shotCount: category == ExpenseCategory.cheki ? 1 : null,
   );
 
-  Future<int> application(
-    int performanceId, {
-    TicketApplicationStage stage = TicketApplicationStage.planned,
-  }) => applications.create(
-    TicketApplicationDraft(performanceId: performanceId, stage: stage),
-  );
-
   group('delete', () {
     late int target;
     late int other;
@@ -63,8 +54,6 @@ void main() {
         expense(ExpenseCategory.transport, target),
         expense(ExpenseCategory.ticket, other),
       ]);
-      await application(target);
-      await application(other);
     });
 
     test('removes ticket, drink and cheki expenses', () async {
@@ -84,19 +73,11 @@ void main() {
       }
     });
 
-    test('removes the ticket applications by cascade', () async {
-      await performances.delete(target);
-
-      expect(await applications.listForPerformance(target), isEmpty);
-      expect(await applications.listOpen(), hasLength(1));
-    });
-
     test('leaves other performances and the partner untouched', () async {
       await performances.delete(target);
 
       expect(await performances.find(target), isNull);
       expect((await expenses.find(expenseIds.last))!.performance?.id, other);
-      expect(await applications.listForPerformance(other), hasLength(1));
       expect(await DriftPartnerRepository(db).find(partnerId), isNotNull);
     });
 
@@ -105,7 +86,6 @@ void main() {
 
       expect(impact.expenseCount, 3);
       expect(impact.expenseTotalYen, 3000);
-      expect(impact.applicationCount, 1);
     });
   });
 
@@ -139,28 +119,28 @@ void main() {
   group('listUpcoming', () {
     final today = LocalDate(2026, 11, 22);
 
-    test('includes performances with a ticket or a live application', () async {
-      final withTicket = await performance('Ticket', DateTime.utc(2026, 12));
-      await expenses.addAll([expense(ExpenseCategory.ticket, withTicket)]);
-      final withApplication = await performance(
-        'Applied',
-        DateTime.utc(2026, 12, 2),
-      );
-      await application(withApplication);
+    test('includes performances with a ticket, soonest first', () async {
+      final later = await performance('Later', DateTime.utc(2026, 12, 2));
+      final sooner = await performance('Sooner', DateTime.utc(2026, 12));
+      await expenses.addAll([
+        expense(ExpenseCategory.ticket, later),
+        expense(ExpenseCategory.ticket, sooner),
+      ]);
 
       final upcoming = await performances.listUpcoming(today);
 
-      expect(upcoming.map((p) => p.title), ['Ticket', 'Applied']);
+      expect(upcoming.map((p) => p.title), ['Sooner', 'Later']);
     });
 
-    test('excludes lost-only, drink-only and past performances', () async {
-      final lost = await performance('Lost', DateTime.utc(2026, 12));
-      await application(lost, stage: TicketApplicationStage.lost);
+    test('excludes ticketless, drink-only and past performances', () async {
+      await performance('No expense', DateTime.utc(2026, 12));
       final drink = await performance('Drink', DateTime.utc(2026, 12));
-      await expenses.addAll([expense(ExpenseCategory.drink, drink)]);
       // 2026-11-21 23:00 JST。
       final past = await performance('Past', DateTime.utc(2026, 11, 21, 14));
-      await application(past);
+      await expenses.addAll([
+        expense(ExpenseCategory.drink, drink),
+        expense(ExpenseCategory.ticket, past),
+      ]);
 
       expect(await performances.listUpcoming(today), isEmpty);
     });
@@ -171,7 +151,7 @@ void main() {
         'Tonight',
         DateTime.utc(2026, 11, 21, 15, 30),
       );
-      await application(id);
+      await expenses.addAll([expense(ExpenseCategory.ticket, id)]);
 
       expect(
         (await performances.listUpcoming(today)).map((p) => p.title),

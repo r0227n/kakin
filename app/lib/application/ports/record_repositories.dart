@@ -60,7 +60,7 @@ abstract interface class PerformanceRepository {
     LocalDate until,
   );
 
-  /// 開始日が [today] 以降で、チケット代か落選以外のチケット申込がある公演。
+  /// 開始日が [today] 以降で、チケット代を1件以上記録した公演。
   Future<List<Performance>> listUpcoming(LocalDate today);
 
   /// [id] の公演。
@@ -78,7 +78,7 @@ abstract interface class PerformanceRepository {
   /// 削除すると一緒に消えるもの。
   Future<PerformanceDeletionImpact> deletionImpact(int id);
 
-  /// 必須カテゴリの支出とチケット申込を含めて削除する。
+  /// 必須カテゴリの支出を含めて削除する。
   Future<void> delete(int id);
 }
 
@@ -104,45 +104,4 @@ abstract interface class PartnerRepository {
 
   /// 参照されているアイコン画像のファイル名。
   Future<Set<String>> referencedIconFiles();
-}
-
-/// チケット申込の永続化契約。
-abstract interface class TicketApplicationRepository {
-  /// [performanceId] のチケット申込。登録の新しい順。
-  Future<List<TicketApplication>> listForPerformance(int performanceId);
-
-  /// [performanceIds] のチケット申込。登録の新しい順。
-  Future<List<TicketApplication>> listForPerformances(
-    Iterable<int> performanceIds,
-  );
-
-  /// 申込予定・結果待ち・入金待ちのチケット申込。
-  Future<List<TicketApplication>> listOpen();
-
-  /// [id] のチケット申込。
-  Future<TicketApplication?> find(int id);
-
-  /// [service] と [referenceNo] が一致するチケット申込。
-  Future<TicketApplication?> findByReference(
-    TicketServiceKind service,
-    String referenceNo,
-  );
-
-  /// 同じ公演・同じサービスで、落選・確保済みでない最も新しいチケット申込。
-  Future<TicketApplication?> findLatestOpen(
-    int performanceId,
-    TicketServiceKind service,
-  );
-
-  /// 登録して ID を返す。
-  Future<int> create(TicketApplicationDraft draft);
-
-  /// 項目を置き換える。
-  Future<void> update(int id, TicketApplicationDraft draft);
-
-  /// 段階だけを変える。
-  Future<void> updateStage(int id, TicketApplicationStage stage);
-
-  /// 削除する。
-  Future<void> delete(int id);
 }

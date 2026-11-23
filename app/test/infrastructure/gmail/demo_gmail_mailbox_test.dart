@@ -35,8 +35,7 @@ void main() {
       (m) => m.messageId == 'demo-eplus-2',
     );
 
-    expect(mail.service, TicketServiceKind.eplus);
-    expect(mail.kind, TicketMailKind.payment);
+    expect(mail.service, TicketMailService.eplus);
     expect(mail.title, 'クリスマス公演');
     expect(mail.venue, '池袋 ホールC');
     // システム利用料を含まないチケット料金。
@@ -52,8 +51,7 @@ void main() {
         (m) => m.messageId == 'demo-lp-2',
       );
 
-      expect(mail.service, TicketServiceKind.livepocket);
-      expect(mail.kind, TicketMailKind.payment);
+      expect(mail.service, TicketMailService.livepocket);
       expect(mail.title, '春ツアー2027 東京公演');
       expect(mail.venue, '有明 アリーナD');
       expect(mail.priceYen, 12000);
@@ -79,14 +77,6 @@ void main() {
       mails.map((m) => JapanTime.wallClockOf(m.receivedAt).hour).toSet(),
       {21},
     );
-  });
-
-  test('payment mails carry no reference or deadlines', () async {
-    for (final mail in await fetchAll()) {
-      expect(mail.referenceNo, isNull);
-      expect(mail.resultAt, isNull);
-      expect(mail.paymentDeadlineAt, isNull);
-    }
   });
 
   test('skips mails received before after', () async {

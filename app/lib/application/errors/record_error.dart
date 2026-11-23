@@ -63,12 +63,3 @@ final class PartnerIconException extends AppException {
   @override
   AppErrorCode get code => AppErrorCode.partnerIcon;
 }
-
-/// 通知を予約できなかったことを表す。
-final class ReminderScheduleException extends AppException {
-  /// plugin の失敗を保持する。
-  const ReminderScheduleException({super.cause, super.causeStackTrace});
-
-  @override
-  AppErrorCode get code => AppErrorCode.reminderSchedule;
-}

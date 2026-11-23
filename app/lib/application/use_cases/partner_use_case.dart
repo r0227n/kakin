@@ -1,5 +1,5 @@
 import 'package:app/application/errors/record_error.dart';
-import 'package:app/application/models/notifications.dart';
+import 'package:app/application/models/partner_icon_source.dart';
 import 'package:app/application/models/records.dart';
 import 'package:app/application/ports/device_ports.dart';
 import 'package:app/application/ports/record_repositories.dart';

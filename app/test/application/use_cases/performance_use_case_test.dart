@@ -21,15 +21,6 @@ void main() {
   });
   tearDown(() => t.close());
 
-  Future<int> addApplication(int performanceId) =>
-      DriftTicketApplicationRepository(t.database).create(
-        TicketApplicationDraft(
-          performanceId: performanceId,
-          stage: TicketApplicationStage.planned,
-          applyDeadlineAt: DateTime.utc(2026, 11, 25, 14, 59),
-        ),
-      );
-
   test('create trims the title and stores a blank venue as none', () async {
     final id = await performances.create(
       PerformanceDraft(title: '  Live  ', startsAt: startsAt, venue: '  '),
@@ -61,7 +52,7 @@ void main() {
   });
 
   test(
-    'deletionImpact counts required-category expenses and applications',
+    'deletionImpact counts only required-category expenses',
     () async {
       final id = await performances.create(
         PerformanceDraft(title: 'Live', startsAt: startsAt),
@@ -91,13 +82,11 @@ void main() {
           performanceId: id,
         ),
       ]);
-      await addApplication(id);
 
       final impact = await performances.deletionImpact(id);
 
       expect(impact.expenseCount, 2);
       expect(impact.expenseTotalYen, 6000);
-      expect(impact.applicationCount, 1);
     },
   );
 
@@ -108,42 +97,51 @@ void main() {
 
     final impact = await performances.deletionImpact(id);
 
-    expect(
-      (impact.expenseCount, impact.expenseTotalYen, impact.applicationCount),
-      (0, 0, 0),
-    );
+    expect((impact.expenseCount, impact.expenseTotalYen), (0, 0));
   });
 
-  test('delete removes the performance and its scheduled reminders', () async {
+  test('delete removes the performance', () async {
     final id = await performances.create(
       PerformanceDraft(title: 'Live', startsAt: startsAt),
     );
-    await addApplication(id);
-    await t.graph.reminders.rebuild();
-    expect(t.scheduler.scheduled, isNotEmpty);
 
     await performances.delete(id);
 
     expect(await performances.find(id), isNull);
-    expect(t.scheduler.scheduled, isEmpty);
   });
 
-  test('update reschedules reminders with the new title', () async {
-    final id = await performances.create(
-      PerformanceDraft(title: 'Live', startsAt: startsAt),
-    );
-    await addApplication(id);
+  test(
+    'listUpcoming returns ticketed performances from today, soonest first',
+    () async {
+      Future<int> add(String title, DateTime at, {bool ticket = true}) async {
+        final id = await performances.create(
+          PerformanceDraft(title: title, startsAt: at),
+        );
+        await t.graph.expense.record([
+          ExpenseDraft(
+            category: ticket ? ExpenseCategory.ticket : ExpenseCategory.goods,
+            amountYen: 5000,
+            paidOn: day,
+            performanceId: id,
+          ),
+        ]);
+        return id;
+      }
 
-    await performances.update(
-      id,
-      PerformanceDraft(title: 'Renamed', startsAt: startsAt),
-    );
+      // 時計は日本時間の 2026-11-22 12:00。
+      await add('Later', DateTime.utc(2026, 12, 1, 9));
+      await add('Tonight', DateTime.utc(2026, 11, 22, 10));
+      await add('Yesterday', DateTime.utc(2026, 11, 21, 10));
+      await add('Goods only', DateTime.utc(2026, 11, 30, 10), ticket: false);
 
-    expect(
-      t.scheduler.scheduled.map((r) => r.performanceTitle).toSet(),
-      {'Renamed'},
-    );
-  });
+      final upcoming = await performances.listUpcoming();
+
+      expect(
+        [for (final u in upcoming) (u.performance.title, u.daysUntil)],
+        [('Tonight', 0), ('Later', 9)],
+      );
+    },
+  );
 
   test('listAll returns the newest start first', () async {
     await performances.create(PerformanceDraft(title: 'A', startsAt: startsAt));

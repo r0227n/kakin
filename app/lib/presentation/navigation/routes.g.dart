@@ -13,8 +13,6 @@ List<RouteBase> get $appRoutes => [
   $editExpenseRoute,
   $newPerformanceRoute,
   $performanceDetailRoute,
-  $newTicketApplicationRoute,
-  $editTicketApplicationRoute,
   $partnerPickerRoute,
   $newPartnerRoute,
   $editPartnerRoute,
@@ -390,78 +388,6 @@ mixin $EditPerformanceRoute on GoRouteData {
   @override
   String get location => GoRouteData.$location(
     '/performances/${Uri.encodeComponent(_self.performanceId.toString())}/edit',
-  );
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $newTicketApplicationRoute => GoRouteData.$route(
-  path: '/applications/new',
-  factory: $NewTicketApplicationRoute._fromState,
-);
-
-mixin $NewTicketApplicationRoute on GoRouteData {
-  static NewTicketApplicationRoute _fromState(GoRouterState state) =>
-      NewTicketApplicationRoute(
-        performanceId: _$convertMapValue(
-          'performance-id',
-          state.uri.queryParameters,
-          int.tryParse,
-        ),
-      );
-
-  NewTicketApplicationRoute get _self => this as NewTicketApplicationRoute;
-
-  @override
-  String get location => GoRouteData.$location(
-    '/applications/new',
-    queryParams: {
-      if (_self.performanceId != null)
-        'performance-id': _self.performanceId!.toString(),
-    },
-  );
-
-  @override
-  void go(BuildContext context) => context.go(location);
-
-  @override
-  Future<T?> push<T>(BuildContext context) => context.push<T>(location);
-
-  @override
-  void pushReplacement(BuildContext context) =>
-      context.pushReplacement(location);
-
-  @override
-  void replace(BuildContext context) => context.replace(location);
-}
-
-RouteBase get $editTicketApplicationRoute => GoRouteData.$route(
-  path: '/applications/:applicationId',
-  factory: $EditTicketApplicationRoute._fromState,
-);
-
-mixin $EditTicketApplicationRoute on GoRouteData {
-  static EditTicketApplicationRoute _fromState(GoRouterState state) =>
-      EditTicketApplicationRoute(
-        applicationId: int.parse(state.pathParameters['applicationId']!),
-      );
-
-  EditTicketApplicationRoute get _self => this as EditTicketApplicationRoute;
-
-  @override
-  String get location => GoRouteData.$location(
-    '/applications/${Uri.encodeComponent(_self.applicationId.toString())}',
   );
 
   @override

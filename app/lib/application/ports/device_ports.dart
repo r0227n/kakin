@@ -1,16 +1,4 @@
-import 'package:app/application/models/notifications.dart';
-
-/// 端末内でリマインドの通知を予約する契約。
-abstract interface class ReminderScheduler {
-  /// OS の通知の許可の状態。
-  Future<NotificationPermission> permissionStatus();
-
-  /// OS に通知の許可を求める。
-  Future<NotificationPermission> requestPermission();
-
-  /// 予約済みのリマインドをすべて取り消し、[reminders] を予約し直す。
-  Future<void> replaceAll(List<ReminderNotification> reminders);
-}
+import 'package:app/application/models/partner_icon_source.dart';
 
 /// チェキ相手のアイコン画像を端末内に保存する契約。
 abstract interface class PartnerIconStore {

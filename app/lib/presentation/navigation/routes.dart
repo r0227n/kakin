@@ -9,7 +9,6 @@ import 'package:app/presentation/features/partners/screens/partner_edit_screen.d
 import 'package:app/presentation/features/partners/screens/partner_picker_screen.dart';
 import 'package:app/presentation/features/performance_editor/screens/performance_editor_screen.dart';
 import 'package:app/presentation/features/settings/screens/settings_screen.dart';
-import 'package:app/presentation/features/ticket_application/screens/ticket_application_screen.dart';
 import 'package:app/presentation/features/upcoming/screens/performance_detail_screen.dart';
 import 'package:app/presentation/features/upcoming/screens/upcoming_screen.dart';
 import 'package:app/presentation/navigation/app_shell.dart';
@@ -205,7 +204,7 @@ class NewPerformanceRoute extends GoRouteData with $NewPerformanceRoute {
       _modal(state, const PerformanceEditorScreen());
 }
 
-/// 公演とそのチケット申込。
+/// 公演の内容。編集と削除の入口。
 @TypedGoRoute<PerformanceDetailRoute>(
   path: '/performances/:performanceId',
   routes: [TypedGoRoute<EditPerformanceRoute>(path: 'edit')],
@@ -233,38 +232,6 @@ class EditPerformanceRoute extends GoRouteData with $EditPerformanceRoute {
   @override
   Page<void> buildPage(BuildContext context, GoRouterState state) =>
       _modal(state, PerformanceEditorScreen(performanceId: performanceId));
-}
-
-/// チケット申込の追加。
-@TypedGoRoute<NewTicketApplicationRoute>(path: '/applications/new')
-class NewTicketApplicationRoute extends GoRouteData
-    with $NewTicketApplicationRoute {
-  /// [performanceId] を初期値にする。
-  const NewTicketApplicationRoute({this.performanceId});
-
-  /// 最初に選ぶ公演。
-  final int? performanceId;
-
-  @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) => _modal(
-    state,
-    TicketApplicationScreen(initialPerformanceId: performanceId),
-  );
-}
-
-/// チケット申込の編集。通知のタップでも開く。
-@TypedGoRoute<EditTicketApplicationRoute>(path: '/applications/:applicationId')
-class EditTicketApplicationRoute extends GoRouteData
-    with $EditTicketApplicationRoute {
-  /// [applicationId] のチケット申込を開く。
-  const EditTicketApplicationRoute({required this.applicationId});
-
-  /// 編集するチケット申込。
-  final int applicationId;
-
-  @override
-  Page<void> buildPage(BuildContext context, GoRouterState state) =>
-      _modal(state, TicketApplicationScreen(applicationId: applicationId));
 }
 
 /// チェキ相手の選択。選んだ相手の ID を返す。

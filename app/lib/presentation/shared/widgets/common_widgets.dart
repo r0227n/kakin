@@ -50,7 +50,7 @@ class SurfaceCard extends StatelessWidget {
   }
 }
 
-/// 小さなラベル（Gmail・二重計上・段階）。
+/// 小さなラベル（Gmail・二重計上）。
 class TagChip extends StatelessWidget {
   /// [background] の上に [label] を置く。
   const TagChip({

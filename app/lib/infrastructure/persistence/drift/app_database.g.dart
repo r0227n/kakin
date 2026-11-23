@@ -1435,698 +1435,6 @@ class PartnersCompanion extends UpdateCompanion<PartnerRow> {
   }
 }
 
-class $TicketApplicationsTable extends TicketApplications
-    with TableInfo<$TicketApplicationsTable, TicketApplicationRow> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $TicketApplicationsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-    'id',
-    aliasedName,
-    false,
-    hasAutoIncrement: true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'PRIMARY KEY AUTOINCREMENT',
-    ),
-  );
-  static const VerificationMeta _performanceIdMeta = const VerificationMeta(
-    'performanceId',
-  );
-  @override
-  late final GeneratedColumn<int> performanceId = GeneratedColumn<int>(
-    'performance_id',
-    aliasedName,
-    false,
-    type: DriftSqlType.int,
-    requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES performances (id) ON DELETE CASCADE',
-    ),
-  );
-  @override
-  late final GeneratedColumnWithTypeConverter<TicketServiceKind?, String>
-  service =
-      GeneratedColumn<String>(
-        'service',
-        aliasedName,
-        true,
-        type: DriftSqlType.string,
-        requiredDuringInsert: false,
-      ).withConverter<TicketServiceKind?>(
-        $TicketApplicationsTable.$converterservicen,
-      );
-  @override
-  late final GeneratedColumnWithTypeConverter<TicketApplicationStage, String>
-  stage =
-      GeneratedColumn<String>(
-        'stage',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
-      ).withConverter<TicketApplicationStage>(
-        $TicketApplicationsTable.$converterstage,
-      );
-  static const VerificationMeta _referenceNoMeta = const VerificationMeta(
-    'referenceNo',
-  );
-  @override
-  late final GeneratedColumn<String> referenceNo = GeneratedColumn<String>(
-    'reference_no',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _applyDeadlineAtMeta = const VerificationMeta(
-    'applyDeadlineAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> applyDeadlineAt =
-      GeneratedColumn<DateTime>(
-        'apply_deadline_at',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
-  static const VerificationMeta _resultAtMeta = const VerificationMeta(
-    'resultAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> resultAt = GeneratedColumn<DateTime>(
-    'result_at',
-    aliasedName,
-    true,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _paymentDeadlineAtMeta = const VerificationMeta(
-    'paymentDeadlineAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> paymentDeadlineAt =
-      GeneratedColumn<DateTime>(
-        'payment_deadline_at',
-        aliasedName,
-        true,
-        type: DriftSqlType.dateTime,
-        requiredDuringInsert: false,
-      );
-  static const VerificationMeta _noteMeta = const VerificationMeta('note');
-  @override
-  late final GeneratedColumn<String> note = GeneratedColumn<String>(
-    'note',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _createdAtMeta = const VerificationMeta(
-    'createdAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
-    'created_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    clientDefault: () => DateTime.now().toUtc(),
-  );
-  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
-    'updatedAt',
-  );
-  @override
-  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
-    'updated_at',
-    aliasedName,
-    false,
-    type: DriftSqlType.dateTime,
-    requiredDuringInsert: false,
-    clientDefault: () => DateTime.now().toUtc(),
-  );
-  @override
-  List<GeneratedColumn> get $columns => [
-    id,
-    performanceId,
-    service,
-    stage,
-    referenceNo,
-    applyDeadlineAt,
-    resultAt,
-    paymentDeadlineAt,
-    note,
-    createdAt,
-    updatedAt,
-  ];
-  @override
-  String get aliasedName => _alias ?? actualTableName;
-  @override
-  String get actualTableName => $name;
-  static const String $name = 'ticket_applications';
-  @override
-  VerificationContext validateIntegrity(
-    Insertable<TicketApplicationRow> instance, {
-    bool isInserting = false,
-  }) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('performance_id')) {
-      context.handle(
-        _performanceIdMeta,
-        performanceId.isAcceptableOrUnknown(
-          data['performance_id']!,
-          _performanceIdMeta,
-        ),
-      );
-    } else if (isInserting) {
-      context.missing(_performanceIdMeta);
-    }
-    if (data.containsKey('reference_no')) {
-      context.handle(
-        _referenceNoMeta,
-        referenceNo.isAcceptableOrUnknown(
-          data['reference_no']!,
-          _referenceNoMeta,
-        ),
-      );
-    }
-    if (data.containsKey('apply_deadline_at')) {
-      context.handle(
-        _applyDeadlineAtMeta,
-        applyDeadlineAt.isAcceptableOrUnknown(
-          data['apply_deadline_at']!,
-          _applyDeadlineAtMeta,
-        ),
-      );
-    }
-    if (data.containsKey('result_at')) {
-      context.handle(
-        _resultAtMeta,
-        resultAt.isAcceptableOrUnknown(data['result_at']!, _resultAtMeta),
-      );
-    }
-    if (data.containsKey('payment_deadline_at')) {
-      context.handle(
-        _paymentDeadlineAtMeta,
-        paymentDeadlineAt.isAcceptableOrUnknown(
-          data['payment_deadline_at']!,
-          _paymentDeadlineAtMeta,
-        ),
-      );
-    }
-    if (data.containsKey('note')) {
-      context.handle(
-        _noteMeta,
-        note.isAcceptableOrUnknown(data['note']!, _noteMeta),
-      );
-    }
-    if (data.containsKey('created_at')) {
-      context.handle(
-        _createdAtMeta,
-        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
-      );
-    }
-    if (data.containsKey('updated_at')) {
-      context.handle(
-        _updatedAtMeta,
-        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
-      );
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  TicketApplicationRow map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return TicketApplicationRow(
-      id: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}id'],
-      )!,
-      performanceId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}performance_id'],
-      )!,
-      service: $TicketApplicationsTable.$converterservicen.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}service'],
-        ),
-      ),
-      stage: $TicketApplicationsTable.$converterstage.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}stage'],
-        )!,
-      ),
-      referenceNo: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}reference_no'],
-      ),
-      applyDeadlineAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}apply_deadline_at'],
-      ),
-      resultAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}result_at'],
-      ),
-      paymentDeadlineAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}payment_deadline_at'],
-      ),
-      note: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}note'],
-      ),
-      createdAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}created_at'],
-      )!,
-      updatedAt: attachedDatabase.typeMapping.read(
-        DriftSqlType.dateTime,
-        data['${effectivePrefix}updated_at'],
-      )!,
-    );
-  }
-
-  @override
-  $TicketApplicationsTable createAlias(String alias) {
-    return $TicketApplicationsTable(attachedDatabase, alias);
-  }
-
-  static JsonTypeConverter2<TicketServiceKind, String, String>
-  $converterservice = const EnumNameConverter<TicketServiceKind>(
-    TicketServiceKind.values,
-  );
-  static JsonTypeConverter2<TicketServiceKind?, String?, String?>
-  $converterservicen = JsonTypeConverter2.asNullable($converterservice);
-  static TypeConverter<TicketApplicationStage, String> $converterstage =
-      const TicketStageConverter();
-}
-
-class TicketApplicationRow extends DataClass
-    implements Insertable<TicketApplicationRow> {
-  final int id;
-  final int performanceId;
-  final TicketServiceKind? service;
-  final TicketApplicationStage stage;
-  final String? referenceNo;
-  final DateTime? applyDeadlineAt;
-  final DateTime? resultAt;
-  final DateTime? paymentDeadlineAt;
-  final String? note;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  const TicketApplicationRow({
-    required this.id,
-    required this.performanceId,
-    this.service,
-    required this.stage,
-    this.referenceNo,
-    this.applyDeadlineAt,
-    this.resultAt,
-    this.paymentDeadlineAt,
-    this.note,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    map['id'] = Variable<int>(id);
-    map['performance_id'] = Variable<int>(performanceId);
-    if (!nullToAbsent || service != null) {
-      map['service'] = Variable<String>(
-        $TicketApplicationsTable.$converterservicen.toSql(service),
-      );
-    }
-    {
-      map['stage'] = Variable<String>(
-        $TicketApplicationsTable.$converterstage.toSql(stage),
-      );
-    }
-    if (!nullToAbsent || referenceNo != null) {
-      map['reference_no'] = Variable<String>(referenceNo);
-    }
-    if (!nullToAbsent || applyDeadlineAt != null) {
-      map['apply_deadline_at'] = Variable<DateTime>(applyDeadlineAt);
-    }
-    if (!nullToAbsent || resultAt != null) {
-      map['result_at'] = Variable<DateTime>(resultAt);
-    }
-    if (!nullToAbsent || paymentDeadlineAt != null) {
-      map['payment_deadline_at'] = Variable<DateTime>(paymentDeadlineAt);
-    }
-    if (!nullToAbsent || note != null) {
-      map['note'] = Variable<String>(note);
-    }
-    map['created_at'] = Variable<DateTime>(createdAt);
-    map['updated_at'] = Variable<DateTime>(updatedAt);
-    return map;
-  }
-
-  TicketApplicationsCompanion toCompanion(bool nullToAbsent) {
-    return TicketApplicationsCompanion(
-      id: Value(id),
-      performanceId: Value(performanceId),
-      service: service == null && nullToAbsent
-          ? const Value.absent()
-          : Value(service),
-      stage: Value(stage),
-      referenceNo: referenceNo == null && nullToAbsent
-          ? const Value.absent()
-          : Value(referenceNo),
-      applyDeadlineAt: applyDeadlineAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(applyDeadlineAt),
-      resultAt: resultAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(resultAt),
-      paymentDeadlineAt: paymentDeadlineAt == null && nullToAbsent
-          ? const Value.absent()
-          : Value(paymentDeadlineAt),
-      note: note == null && nullToAbsent ? const Value.absent() : Value(note),
-      createdAt: Value(createdAt),
-      updatedAt: Value(updatedAt),
-    );
-  }
-
-  factory TicketApplicationRow.fromJson(
-    Map<String, dynamic> json, {
-    ValueSerializer? serializer,
-  }) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return TicketApplicationRow(
-      id: serializer.fromJson<int>(json['id']),
-      performanceId: serializer.fromJson<int>(json['performanceId']),
-      service: $TicketApplicationsTable.$converterservicen.fromJson(
-        serializer.fromJson<String?>(json['service']),
-      ),
-      stage: serializer.fromJson<TicketApplicationStage>(json['stage']),
-      referenceNo: serializer.fromJson<String?>(json['referenceNo']),
-      applyDeadlineAt: serializer.fromJson<DateTime?>(json['applyDeadlineAt']),
-      resultAt: serializer.fromJson<DateTime?>(json['resultAt']),
-      paymentDeadlineAt: serializer.fromJson<DateTime?>(
-        json['paymentDeadlineAt'],
-      ),
-      note: serializer.fromJson<String?>(json['note']),
-      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
-      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'performanceId': serializer.toJson<int>(performanceId),
-      'service': serializer.toJson<String?>(
-        $TicketApplicationsTable.$converterservicen.toJson(service),
-      ),
-      'stage': serializer.toJson<TicketApplicationStage>(stage),
-      'referenceNo': serializer.toJson<String?>(referenceNo),
-      'applyDeadlineAt': serializer.toJson<DateTime?>(applyDeadlineAt),
-      'resultAt': serializer.toJson<DateTime?>(resultAt),
-      'paymentDeadlineAt': serializer.toJson<DateTime?>(paymentDeadlineAt),
-      'note': serializer.toJson<String?>(note),
-      'createdAt': serializer.toJson<DateTime>(createdAt),
-      'updatedAt': serializer.toJson<DateTime>(updatedAt),
-    };
-  }
-
-  TicketApplicationRow copyWith({
-    int? id,
-    int? performanceId,
-    Value<TicketServiceKind?> service = const Value.absent(),
-    TicketApplicationStage? stage,
-    Value<String?> referenceNo = const Value.absent(),
-    Value<DateTime?> applyDeadlineAt = const Value.absent(),
-    Value<DateTime?> resultAt = const Value.absent(),
-    Value<DateTime?> paymentDeadlineAt = const Value.absent(),
-    Value<String?> note = const Value.absent(),
-    DateTime? createdAt,
-    DateTime? updatedAt,
-  }) => TicketApplicationRow(
-    id: id ?? this.id,
-    performanceId: performanceId ?? this.performanceId,
-    service: service.present ? service.value : this.service,
-    stage: stage ?? this.stage,
-    referenceNo: referenceNo.present ? referenceNo.value : this.referenceNo,
-    applyDeadlineAt: applyDeadlineAt.present
-        ? applyDeadlineAt.value
-        : this.applyDeadlineAt,
-    resultAt: resultAt.present ? resultAt.value : this.resultAt,
-    paymentDeadlineAt: paymentDeadlineAt.present
-        ? paymentDeadlineAt.value
-        : this.paymentDeadlineAt,
-    note: note.present ? note.value : this.note,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
-  TicketApplicationRow copyWithCompanion(TicketApplicationsCompanion data) {
-    return TicketApplicationRow(
-      id: data.id.present ? data.id.value : this.id,
-      performanceId: data.performanceId.present
-          ? data.performanceId.value
-          : this.performanceId,
-      service: data.service.present ? data.service.value : this.service,
-      stage: data.stage.present ? data.stage.value : this.stage,
-      referenceNo: data.referenceNo.present
-          ? data.referenceNo.value
-          : this.referenceNo,
-      applyDeadlineAt: data.applyDeadlineAt.present
-          ? data.applyDeadlineAt.value
-          : this.applyDeadlineAt,
-      resultAt: data.resultAt.present ? data.resultAt.value : this.resultAt,
-      paymentDeadlineAt: data.paymentDeadlineAt.present
-          ? data.paymentDeadlineAt.value
-          : this.paymentDeadlineAt,
-      note: data.note.present ? data.note.value : this.note,
-      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
-      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
-    );
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('TicketApplicationRow(')
-          ..write('id: $id, ')
-          ..write('performanceId: $performanceId, ')
-          ..write('service: $service, ')
-          ..write('stage: $stage, ')
-          ..write('referenceNo: $referenceNo, ')
-          ..write('applyDeadlineAt: $applyDeadlineAt, ')
-          ..write('resultAt: $resultAt, ')
-          ..write('paymentDeadlineAt: $paymentDeadlineAt, ')
-          ..write('note: $note, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => Object.hash(
-    id,
-    performanceId,
-    service,
-    stage,
-    referenceNo,
-    applyDeadlineAt,
-    resultAt,
-    paymentDeadlineAt,
-    note,
-    createdAt,
-    updatedAt,
-  );
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is TicketApplicationRow &&
-          other.id == this.id &&
-          other.performanceId == this.performanceId &&
-          other.service == this.service &&
-          other.stage == this.stage &&
-          other.referenceNo == this.referenceNo &&
-          other.applyDeadlineAt == this.applyDeadlineAt &&
-          other.resultAt == this.resultAt &&
-          other.paymentDeadlineAt == this.paymentDeadlineAt &&
-          other.note == this.note &&
-          other.createdAt == this.createdAt &&
-          other.updatedAt == this.updatedAt);
-}
-
-class TicketApplicationsCompanion
-    extends UpdateCompanion<TicketApplicationRow> {
-  final Value<int> id;
-  final Value<int> performanceId;
-  final Value<TicketServiceKind?> service;
-  final Value<TicketApplicationStage> stage;
-  final Value<String?> referenceNo;
-  final Value<DateTime?> applyDeadlineAt;
-  final Value<DateTime?> resultAt;
-  final Value<DateTime?> paymentDeadlineAt;
-  final Value<String?> note;
-  final Value<DateTime> createdAt;
-  final Value<DateTime> updatedAt;
-  const TicketApplicationsCompanion({
-    this.id = const Value.absent(),
-    this.performanceId = const Value.absent(),
-    this.service = const Value.absent(),
-    this.stage = const Value.absent(),
-    this.referenceNo = const Value.absent(),
-    this.applyDeadlineAt = const Value.absent(),
-    this.resultAt = const Value.absent(),
-    this.paymentDeadlineAt = const Value.absent(),
-    this.note = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-  });
-  TicketApplicationsCompanion.insert({
-    this.id = const Value.absent(),
-    required int performanceId,
-    this.service = const Value.absent(),
-    required TicketApplicationStage stage,
-    this.referenceNo = const Value.absent(),
-    this.applyDeadlineAt = const Value.absent(),
-    this.resultAt = const Value.absent(),
-    this.paymentDeadlineAt = const Value.absent(),
-    this.note = const Value.absent(),
-    this.createdAt = const Value.absent(),
-    this.updatedAt = const Value.absent(),
-  }) : performanceId = Value(performanceId),
-       stage = Value(stage);
-  static Insertable<TicketApplicationRow> custom({
-    Expression<int>? id,
-    Expression<int>? performanceId,
-    Expression<String>? service,
-    Expression<String>? stage,
-    Expression<String>? referenceNo,
-    Expression<DateTime>? applyDeadlineAt,
-    Expression<DateTime>? resultAt,
-    Expression<DateTime>? paymentDeadlineAt,
-    Expression<String>? note,
-    Expression<DateTime>? createdAt,
-    Expression<DateTime>? updatedAt,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (performanceId != null) 'performance_id': performanceId,
-      if (service != null) 'service': service,
-      if (stage != null) 'stage': stage,
-      if (referenceNo != null) 'reference_no': referenceNo,
-      if (applyDeadlineAt != null) 'apply_deadline_at': applyDeadlineAt,
-      if (resultAt != null) 'result_at': resultAt,
-      if (paymentDeadlineAt != null) 'payment_deadline_at': paymentDeadlineAt,
-      if (note != null) 'note': note,
-      if (createdAt != null) 'created_at': createdAt,
-      if (updatedAt != null) 'updated_at': updatedAt,
-    });
-  }
-
-  TicketApplicationsCompanion copyWith({
-    Value<int>? id,
-    Value<int>? performanceId,
-    Value<TicketServiceKind?>? service,
-    Value<TicketApplicationStage>? stage,
-    Value<String?>? referenceNo,
-    Value<DateTime?>? applyDeadlineAt,
-    Value<DateTime?>? resultAt,
-    Value<DateTime?>? paymentDeadlineAt,
-    Value<String?>? note,
-    Value<DateTime>? createdAt,
-    Value<DateTime>? updatedAt,
-  }) {
-    return TicketApplicationsCompanion(
-      id: id ?? this.id,
-      performanceId: performanceId ?? this.performanceId,
-      service: service ?? this.service,
-      stage: stage ?? this.stage,
-      referenceNo: referenceNo ?? this.referenceNo,
-      applyDeadlineAt: applyDeadlineAt ?? this.applyDeadlineAt,
-      resultAt: resultAt ?? this.resultAt,
-      paymentDeadlineAt: paymentDeadlineAt ?? this.paymentDeadlineAt,
-      note: note ?? this.note,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (performanceId.present) {
-      map['performance_id'] = Variable<int>(performanceId.value);
-    }
-    if (service.present) {
-      map['service'] = Variable<String>(
-        $TicketApplicationsTable.$converterservicen.toSql(service.value),
-      );
-    }
-    if (stage.present) {
-      map['stage'] = Variable<String>(
-        $TicketApplicationsTable.$converterstage.toSql(stage.value),
-      );
-    }
-    if (referenceNo.present) {
-      map['reference_no'] = Variable<String>(referenceNo.value);
-    }
-    if (applyDeadlineAt.present) {
-      map['apply_deadline_at'] = Variable<DateTime>(applyDeadlineAt.value);
-    }
-    if (resultAt.present) {
-      map['result_at'] = Variable<DateTime>(resultAt.value);
-    }
-    if (paymentDeadlineAt.present) {
-      map['payment_deadline_at'] = Variable<DateTime>(paymentDeadlineAt.value);
-    }
-    if (note.present) {
-      map['note'] = Variable<String>(note.value);
-    }
-    if (createdAt.present) {
-      map['created_at'] = Variable<DateTime>(createdAt.value);
-    }
-    if (updatedAt.present) {
-      map['updated_at'] = Variable<DateTime>(updatedAt.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('TicketApplicationsCompanion(')
-          ..write('id: $id, ')
-          ..write('performanceId: $performanceId, ')
-          ..write('service: $service, ')
-          ..write('stage: $stage, ')
-          ..write('referenceNo: $referenceNo, ')
-          ..write('applyDeadlineAt: $applyDeadlineAt, ')
-          ..write('resultAt: $resultAt, ')
-          ..write('paymentDeadlineAt: $paymentDeadlineAt, ')
-          ..write('note: $note, ')
-          ..write('createdAt: $createdAt, ')
-          ..write('updatedAt: $updatedAt')
-          ..write(')'))
-        .toString();
-  }
-}
-
 class $EmailImportsTable extends EmailImports
     with TableInfo<$EmailImportsTable, EmailImportRow> {
   @override
@@ -2177,28 +1485,6 @@ class $EmailImportsTable extends EmailImports
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   ).withConverter<StoredMailService>($EmailImportsTable.$converterservice);
-  @override
-  late final GeneratedColumnWithTypeConverter<StoredMailKind, String> mailKind =
-      GeneratedColumn<String>(
-        'mail_kind',
-        aliasedName,
-        false,
-        type: DriftSqlType.string,
-        requiredDuringInsert: true,
-      ).withConverter<StoredMailKind>($EmailImportsTable.$convertermailKind);
-  static const VerificationMeta _ticketApplicationIdMeta =
-      const VerificationMeta('ticketApplicationId');
-  @override
-  late final GeneratedColumn<int> ticketApplicationId = GeneratedColumn<int>(
-    'ticket_application_id',
-    aliasedName,
-    true,
-    type: DriftSqlType.int,
-    requiredDuringInsert: false,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES ticket_applications (id) ON DELETE SET NULL',
-    ),
-  );
   static const VerificationMeta _subjectMeta = const VerificationMeta(
     'subject',
   );
@@ -2238,8 +1524,6 @@ class $EmailImportsTable extends EmailImports
     accountEmail,
     gmailMessageId,
     service,
-    mailKind,
-    ticketApplicationId,
     subject,
     receivedAt,
     importedAt,
@@ -2280,15 +1564,6 @@ class $EmailImportsTable extends EmailImports
       );
     } else if (isInserting) {
       context.missing(_gmailMessageIdMeta);
-    }
-    if (data.containsKey('ticket_application_id')) {
-      context.handle(
-        _ticketApplicationIdMeta,
-        ticketApplicationId.isAcceptableOrUnknown(
-          data['ticket_application_id']!,
-          _ticketApplicationIdMeta,
-        ),
-      );
     }
     if (data.containsKey('subject')) {
       context.handle(
@@ -2345,16 +1620,6 @@ class $EmailImportsTable extends EmailImports
           data['${effectivePrefix}service'],
         )!,
       ),
-      mailKind: $EmailImportsTable.$convertermailKind.fromSql(
-        attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}mail_kind'],
-        )!,
-      ),
-      ticketApplicationId: attachedDatabase.typeMapping.read(
-        DriftSqlType.int,
-        data['${effectivePrefix}ticket_application_id'],
-      ),
       subject: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}subject'],
@@ -2379,8 +1644,6 @@ class $EmailImportsTable extends EmailImports
   $converterservice = const EnumNameConverter<StoredMailService>(
     StoredMailService.values,
   );
-  static JsonTypeConverter2<StoredMailKind, String, String> $convertermailKind =
-      const EnumNameConverter<StoredMailKind>(StoredMailKind.values);
 }
 
 class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
@@ -2388,8 +1651,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
   final String accountEmail;
   final String gmailMessageId;
   final StoredMailService service;
-  final StoredMailKind mailKind;
-  final int? ticketApplicationId;
   final String subject;
   final DateTime receivedAt;
   final DateTime importedAt;
@@ -2398,8 +1659,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
     required this.accountEmail,
     required this.gmailMessageId,
     required this.service,
-    required this.mailKind,
-    this.ticketApplicationId,
     required this.subject,
     required this.receivedAt,
     required this.importedAt,
@@ -2415,14 +1674,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
         $EmailImportsTable.$converterservice.toSql(service),
       );
     }
-    {
-      map['mail_kind'] = Variable<String>(
-        $EmailImportsTable.$convertermailKind.toSql(mailKind),
-      );
-    }
-    if (!nullToAbsent || ticketApplicationId != null) {
-      map['ticket_application_id'] = Variable<int>(ticketApplicationId);
-    }
     map['subject'] = Variable<String>(subject);
     map['received_at'] = Variable<DateTime>(receivedAt);
     map['imported_at'] = Variable<DateTime>(importedAt);
@@ -2435,10 +1686,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
       accountEmail: Value(accountEmail),
       gmailMessageId: Value(gmailMessageId),
       service: Value(service),
-      mailKind: Value(mailKind),
-      ticketApplicationId: ticketApplicationId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(ticketApplicationId),
       subject: Value(subject),
       receivedAt: Value(receivedAt),
       importedAt: Value(importedAt),
@@ -2457,12 +1704,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
       service: $EmailImportsTable.$converterservice.fromJson(
         serializer.fromJson<String>(json['service']),
       ),
-      mailKind: $EmailImportsTable.$convertermailKind.fromJson(
-        serializer.fromJson<String>(json['mailKind']),
-      ),
-      ticketApplicationId: serializer.fromJson<int?>(
-        json['ticketApplicationId'],
-      ),
       subject: serializer.fromJson<String>(json['subject']),
       receivedAt: serializer.fromJson<DateTime>(json['receivedAt']),
       importedAt: serializer.fromJson<DateTime>(json['importedAt']),
@@ -2478,10 +1719,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
       'service': serializer.toJson<String>(
         $EmailImportsTable.$converterservice.toJson(service),
       ),
-      'mailKind': serializer.toJson<String>(
-        $EmailImportsTable.$convertermailKind.toJson(mailKind),
-      ),
-      'ticketApplicationId': serializer.toJson<int?>(ticketApplicationId),
       'subject': serializer.toJson<String>(subject),
       'receivedAt': serializer.toJson<DateTime>(receivedAt),
       'importedAt': serializer.toJson<DateTime>(importedAt),
@@ -2493,8 +1730,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
     String? accountEmail,
     String? gmailMessageId,
     StoredMailService? service,
-    StoredMailKind? mailKind,
-    Value<int?> ticketApplicationId = const Value.absent(),
     String? subject,
     DateTime? receivedAt,
     DateTime? importedAt,
@@ -2503,10 +1738,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
     accountEmail: accountEmail ?? this.accountEmail,
     gmailMessageId: gmailMessageId ?? this.gmailMessageId,
     service: service ?? this.service,
-    mailKind: mailKind ?? this.mailKind,
-    ticketApplicationId: ticketApplicationId.present
-        ? ticketApplicationId.value
-        : this.ticketApplicationId,
     subject: subject ?? this.subject,
     receivedAt: receivedAt ?? this.receivedAt,
     importedAt: importedAt ?? this.importedAt,
@@ -2521,10 +1752,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
           ? data.gmailMessageId.value
           : this.gmailMessageId,
       service: data.service.present ? data.service.value : this.service,
-      mailKind: data.mailKind.present ? data.mailKind.value : this.mailKind,
-      ticketApplicationId: data.ticketApplicationId.present
-          ? data.ticketApplicationId.value
-          : this.ticketApplicationId,
       subject: data.subject.present ? data.subject.value : this.subject,
       receivedAt: data.receivedAt.present
           ? data.receivedAt.value
@@ -2542,8 +1769,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
           ..write('accountEmail: $accountEmail, ')
           ..write('gmailMessageId: $gmailMessageId, ')
           ..write('service: $service, ')
-          ..write('mailKind: $mailKind, ')
-          ..write('ticketApplicationId: $ticketApplicationId, ')
           ..write('subject: $subject, ')
           ..write('receivedAt: $receivedAt, ')
           ..write('importedAt: $importedAt')
@@ -2557,8 +1782,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
     accountEmail,
     gmailMessageId,
     service,
-    mailKind,
-    ticketApplicationId,
     subject,
     receivedAt,
     importedAt,
@@ -2571,8 +1794,6 @@ class EmailImportRow extends DataClass implements Insertable<EmailImportRow> {
           other.accountEmail == this.accountEmail &&
           other.gmailMessageId == this.gmailMessageId &&
           other.service == this.service &&
-          other.mailKind == this.mailKind &&
-          other.ticketApplicationId == this.ticketApplicationId &&
           other.subject == this.subject &&
           other.receivedAt == this.receivedAt &&
           other.importedAt == this.importedAt);
@@ -2583,8 +1804,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
   final Value<String> accountEmail;
   final Value<String> gmailMessageId;
   final Value<StoredMailService> service;
-  final Value<StoredMailKind> mailKind;
-  final Value<int?> ticketApplicationId;
   final Value<String> subject;
   final Value<DateTime> receivedAt;
   final Value<DateTime> importedAt;
@@ -2593,8 +1812,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
     this.accountEmail = const Value.absent(),
     this.gmailMessageId = const Value.absent(),
     this.service = const Value.absent(),
-    this.mailKind = const Value.absent(),
-    this.ticketApplicationId = const Value.absent(),
     this.subject = const Value.absent(),
     this.receivedAt = const Value.absent(),
     this.importedAt = const Value.absent(),
@@ -2604,15 +1821,12 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
     required String accountEmail,
     required String gmailMessageId,
     required StoredMailService service,
-    required StoredMailKind mailKind,
-    this.ticketApplicationId = const Value.absent(),
     required String subject,
     required DateTime receivedAt,
     required DateTime importedAt,
   }) : accountEmail = Value(accountEmail),
        gmailMessageId = Value(gmailMessageId),
        service = Value(service),
-       mailKind = Value(mailKind),
        subject = Value(subject),
        receivedAt = Value(receivedAt),
        importedAt = Value(importedAt);
@@ -2621,8 +1835,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
     Expression<String>? accountEmail,
     Expression<String>? gmailMessageId,
     Expression<String>? service,
-    Expression<String>? mailKind,
-    Expression<int>? ticketApplicationId,
     Expression<String>? subject,
     Expression<DateTime>? receivedAt,
     Expression<DateTime>? importedAt,
@@ -2632,9 +1844,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
       if (accountEmail != null) 'account_email': accountEmail,
       if (gmailMessageId != null) 'gmail_message_id': gmailMessageId,
       if (service != null) 'service': service,
-      if (mailKind != null) 'mail_kind': mailKind,
-      if (ticketApplicationId != null)
-        'ticket_application_id': ticketApplicationId,
       if (subject != null) 'subject': subject,
       if (receivedAt != null) 'received_at': receivedAt,
       if (importedAt != null) 'imported_at': importedAt,
@@ -2646,8 +1855,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
     Value<String>? accountEmail,
     Value<String>? gmailMessageId,
     Value<StoredMailService>? service,
-    Value<StoredMailKind>? mailKind,
-    Value<int?>? ticketApplicationId,
     Value<String>? subject,
     Value<DateTime>? receivedAt,
     Value<DateTime>? importedAt,
@@ -2657,8 +1864,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
       accountEmail: accountEmail ?? this.accountEmail,
       gmailMessageId: gmailMessageId ?? this.gmailMessageId,
       service: service ?? this.service,
-      mailKind: mailKind ?? this.mailKind,
-      ticketApplicationId: ticketApplicationId ?? this.ticketApplicationId,
       subject: subject ?? this.subject,
       receivedAt: receivedAt ?? this.receivedAt,
       importedAt: importedAt ?? this.importedAt,
@@ -2682,14 +1887,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
         $EmailImportsTable.$converterservice.toSql(service.value),
       );
     }
-    if (mailKind.present) {
-      map['mail_kind'] = Variable<String>(
-        $EmailImportsTable.$convertermailKind.toSql(mailKind.value),
-      );
-    }
-    if (ticketApplicationId.present) {
-      map['ticket_application_id'] = Variable<int>(ticketApplicationId.value);
-    }
     if (subject.present) {
       map['subject'] = Variable<String>(subject.value);
     }
@@ -2709,8 +1906,6 @@ class EmailImportsCompanion extends UpdateCompanion<EmailImportRow> {
           ..write('accountEmail: $accountEmail, ')
           ..write('gmailMessageId: $gmailMessageId, ')
           ..write('service: $service, ')
-          ..write('mailKind: $mailKind, ')
-          ..write('ticketApplicationId: $ticketApplicationId, ')
           ..write('subject: $subject, ')
           ..write('receivedAt: $receivedAt, ')
           ..write('importedAt: $importedAt')
@@ -3974,8 +3169,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   );
   late final $PerformancesTable performances = $PerformancesTable(this);
   late final $PartnersTable partners = $PartnersTable(this);
-  late final $TicketApplicationsTable ticketApplications =
-      $TicketApplicationsTable(this);
   late final $EmailImportsTable emailImports = $EmailImportsTable(this);
   late final $ExpensesTable expenses = $ExpensesTable(this);
   late final $GmailSyncStatesTable gmailSyncStates = $GmailSyncStatesTable(
@@ -4009,14 +3202,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     'partners_name',
     'CREATE INDEX partners_name ON partners (name)',
   );
-  late final Index ticketApplicationsPerformanceId = Index(
-    'ticket_applications_performance_id',
-    'CREATE INDEX ticket_applications_performance_id ON ticket_applications (performance_id)',
-  );
-  late final Index ticketApplicationsServiceReferenceNo = Index(
-    'ticket_applications_service_reference_no',
-    'CREATE INDEX ticket_applications_service_reference_no ON ticket_applications (service, reference_no)',
-  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -4026,7 +3211,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     budgetOverrides,
     performances,
     partners,
-    ticketApplications,
     emailImports,
     expenses,
     gmailSyncStates,
@@ -4037,25 +3221,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     expensesPartnerId,
     expensesEmailImportId,
     partnersName,
-    ticketApplicationsPerformanceId,
-    ticketApplicationsServiceReferenceNo,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'performances',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('ticket_applications', kind: UpdateKind.delete)],
-    ),
-    WritePropagation(
-      on: TableUpdateQuery.onTableName(
-        'ticket_applications',
-        limitUpdateKind: UpdateKind.delete,
-      ),
-      result: [TableUpdate('email_imports', kind: UpdateKind.update)],
-    ),
     WritePropagation(
       on: TableUpdateQuery.onTableName(
         'performances',
@@ -4469,30 +3637,6 @@ final class $$PerformancesTableReferences
     extends BaseReferences<_$AppDatabase, $PerformancesTable, PerformanceRow> {
   $$PerformancesTableReferences(super.$_db, super.$_table, super.$_typedResult);
 
-  static MultiTypedResultKey<
-    $TicketApplicationsTable,
-    List<TicketApplicationRow>
-  >
-  _ticketApplicationsRefsTable(_$AppDatabase db) =>
-      MultiTypedResultKey.fromTable(
-        db.ticketApplications,
-        aliasName: 'performances__id__ticket_applications__performance_id',
-      );
-
-  $$TicketApplicationsTableProcessedTableManager get ticketApplicationsRefs {
-    final manager = $$TicketApplicationsTableTableManager(
-      $_db,
-      $_db.ticketApplications,
-    ).filter((f) => f.performanceId.id.sqlEquals($_itemColumn<int>('id')!));
-
-    final cache = $_typedResult.readTableOrNull(
-      _ticketApplicationsRefsTable($_db),
-    );
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-
   static MultiTypedResultKey<$ExpensesTable, List<ExpenseRow>>
   _expensesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
     db.expenses,
@@ -4550,31 +3694,6 @@ class $$PerformancesTableFilterComposer
     column: $table.updatedAt,
     builder: (column) => ColumnFilters(column),
   );
-
-  Expression<bool> ticketApplicationsRefs(
-    Expression<bool> Function($$TicketApplicationsTableFilterComposer f) f,
-  ) {
-    final $$TicketApplicationsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.ticketApplications,
-      getReferencedColumn: (t) => t.performanceId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$TicketApplicationsTableFilterComposer(
-            $db: $db,
-            $table: $db.ticketApplications,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
 
   Expression<bool> expensesRefs(
     Expression<bool> Function($$ExpensesTableFilterComposer f) f,
@@ -4669,32 +3788,6 @@ class $$PerformancesTableAnnotationComposer
   GeneratedColumn<DateTime> get updatedAt =>
       $composableBuilder(column: $table.updatedAt, builder: (column) => column);
 
-  Expression<T> ticketApplicationsRefs<T extends Object>(
-    Expression<T> Function($$TicketApplicationsTableAnnotationComposer a) f,
-  ) {
-    final $$TicketApplicationsTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.id,
-          referencedTable: $db.ticketApplications,
-          getReferencedColumn: (t) => t.performanceId,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer,
-              }) => $$TicketApplicationsTableAnnotationComposer(
-                $db: $db,
-                $table: $db.ticketApplications,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
-    return f(composer);
-  }
-
   Expression<T> expensesRefs<T extends Object>(
     Expression<T> Function($$ExpensesTableAnnotationComposer a) f,
   ) {
@@ -4734,10 +3827,7 @@ class $$PerformancesTableTableManager
           $$PerformancesTableUpdateCompanionBuilder,
           (PerformanceRow, $$PerformancesTableReferences),
           PerformanceRow,
-          PrefetchHooks Function({
-            bool ticketApplicationsRefs,
-            bool expensesRefs,
-          })
+          PrefetchHooks Function({bool expensesRefs})
         > {
   $$PerformancesTableTableManager(_$AppDatabase db, $PerformancesTable table)
     : super(
@@ -4790,63 +3880,38 @@ class $$PerformancesTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({ticketApplicationsRefs = false, expensesRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (ticketApplicationsRefs) db.ticketApplications,
-                    if (expensesRefs) db.expenses,
-                  ],
-                  addJoins: null,
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (ticketApplicationsRefs)
-                        await $_getPrefetchedData<
-                          PerformanceRow,
-                          $PerformancesTable,
-                          TicketApplicationRow
-                        >(
-                          currentTable: table,
-                          referencedTable: $$PerformancesTableReferences
-                              ._ticketApplicationsRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$PerformancesTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).ticketApplicationsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.performanceId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                      if (expensesRefs)
-                        await $_getPrefetchedData<
-                          PerformanceRow,
-                          $PerformancesTable,
-                          ExpenseRow
-                        >(
-                          currentTable: table,
-                          referencedTable: $$PerformancesTableReferences
-                              ._expensesRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$PerformancesTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).expensesRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.performanceId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
-                  },
-                );
+          prefetchHooksCallback: ({expensesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (expensesRefs) db.expenses],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (expensesRefs)
+                    await $_getPrefetchedData<
+                      PerformanceRow,
+                      $PerformancesTable,
+                      ExpenseRow
+                    >(
+                      currentTable: table,
+                      referencedTable: $$PerformancesTableReferences
+                          ._expensesRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$PerformancesTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).expensesRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where(
+                            (e) => e.performanceId == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
               },
+            );
+          },
         ),
       );
 }
@@ -4863,7 +3928,7 @@ typedef $$PerformancesTableProcessedTableManager =
       $$PerformancesTableUpdateCompanionBuilder,
       (PerformanceRow, $$PerformancesTableReferences),
       PerformanceRow,
-      PrefetchHooks Function({bool ticketApplicationsRefs, bool expensesRefs})
+      PrefetchHooks Function({bool expensesRefs})
     >;
 typedef $$PartnersTableCreateCompanionBuilder =
     PartnersCompanion Function({
@@ -5175,561 +4240,12 @@ typedef $$PartnersTableProcessedTableManager =
       PartnerRow,
       PrefetchHooks Function({bool expensesRefs})
     >;
-typedef $$TicketApplicationsTableCreateCompanionBuilder =
-    TicketApplicationsCompanion Function({
-      Value<int> id,
-      required int performanceId,
-      Value<TicketServiceKind?> service,
-      required TicketApplicationStage stage,
-      Value<String?> referenceNo,
-      Value<DateTime?> applyDeadlineAt,
-      Value<DateTime?> resultAt,
-      Value<DateTime?> paymentDeadlineAt,
-      Value<String?> note,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
-typedef $$TicketApplicationsTableUpdateCompanionBuilder =
-    TicketApplicationsCompanion Function({
-      Value<int> id,
-      Value<int> performanceId,
-      Value<TicketServiceKind?> service,
-      Value<TicketApplicationStage> stage,
-      Value<String?> referenceNo,
-      Value<DateTime?> applyDeadlineAt,
-      Value<DateTime?> resultAt,
-      Value<DateTime?> paymentDeadlineAt,
-      Value<String?> note,
-      Value<DateTime> createdAt,
-      Value<DateTime> updatedAt,
-    });
-
-final class $$TicketApplicationsTableReferences
-    extends
-        BaseReferences<
-          _$AppDatabase,
-          $TicketApplicationsTable,
-          TicketApplicationRow
-        > {
-  $$TicketApplicationsTableReferences(
-    super.$_db,
-    super.$_table,
-    super.$_typedResult,
-  );
-
-  static $PerformancesTable _performanceIdTable(_$AppDatabase db) => db
-      .performances
-      .createAlias('ticket_applications__performance_id__performances__id');
-
-  $$PerformancesTableProcessedTableManager get performanceId {
-    final $_column = $_itemColumn<int>('performance_id')!;
-
-    final manager = $$PerformancesTableTableManager(
-      $_db,
-      $_db.performances,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_performanceIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
-
-  static MultiTypedResultKey<$EmailImportsTable, List<EmailImportRow>>
-  _emailImportsRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
-    db.emailImports,
-    aliasName: 'ticket_applications__id__email_imports__ticket_application_id',
-  );
-
-  $$EmailImportsTableProcessedTableManager get emailImportsRefs {
-    final manager = $$EmailImportsTableTableManager($_db, $_db.emailImports)
-        .filter(
-          (f) => f.ticketApplicationId.id.sqlEquals($_itemColumn<int>('id')!),
-        );
-
-    final cache = $_typedResult.readTableOrNull(_emailImportsRefsTable($_db));
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: cache),
-    );
-  }
-}
-
-class $$TicketApplicationsTableFilterComposer
-    extends Composer<_$AppDatabase, $TicketApplicationsTable> {
-  $$TicketApplicationsTableFilterComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnFilters<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<TicketServiceKind?, TicketServiceKind, String>
-  get service => $composableBuilder(
-    column: $table.service,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
-
-  ColumnWithTypeConverterFilters<
-    TicketApplicationStage,
-    TicketApplicationStage,
-    String
-  >
-  get stage => $composableBuilder(
-    column: $table.stage,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
-
-  ColumnFilters<String> get referenceNo => $composableBuilder(
-    column: $table.referenceNo,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get applyDeadlineAt => $composableBuilder(
-    column: $table.applyDeadlineAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get resultAt => $composableBuilder(
-    column: $table.resultAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get paymentDeadlineAt => $composableBuilder(
-    column: $table.paymentDeadlineAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get note => $composableBuilder(
-    column: $table.note,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  $$PerformancesTableFilterComposer get performanceId {
-    final $$PerformancesTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.performanceId,
-      referencedTable: $db.performances,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PerformancesTableFilterComposer(
-            $db: $db,
-            $table: $db.performances,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  Expression<bool> emailImportsRefs(
-    Expression<bool> Function($$EmailImportsTableFilterComposer f) f,
-  ) {
-    final $$EmailImportsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.emailImports,
-      getReferencedColumn: (t) => t.ticketApplicationId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EmailImportsTableFilterComposer(
-            $db: $db,
-            $table: $db.emailImports,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-}
-
-class $$TicketApplicationsTableOrderingComposer
-    extends Composer<_$AppDatabase, $TicketApplicationsTable> {
-  $$TicketApplicationsTableOrderingComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  ColumnOrderings<int> get id => $composableBuilder(
-    column: $table.id,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get service => $composableBuilder(
-    column: $table.service,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get stage => $composableBuilder(
-    column: $table.stage,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get referenceNo => $composableBuilder(
-    column: $table.referenceNo,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get applyDeadlineAt => $composableBuilder(
-    column: $table.applyDeadlineAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get resultAt => $composableBuilder(
-    column: $table.resultAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get paymentDeadlineAt => $composableBuilder(
-    column: $table.paymentDeadlineAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get note => $composableBuilder(
-    column: $table.note,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
-    column: $table.createdAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
-    column: $table.updatedAt,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  $$PerformancesTableOrderingComposer get performanceId {
-    final $$PerformancesTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.performanceId,
-      referencedTable: $db.performances,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PerformancesTableOrderingComposer(
-            $db: $db,
-            $table: $db.performances,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-}
-
-class $$TicketApplicationsTableAnnotationComposer
-    extends Composer<_$AppDatabase, $TicketApplicationsTable> {
-  $$TicketApplicationsTableAnnotationComposer({
-    required super.$db,
-    required super.$table,
-    super.joinBuilder,
-    super.$addJoinBuilderToRootComposer,
-    super.$removeJoinBuilderFromRootComposer,
-  });
-  GeneratedColumn<int> get id =>
-      $composableBuilder(column: $table.id, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<TicketServiceKind?, String> get service =>
-      $composableBuilder(column: $table.service, builder: (column) => column);
-
-  GeneratedColumnWithTypeConverter<TicketApplicationStage, String> get stage =>
-      $composableBuilder(column: $table.stage, builder: (column) => column);
-
-  GeneratedColumn<String> get referenceNo => $composableBuilder(
-    column: $table.referenceNo,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get applyDeadlineAt => $composableBuilder(
-    column: $table.applyDeadlineAt,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<DateTime> get resultAt =>
-      $composableBuilder(column: $table.resultAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get paymentDeadlineAt => $composableBuilder(
-    column: $table.paymentDeadlineAt,
-    builder: (column) => column,
-  );
-
-  GeneratedColumn<String> get note =>
-      $composableBuilder(column: $table.note, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get createdAt =>
-      $composableBuilder(column: $table.createdAt, builder: (column) => column);
-
-  GeneratedColumn<DateTime> get updatedAt =>
-      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
-
-  $$PerformancesTableAnnotationComposer get performanceId {
-    final $$PerformancesTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.performanceId,
-      referencedTable: $db.performances,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$PerformancesTableAnnotationComposer(
-            $db: $db,
-            $table: $db.performances,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
-
-  Expression<T> emailImportsRefs<T extends Object>(
-    Expression<T> Function($$EmailImportsTableAnnotationComposer a) f,
-  ) {
-    final $$EmailImportsTableAnnotationComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.id,
-      referencedTable: $db.emailImports,
-      getReferencedColumn: (t) => t.ticketApplicationId,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$EmailImportsTableAnnotationComposer(
-            $db: $db,
-            $table: $db.emailImports,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return f(composer);
-  }
-}
-
-class $$TicketApplicationsTableTableManager
-    extends
-        RootTableManager<
-          _$AppDatabase,
-          $TicketApplicationsTable,
-          TicketApplicationRow,
-          $$TicketApplicationsTableFilterComposer,
-          $$TicketApplicationsTableOrderingComposer,
-          $$TicketApplicationsTableAnnotationComposer,
-          $$TicketApplicationsTableCreateCompanionBuilder,
-          $$TicketApplicationsTableUpdateCompanionBuilder,
-          (TicketApplicationRow, $$TicketApplicationsTableReferences),
-          TicketApplicationRow,
-          PrefetchHooks Function({bool performanceId, bool emailImportsRefs})
-        > {
-  $$TicketApplicationsTableTableManager(
-    _$AppDatabase db,
-    $TicketApplicationsTable table,
-  ) : super(
-        TableManagerState(
-          db: db,
-          table: table,
-          createFilteringComposer: () =>
-              $$TicketApplicationsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer: () =>
-              $$TicketApplicationsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer: () =>
-              $$TicketApplicationsTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
-          updateCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                Value<int> performanceId = const Value.absent(),
-                Value<TicketServiceKind?> service = const Value.absent(),
-                Value<TicketApplicationStage> stage = const Value.absent(),
-                Value<String?> referenceNo = const Value.absent(),
-                Value<DateTime?> applyDeadlineAt = const Value.absent(),
-                Value<DateTime?> resultAt = const Value.absent(),
-                Value<DateTime?> paymentDeadlineAt = const Value.absent(),
-                Value<String?> note = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-              }) => TicketApplicationsCompanion(
-                id: id,
-                performanceId: performanceId,
-                service: service,
-                stage: stage,
-                referenceNo: referenceNo,
-                applyDeadlineAt: applyDeadlineAt,
-                resultAt: resultAt,
-                paymentDeadlineAt: paymentDeadlineAt,
-                note: note,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-              ),
-          createCompanionCallback:
-              ({
-                Value<int> id = const Value.absent(),
-                required int performanceId,
-                Value<TicketServiceKind?> service = const Value.absent(),
-                required TicketApplicationStage stage,
-                Value<String?> referenceNo = const Value.absent(),
-                Value<DateTime?> applyDeadlineAt = const Value.absent(),
-                Value<DateTime?> resultAt = const Value.absent(),
-                Value<DateTime?> paymentDeadlineAt = const Value.absent(),
-                Value<String?> note = const Value.absent(),
-                Value<DateTime> createdAt = const Value.absent(),
-                Value<DateTime> updatedAt = const Value.absent(),
-              }) => TicketApplicationsCompanion.insert(
-                id: id,
-                performanceId: performanceId,
-                service: service,
-                stage: stage,
-                referenceNo: referenceNo,
-                applyDeadlineAt: applyDeadlineAt,
-                resultAt: resultAt,
-                paymentDeadlineAt: paymentDeadlineAt,
-                note: note,
-                createdAt: createdAt,
-                updatedAt: updatedAt,
-              ),
-          withReferenceMapper: (p0) => p0
-              .map(
-                (e) => (
-                  e.readTable(table),
-                  $$TicketApplicationsTableReferences(db, table, e),
-                ),
-              )
-              .toList(),
-          prefetchHooksCallback:
-              ({performanceId = false, emailImportsRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [
-                    if (emailImportsRefs) db.emailImports,
-                  ],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (performanceId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.performanceId,
-                                    referencedTable:
-                                        $$TicketApplicationsTableReferences
-                                            ._performanceIdTable(db),
-                                    referencedColumn:
-                                        $$TicketApplicationsTableReferences
-                                            ._performanceIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
-
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (emailImportsRefs)
-                        await $_getPrefetchedData<
-                          TicketApplicationRow,
-                          $TicketApplicationsTable,
-                          EmailImportRow
-                        >(
-                          currentTable: table,
-                          referencedTable: $$TicketApplicationsTableReferences
-                              ._emailImportsRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$TicketApplicationsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).emailImportsRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.ticketApplicationId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
-                  },
-                );
-              },
-        ),
-      );
-}
-
-typedef $$TicketApplicationsTableProcessedTableManager =
-    ProcessedTableManager<
-      _$AppDatabase,
-      $TicketApplicationsTable,
-      TicketApplicationRow,
-      $$TicketApplicationsTableFilterComposer,
-      $$TicketApplicationsTableOrderingComposer,
-      $$TicketApplicationsTableAnnotationComposer,
-      $$TicketApplicationsTableCreateCompanionBuilder,
-      $$TicketApplicationsTableUpdateCompanionBuilder,
-      (TicketApplicationRow, $$TicketApplicationsTableReferences),
-      TicketApplicationRow,
-      PrefetchHooks Function({bool performanceId, bool emailImportsRefs})
-    >;
 typedef $$EmailImportsTableCreateCompanionBuilder =
     EmailImportsCompanion Function({
       Value<int> id,
       required String accountEmail,
       required String gmailMessageId,
       required StoredMailService service,
-      required StoredMailKind mailKind,
-      Value<int?> ticketApplicationId,
       required String subject,
       required DateTime receivedAt,
       required DateTime importedAt,
@@ -5740,8 +4256,6 @@ typedef $$EmailImportsTableUpdateCompanionBuilder =
       Value<String> accountEmail,
       Value<String> gmailMessageId,
       Value<StoredMailService> service,
-      Value<StoredMailKind> mailKind,
-      Value<int?> ticketApplicationId,
       Value<String> subject,
       Value<DateTime> receivedAt,
       Value<DateTime> importedAt,
@@ -5750,25 +4264,6 @@ typedef $$EmailImportsTableUpdateCompanionBuilder =
 final class $$EmailImportsTableReferences
     extends BaseReferences<_$AppDatabase, $EmailImportsTable, EmailImportRow> {
   $$EmailImportsTableReferences(super.$_db, super.$_table, super.$_typedResult);
-
-  static $TicketApplicationsTable _ticketApplicationIdTable(_$AppDatabase db) =>
-      db.ticketApplications.createAlias(
-        'email_imports__ticket_application_id__ticket_applications__id',
-      );
-
-  $$TicketApplicationsTableProcessedTableManager? get ticketApplicationId {
-    final $_column = $_itemColumn<int>('ticket_application_id');
-    if ($_column == null) return null;
-    final manager = $$TicketApplicationsTableTableManager(
-      $_db,
-      $_db.ticketApplications,
-    ).filter((f) => f.id.sqlEquals($_column));
-    final item = $_typedResult.readTableOrNull(_ticketApplicationIdTable($_db));
-    if (item == null) return manager;
-    return ProcessedTableManager(
-      manager.$state.copyWith(prefetchedData: [item]),
-    );
-  }
 
   static MultiTypedResultKey<$ExpensesTable, List<ExpenseRow>>
   _expensesRefsTable(_$AppDatabase db) => MultiTypedResultKey.fromTable(
@@ -5819,12 +4314,6 @@ class $$EmailImportsTableFilterComposer
     builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
-  ColumnWithTypeConverterFilters<StoredMailKind, StoredMailKind, String>
-  get mailKind => $composableBuilder(
-    column: $table.mailKind,
-    builder: (column) => ColumnWithTypeConverterFilters(column),
-  );
-
   ColumnFilters<String> get subject => $composableBuilder(
     column: $table.subject,
     builder: (column) => ColumnFilters(column),
@@ -5839,29 +4328,6 @@ class $$EmailImportsTableFilterComposer
     column: $table.importedAt,
     builder: (column) => ColumnFilters(column),
   );
-
-  $$TicketApplicationsTableFilterComposer get ticketApplicationId {
-    final $$TicketApplicationsTableFilterComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.ticketApplicationId,
-      referencedTable: $db.ticketApplications,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$TicketApplicationsTableFilterComposer(
-            $db: $db,
-            $table: $db.ticketApplications,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 
   Expression<bool> expensesRefs(
     Expression<bool> Function($$ExpensesTableFilterComposer f) f,
@@ -5918,11 +4384,6 @@ class $$EmailImportsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get mailKind => $composableBuilder(
-    column: $table.mailKind,
-    builder: (column) => ColumnOrderings(column),
-  );
-
   ColumnOrderings<String> get subject => $composableBuilder(
     column: $table.subject,
     builder: (column) => ColumnOrderings(column),
@@ -5937,29 +4398,6 @@ class $$EmailImportsTableOrderingComposer
     column: $table.importedAt,
     builder: (column) => ColumnOrderings(column),
   );
-
-  $$TicketApplicationsTableOrderingComposer get ticketApplicationId {
-    final $$TicketApplicationsTableOrderingComposer composer = $composerBuilder(
-      composer: this,
-      getCurrentColumn: (t) => t.ticketApplicationId,
-      referencedTable: $db.ticketApplications,
-      getReferencedColumn: (t) => t.id,
-      builder:
-          (
-            joinBuilder, {
-            $addJoinBuilderToRootComposer,
-            $removeJoinBuilderFromRootComposer,
-          }) => $$TicketApplicationsTableOrderingComposer(
-            $db: $db,
-            $table: $db.ticketApplications,
-            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-            joinBuilder: joinBuilder,
-            $removeJoinBuilderFromRootComposer:
-                $removeJoinBuilderFromRootComposer,
-          ),
-    );
-    return composer;
-  }
 }
 
 class $$EmailImportsTableAnnotationComposer
@@ -5987,9 +4425,6 @@ class $$EmailImportsTableAnnotationComposer
   GeneratedColumnWithTypeConverter<StoredMailService, String> get service =>
       $composableBuilder(column: $table.service, builder: (column) => column);
 
-  GeneratedColumnWithTypeConverter<StoredMailKind, String> get mailKind =>
-      $composableBuilder(column: $table.mailKind, builder: (column) => column);
-
   GeneratedColumn<String> get subject =>
       $composableBuilder(column: $table.subject, builder: (column) => column);
 
@@ -6002,30 +4437,6 @@ class $$EmailImportsTableAnnotationComposer
     column: $table.importedAt,
     builder: (column) => column,
   );
-
-  $$TicketApplicationsTableAnnotationComposer get ticketApplicationId {
-    final $$TicketApplicationsTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.ticketApplicationId,
-          referencedTable: $db.ticketApplications,
-          getReferencedColumn: (t) => t.id,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
-                $removeJoinBuilderFromRootComposer,
-              }) => $$TicketApplicationsTableAnnotationComposer(
-                $db: $db,
-                $table: $db.ticketApplications,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
-    return composer;
-  }
 
   Expression<T> expensesRefs<T extends Object>(
     Expression<T> Function($$ExpensesTableAnnotationComposer a) f,
@@ -6066,7 +4477,7 @@ class $$EmailImportsTableTableManager
           $$EmailImportsTableUpdateCompanionBuilder,
           (EmailImportRow, $$EmailImportsTableReferences),
           EmailImportRow,
-          PrefetchHooks Function({bool ticketApplicationId, bool expensesRefs})
+          PrefetchHooks Function({bool expensesRefs})
         > {
   $$EmailImportsTableTableManager(_$AppDatabase db, $EmailImportsTable table)
     : super(
@@ -6085,8 +4496,6 @@ class $$EmailImportsTableTableManager
                 Value<String> accountEmail = const Value.absent(),
                 Value<String> gmailMessageId = const Value.absent(),
                 Value<StoredMailService> service = const Value.absent(),
-                Value<StoredMailKind> mailKind = const Value.absent(),
-                Value<int?> ticketApplicationId = const Value.absent(),
                 Value<String> subject = const Value.absent(),
                 Value<DateTime> receivedAt = const Value.absent(),
                 Value<DateTime> importedAt = const Value.absent(),
@@ -6095,8 +4504,6 @@ class $$EmailImportsTableTableManager
                 accountEmail: accountEmail,
                 gmailMessageId: gmailMessageId,
                 service: service,
-                mailKind: mailKind,
-                ticketApplicationId: ticketApplicationId,
                 subject: subject,
                 receivedAt: receivedAt,
                 importedAt: importedAt,
@@ -6107,8 +4514,6 @@ class $$EmailImportsTableTableManager
                 required String accountEmail,
                 required String gmailMessageId,
                 required StoredMailService service,
-                required StoredMailKind mailKind,
-                Value<int?> ticketApplicationId = const Value.absent(),
                 required String subject,
                 required DateTime receivedAt,
                 required DateTime importedAt,
@@ -6117,8 +4522,6 @@ class $$EmailImportsTableTableManager
                 accountEmail: accountEmail,
                 gmailMessageId: gmailMessageId,
                 service: service,
-                mailKind: mailKind,
-                ticketApplicationId: ticketApplicationId,
                 subject: subject,
                 receivedAt: receivedAt,
                 importedAt: importedAt,
@@ -6131,72 +4534,38 @@ class $$EmailImportsTableTableManager
                 ),
               )
               .toList(),
-          prefetchHooksCallback:
-              ({ticketApplicationId = false, expensesRefs = false}) {
-                return PrefetchHooks(
-                  db: db,
-                  explicitlyWatchedTables: [if (expensesRefs) db.expenses],
-                  addJoins:
-                      <
-                        T extends TableManagerState<
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic,
-                          dynamic
-                        >
-                      >(state) {
-                        if (ticketApplicationId) {
-                          state =
-                              state.withJoin(
-                                    currentTable: table,
-                                    currentColumn: table.ticketApplicationId,
-                                    referencedTable:
-                                        $$EmailImportsTableReferences
-                                            ._ticketApplicationIdTable(db),
-                                    referencedColumn:
-                                        $$EmailImportsTableReferences
-                                            ._ticketApplicationIdTable(db)
-                                            .id,
-                                  )
-                                  as T;
-                        }
-
-                        return state;
-                      },
-                  getPrefetchedDataCallback: (items) async {
-                    return [
-                      if (expensesRefs)
-                        await $_getPrefetchedData<
-                          EmailImportRow,
-                          $EmailImportsTable,
-                          ExpenseRow
-                        >(
-                          currentTable: table,
-                          referencedTable: $$EmailImportsTableReferences
-                              ._expensesRefsTable(db),
-                          managerFromTypedResult: (p0) =>
-                              $$EmailImportsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).expensesRefs,
-                          referencedItemsForCurrentItem:
-                              (item, referencedItems) => referencedItems.where(
-                                (e) => e.emailImportId == item.id,
-                              ),
-                          typedResults: items,
-                        ),
-                    ];
-                  },
-                );
+          prefetchHooksCallback: ({expensesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (expensesRefs) db.expenses],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (expensesRefs)
+                    await $_getPrefetchedData<
+                      EmailImportRow,
+                      $EmailImportsTable,
+                      ExpenseRow
+                    >(
+                      currentTable: table,
+                      referencedTable: $$EmailImportsTableReferences
+                          ._expensesRefsTable(db),
+                      managerFromTypedResult: (p0) =>
+                          $$EmailImportsTableReferences(
+                            db,
+                            table,
+                            p0,
+                          ).expensesRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where(
+                            (e) => e.emailImportId == item.id,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
               },
+            );
+          },
         ),
       );
 }
@@ -6213,7 +4582,7 @@ typedef $$EmailImportsTableProcessedTableManager =
       $$EmailImportsTableUpdateCompanionBuilder,
       (EmailImportRow, $$EmailImportsTableReferences),
       EmailImportRow,
-      PrefetchHooks Function({bool ticketApplicationId, bool expensesRefs})
+      PrefetchHooks Function({bool expensesRefs})
     >;
 typedef $$ExpensesTableCreateCompanionBuilder =
     ExpensesCompanion Function({
@@ -7118,8 +5487,6 @@ class $AppDatabaseManager {
       $$PerformancesTableTableManager(_db, _db.performances);
   $$PartnersTableTableManager get partners =>
       $$PartnersTableTableManager(_db, _db.partners);
-  $$TicketApplicationsTableTableManager get ticketApplications =>
-      $$TicketApplicationsTableTableManager(_db, _db.ticketApplications);
   $$EmailImportsTableTableManager get emailImports =>
       $$EmailImportsTableTableManager(_db, _db.emailImports);
   $$ExpensesTableTableManager get expenses =>

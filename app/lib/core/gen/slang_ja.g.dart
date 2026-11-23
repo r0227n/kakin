@@ -69,11 +69,6 @@ class Translations with BaseTranslations<AppLocale, Translations> {
   late final TranslationsCategoryJa category = TranslationsCategoryJa._(_root);
   late final TranslationsCategoryShortJa categoryShort =
       TranslationsCategoryShortJa._(_root);
-  late final TranslationsStageJa stage = TranslationsStageJa._(_root);
-  late final TranslationsServiceJa service = TranslationsServiceJa._(_root);
-  late final TranslationsDeadlineJa deadline = TranslationsDeadlineJa._(_root);
-  late final TranslationsQuickActionJa quickAction =
-      TranslationsQuickActionJa._(_root);
   late final TranslationsBasisJa basis = TranslationsBasisJa._(_root);
   late final TranslationsSummaryJa summary = TranslationsSummaryJa._(_root);
   late final TranslationsCalendarJa calendar = TranslationsCalendarJa._(_root);
@@ -83,13 +78,10 @@ class Translations with BaseTranslations<AppLocale, Translations> {
       TranslationsPerformanceJa._(_root);
   late final TranslationsExpenseJa expense = TranslationsExpenseJa._(_root);
   late final TranslationsPartnerJa partner = TranslationsPartnerJa._(_root);
-  late final TranslationsApplicationJa application =
-      TranslationsApplicationJa._(_root);
   late final TranslationsSettingsJa settings = TranslationsSettingsJa._(_root);
   late final TranslationsOnboardingJa onboarding = TranslationsOnboardingJa._(
     _root,
   );
-  late final TranslationsReminderJa reminder = TranslationsReminderJa._(_root);
   late final TranslationsErrorsJa errors = TranslationsErrorsJa._(_root);
 }
 
@@ -311,90 +303,6 @@ class TranslationsCategoryShortJa {
   String get other => 'その他';
 }
 
-// Path: stage
-class TranslationsStageJa {
-  TranslationsStageJa._(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// ja: '申込予定'
-  String get planned => '申込予定';
-
-  /// ja: '結果待ち'
-  String get awaitingResult => '結果待ち';
-
-  /// ja: '入金待ち'
-  String get awaitingPayment => '入金待ち';
-
-  /// ja: '確保済み'
-  String get secured => '確保済み';
-
-  /// ja: '落選'
-  String get lost => '落選';
-}
-
-// Path: service
-class TranslationsServiceJa {
-  TranslationsServiceJa._(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// ja: 'eplus'
-  String get eplus => 'eplus';
-
-  /// ja: 'ライブポケット'
-  String get livepocket => 'ライブポケット';
-
-  /// ja: 'その他'
-  String get other => 'その他';
-}
-
-// Path: deadline
-class TranslationsDeadlineJa {
-  TranslationsDeadlineJa._(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// ja: '申込締切'
-  String get apply => '申込締切';
-
-  /// ja: '当落発表日時'
-  String get result => '当落発表日時';
-
-  /// ja: '入金期限'
-  String get payment => '入金期限';
-
-  /// ja: '当落発表'
-  String get resultShort => '当落発表';
-}
-
-// Path: quickAction
-class TranslationsQuickActionJa {
-  TranslationsQuickActionJa._(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// ja: '申し込んだ'
-  String get applied => '申し込んだ';
-
-  /// ja: '当選'
-  String get won => '当選';
-
-  /// ja: '落選'
-  String get lost => '落選';
-
-  /// ja: '支払った'
-  String get paid => '支払った';
-}
-
 // Path: basis
 class TranslationsBasisJa {
   TranslationsBasisJa._(this._root);
@@ -548,37 +456,8 @@ class TranslationsUpcomingJa {
 
   // Translations
 
-  /// ja: '申込を追加'
-  String get addApplication => '申込を追加';
-
-  /// ja: 'やること'
-  String get todo => 'やること';
-
-  /// ja: '期限が近い順'
-  String get todoOrder => '期限が近い順';
-
-  /// ja: '期限が近いチケット申込はありません。'
-  String get noTodo => '期限が近いチケット申込はありません。';
-
-  /// ja: '公演'
-  String get performances => '公演';
-
-  /// ja: 'これからの公演はまだありません。チケット代かチケット申込を登録すると表示します。'
-  String get noPerformances => 'これからの公演はまだありません。チケット代かチケット申込を登録すると表示します。';
-
-  /// ja: '${kind}を過ぎました · 結果を記録'
-  String overdue({required Object kind}) => '${kind}を過ぎました · 結果を記録';
-
-  /// ja: '要更新'
-  String get needsUpdate => '要更新';
-
-  /// ja: '「${title}」を${stage}にしました'
-  String stageChanged({required Object title, required Object stage}) =>
-      '「${title}」を${stage}にしました';
-
-  /// ja: '${title}を${stage}にする'
-  String actionLabel({required Object title, required Object stage}) =>
-      '${title}を${stage}にする';
+  /// ja: 'これからの公演はまだありません。チケット代を記録すると表示します。'
+  String get noPerformances => 'これからの公演はまだありません。チケット代を記録すると表示します。';
 
   /// ja: '${time} 開演'
   String startsAt({required Object time}) => '${time} 開演';
@@ -586,13 +465,6 @@ class TranslationsUpcomingJa {
   /// ja: '${time} 開演 · ${venue}'
   String startsAtVenue({required Object time, required Object venue}) =>
       '${time} 開演 · ${venue}';
-
-  /// ja: '申込なし'
-  String get noApplication => '申込なし';
-
-  /// ja: '通知が許可されていないため、リマインドは届きません。端末の設定アプリから通知を許可してください。'
-  String get notificationsDenied =>
-      '通知が許可されていないため、リマインドは届きません。端末の設定アプリから通知を許可してください。';
 }
 
 // Path: performance
@@ -642,25 +514,15 @@ class TranslationsPerformanceJa {
   /// ja: '新しい公演を登録'
   String get createNew => '新しい公演を登録';
 
-  /// ja: 'チケット申込'
-  String get applications => 'チケット申込';
-
-  /// ja: 'チケット申込はまだありません'
-  String get noApplications => 'チケット申込はまだありません';
-
   /// ja: 'この公演を削除'
   String get delete => 'この公演を削除';
 
   /// ja: '公演を削除しますか？'
   String get deleteTitle => '公演を削除しますか？';
 
-  /// ja: 'チケット代・ドリンク代・チェキ代 ${count}件（${amount}）と、チケット申込 ${applications}件も一緒に削除します。グッズ代などは公演との紐づけだけを外します。'
-  String deleteBody({
-    required Object count,
-    required Object amount,
-    required Object applications,
-  }) =>
-      'チケット代・ドリンク代・チェキ代 ${count}件（${amount}）と、チケット申込 ${applications}件も一緒に削除します。グッズ代などは公演との紐づけだけを外します。';
+  /// ja: 'チケット代・ドリンク代・チェキ代 ${count}件（${amount}）も一緒に削除します。グッズ代などは公演との紐づけだけを外します。'
+  String deleteBody({required Object count, required Object amount}) =>
+      'チケット代・ドリンク代・チェキ代 ${count}件（${amount}）も一緒に削除します。グッズ代などは公演との紐づけだけを外します。';
 
   /// ja: '公演名を入力してください'
   String get titleRequired => '公演名を入力してください';
@@ -880,81 +742,6 @@ class TranslationsPartnerJa {
   String get empty => '登録済みのチェキ相手はいません';
 }
 
-// Path: application
-class TranslationsApplicationJa {
-  TranslationsApplicationJa._(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// ja: 'チケット申込'
-  String get title => 'チケット申込';
-
-  /// ja: '公演'
-  String get performance => '公演';
-
-  /// ja: '申込段階'
-  String get stage => '申込段階';
-
-  /// ja: 'チケットサービス'
-  String get service => 'チケットサービス';
-
-  /// ja: '受付番号'
-  String get referenceNo => '受付番号';
-
-  /// ja: '任意 · Gmail の照合に使います'
-  String get referenceHint => '任意 · Gmail の照合に使います';
-
-  /// ja: '期限'
-  String get deadlines => '期限';
-
-  /// ja: 'リマインド対象'
-  String get reminded => 'リマインド対象';
-
-  /// ja: '日時を選ぶ'
-  String get pickDateTime => '日時を選ぶ';
-
-  /// ja: 'クリア'
-  String get clear => 'クリア';
-
-  /// ja: 'メモ'
-  String get note => 'メモ';
-
-  /// ja: 'このチケット申込を削除'
-  String get delete => 'このチケット申込を削除';
-
-  /// ja: 'Gmail から取り込み'
-  String get imported => 'Gmail から取り込み';
-
-  /// ja: '申込締切を過ぎています。申し込んだら、段階を「結果待ち」にしてください。'
-  String get overdueApply => '申込締切を過ぎています。申し込んだら、段階を「結果待ち」にしてください。';
-
-  /// ja: '当落発表日時を過ぎています。結果が出たら段階を更新してください。'
-  String get overdueResult => '当落発表日時を過ぎています。結果が出たら段階を更新してください。';
-
-  /// ja: '入金期限を過ぎています。支払ったら段階を「確保済み」にしてください。'
-  String get overduePayment => '入金期限を過ぎています。支払ったら段階を「確保済み」にしてください。';
-
-  /// ja: '${times} に通知します。'
-  String willNotify({required Object times}) => '${times} に通知します。';
-
-  /// ja: 'この段階ではリマインドしません。発券の状況はメモに残せます。'
-  String get noReminder => 'この段階ではリマインドしません。発券の状況はメモに残せます。';
-
-  /// ja: '${kind}を入れると、期限の前に通知します。'
-  String noDeadline({required Object kind}) => '${kind}を入れると、期限の前に通知します。';
-
-  /// ja: '${kind}のリマインドは設定でオフになっています。'
-  String reminderOff({required Object kind}) => '${kind}のリマインドは設定でオフになっています。';
-
-  /// ja: '公演を選んでください'
-  String get performanceRequired => '公演を選んでください';
-
-  /// ja: 'チケット申込を追加'
-  String get add => 'チケット申込を追加';
-}
-
 // Path: settings
 class TranslationsSettingsJa {
   TranslationsSettingsJa._(this._root);
@@ -1067,27 +854,15 @@ class TranslationsSettingsJa {
   /// ja: 'OAuth クライアントが未設定のため、モックデータのメールを取り込みます。'
   String get demoNote => 'OAuth クライアントが未設定のため、モックデータのメールを取り込みます。';
 
-  /// ja: 'リマインド'
-  String get reminders => 'リマインド';
-
-  /// ja: '通知は許可されています'
-  String get permissionGranted => '通知は許可されています';
-
-  /// ja: '通知が許可されていません。端末の設定アプリから許可してください。'
-  String get permissionDenied => '通知が許可されていません。端末の設定アプリから許可してください。';
-
-  /// ja: '初めて期限を登録したときに、通知の許可を求めます'
-  String get permissionUnknown => '初めて期限を登録したときに、通知の許可を求めます';
-
   /// ja: '表示'
   String get display => '表示';
 
   /// ja: '金額を表示する'
   String get showAmounts => '金額を表示する';
 
-  /// ja: 'オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演と通知には金額を表示しません。'
+  /// ja: 'オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演には金額を表示しません。'
   String get showAmountsNote =>
-      'オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演と通知には金額を表示しません。';
+      'オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演には金額を表示しません。';
 
   /// ja: 'テーマ'
   String get theme => 'テーマ';
@@ -1115,15 +890,6 @@ class TranslationsSettingsJa {
 
   /// ja: 'カレンダーとリストで支出をどの日に置くかの初期値です。残高は常に支払日で計算します。'
   String get defaultBasisNote => 'カレンダーとリストで支出をどの日に置くかの初期値です。残高は常に支払日で計算します。';
-
-  /// ja: '前日 20:00 と3時間前'
-  String get reminderApplyWhen => '前日 20:00 と3時間前';
-
-  /// ja: '発表の時刻'
-  String get reminderResultWhen => '発表の時刻';
-
-  /// ja: '前日 20:00 と3時間前'
-  String get reminderPaymentWhen => '前日 20:00 と3時間前';
 
   /// ja: '上書きを保存しました'
   String get overrideSaved => '上書きを保存しました';
@@ -1164,11 +930,11 @@ class TranslationsOnboardingJa {
   /// ja: 'ドリンク代は前回の金額で、チェキ代は相手を選んで枚数を入れるだけ。'
   String get featureRecordBody => 'ドリンク代は前回の金額で、チェキ代は相手を選んで枚数を入れるだけ。';
 
-  /// ja: 'チケットの期限を逃さない'
-  String get featureReminderTitle => 'チケットの期限を逃さない';
+  /// ja: 'チケット代は自動で記録'
+  String get featureGmailTitle => 'チケット代は自動で記録';
 
-  /// ja: '抽選の申込締切・当落発表・入金期限を通知でお知らせします。'
-  String get featureReminderBody => '抽選の申込締切・当落発表・入金期限を通知でお知らせします。';
+  /// ja: 'Gmail と連携すると、決済完了のメールからチケット代と公演を登録します。'
+  String get featureGmailBody => 'Gmail と連携すると、決済完了のメールからチケット代と公演を登録します。';
 
   /// ja: 'データはこの端末の中だけに保存します。登録やログインは要りません。'
   String get privacy => 'データはこの端末の中だけに保存します。登録やログインは要りません。';
@@ -1202,9 +968,8 @@ class TranslationsOnboardingJa {
   /// ja: 'チケットのメールから自動で記録'
   String get gmailTitle => 'チケットのメールから自動で記録';
 
-  /// ja: 'Gmail と連携すると、チケットの購入や抽選のメールを読み取り、チケット代とチケット申込を自動で登録します。'
-  String get gmailBody =>
-      'Gmail と連携すると、チケットの購入や抽選のメールを読み取り、チケット代とチケット申込を自動で登録します。';
+  /// ja: 'Gmail と連携すると、チケットの決済完了のメールを読み取り、チケット代と公演を自動で登録します。'
+  String get gmailBody => 'Gmail と連携すると、チケットの決済完了のメールを読み取り、チケット代と公演を自動で登録します。';
 
   /// ja: '読むのは eplus・ライブポケットのチケットのメールだけ。メールの送信や削除はしません。'
   String get gmailScope => '読むのは eplus・ライブポケットのチケットのメールだけ。メールの送信や削除はしません。';
@@ -1230,37 +995,6 @@ class TranslationsOnboardingJa {
 
   /// ja: '自動'
   String get sampleAuto => '自動';
-}
-
-// Path: reminder
-class TranslationsReminderJa {
-  TranslationsReminderJa._(this._root);
-
-  final Translations _root; // ignore: unused_field
-
-  // Translations
-
-  /// ja: 'チケット申込のリマインド'
-  String get channelName => 'チケット申込のリマインド';
-
-  /// ja: '申込締切・当落発表・入金期限をお知らせします'
-  String get channelDescription => '申込締切・当落発表・入金期限をお知らせします';
-
-  /// ja: '明日 ${time} が申込締切です'
-  String applyEve({required Object time}) => '明日 ${time} が申込締切です';
-
-  /// ja: '申込締切まであと3時間（${time}）'
-  String applySoon({required Object time}) => '申込締切まであと3時間（${time}）';
-
-  /// ja: '当落発表の時刻です（${dateTime}）。結果を記録しましょう'
-  String resultAt({required Object dateTime}) =>
-      '当落発表の時刻です（${dateTime}）。結果を記録しましょう';
-
-  /// ja: '明日 ${time} が入金期限です'
-  String paymentEve({required Object time}) => '明日 ${time} が入金期限です';
-
-  /// ja: '入金期限まであと3時間（${time}）'
-  String paymentSoon({required Object time}) => '入金期限まであと3時間（${time}）';
 }
 
 // Path: errors
@@ -1294,9 +1028,6 @@ class TranslationsErrorsJa {
 
   /// ja: 'Gmail と同期できませんでした。時間をおいてもう一度お試しください。'
   String get gmailSync => 'Gmail と同期できませんでした。時間をおいてもう一度お試しください。';
-
-  /// ja: '通知を予約できませんでした。'
-  String get reminderSchedule => '通知を予約できませんでした。';
 }
 
 /// The flat map containing all translations for locale <ja>.
@@ -1393,22 +1124,6 @@ extension on Translations {
       'categoryShort.transport' => '交通費',
       'categoryShort.locker' => 'ロッカー',
       'categoryShort.other' => 'その他',
-      'stage.planned' => '申込予定',
-      'stage.awaitingResult' => '結果待ち',
-      'stage.awaitingPayment' => '入金待ち',
-      'stage.secured' => '確保済み',
-      'stage.lost' => '落選',
-      'service.eplus' => 'eplus',
-      'service.livepocket' => 'ライブポケット',
-      'service.other' => 'その他',
-      'deadline.apply' => '申込締切',
-      'deadline.result' => '当落発表日時',
-      'deadline.payment' => '入金期限',
-      'deadline.resultShort' => '当落発表',
-      'quickAction.applied' => '申し込んだ',
-      'quickAction.won' => '当選',
-      'quickAction.lost' => '落選',
-      'quickAction.paid' => '支払った',
       'basis.label' => '計上基準',
       'basis.paidOn' => '支払日',
       'basis.performanceDate' => '公演日',
@@ -1447,27 +1162,11 @@ extension on Translations {
       'list.performanceOn' => ({required Object date}) => '公演 ${date}',
       'list.overspent' => '超過',
       'list.filterLabel' => 'カテゴリで絞り込む',
-      'upcoming.addApplication' => '申込を追加',
-      'upcoming.todo' => 'やること',
-      'upcoming.todoOrder' => '期限が近い順',
-      'upcoming.noTodo' => '期限が近いチケット申込はありません。',
-      'upcoming.performances' => '公演',
-      'upcoming.noPerformances' => 'これからの公演はまだありません。チケット代かチケット申込を登録すると表示します。',
-      'upcoming.overdue' => ({required Object kind}) => '${kind}を過ぎました · 結果を記録',
-      'upcoming.needsUpdate' => '要更新',
-      'upcoming.stageChanged' =>
-        ({required Object title, required Object stage}) =>
-            '「${title}」を${stage}にしました',
-      'upcoming.actionLabel' =>
-        ({required Object title, required Object stage}) =>
-            '${title}を${stage}にする',
+      'upcoming.noPerformances' => 'これからの公演はまだありません。チケット代を記録すると表示します。',
       'upcoming.startsAt' => ({required Object time}) => '${time} 開演',
       'upcoming.startsAtVenue' =>
         ({required Object time, required Object venue}) =>
             '${time} 開演 · ${venue}',
-      'upcoming.noApplication' => '申込なし',
-      'upcoming.notificationsDenied' =>
-        '通知が許可されていないため、リマインドは届きません。端末の設定アプリから通知を許可してください。',
       'performance.title' => '公演',
       'performance.newTitle' => '公演を登録',
       'performance.editTitle' => '公演を編集',
@@ -1481,17 +1180,11 @@ extension on Translations {
       'performance.none' => '紐づけない',
       'performance.noPerformances' => '登録済みの公演はありません',
       'performance.createNew' => '新しい公演を登録',
-      'performance.applications' => 'チケット申込',
-      'performance.noApplications' => 'チケット申込はまだありません',
       'performance.delete' => 'この公演を削除',
       'performance.deleteTitle' => '公演を削除しますか？',
       'performance.deleteBody' =>
-        ({
-          required Object count,
-          required Object amount,
-          required Object applications,
-        }) =>
-            'チケット代・ドリンク代・チェキ代 ${count}件（${amount}）と、チケット申込 ${applications}件も一緒に削除します。グッズ代などは公演との紐づけだけを外します。',
+        ({required Object count, required Object amount}) =>
+            'チケット代・ドリンク代・チェキ代 ${count}件（${amount}）も一緒に削除します。グッズ代などは公演との紐づけだけを外します。',
       'performance.titleRequired' => '公演名を入力してください',
       'expense.addTitle' => '支出を追加',
       'expense.editTitle' => '支出を編集',
@@ -1566,31 +1259,6 @@ extension on Translations {
       'partner.inUse' => 'チェキ代の記録があるため削除できません',
       'partner.nameRequired' => '名前を入力してください',
       'partner.empty' => '登録済みのチェキ相手はいません',
-      'application.title' => 'チケット申込',
-      'application.performance' => '公演',
-      'application.stage' => '申込段階',
-      'application.service' => 'チケットサービス',
-      'application.referenceNo' => '受付番号',
-      'application.referenceHint' => '任意 · Gmail の照合に使います',
-      'application.deadlines' => '期限',
-      'application.reminded' => 'リマインド対象',
-      'application.pickDateTime' => '日時を選ぶ',
-      'application.clear' => 'クリア',
-      'application.note' => 'メモ',
-      'application.delete' => 'このチケット申込を削除',
-      'application.imported' => 'Gmail から取り込み',
-      'application.overdueApply' => '申込締切を過ぎています。申し込んだら、段階を「結果待ち」にしてください。',
-      'application.overdueResult' => '当落発表日時を過ぎています。結果が出たら段階を更新してください。',
-      'application.overduePayment' => '入金期限を過ぎています。支払ったら段階を「確保済み」にしてください。',
-      'application.willNotify' =>
-        ({required Object times}) => '${times} に通知します。',
-      'application.noReminder' => 'この段階ではリマインドしません。発券の状況はメモに残せます。',
-      'application.noDeadline' =>
-        ({required Object kind}) => '${kind}を入れると、期限の前に通知します。',
-      'application.reminderOff' =>
-        ({required Object kind}) => '${kind}のリマインドは設定でオフになっています。',
-      'application.performanceRequired' => '公演を選んでください',
-      'application.add' => 'チケット申込を追加',
       'settings.budget' => '推し活代',
       'settings.monthly' => '月額',
       'settings.startMonth' => '開始月',
@@ -1629,14 +1297,10 @@ extension on Translations {
       'settings.disconnectTitle' => 'Gmail の連携を解除しますか？',
       'settings.demo' => 'デモデータ',
       'settings.demoNote' => 'OAuth クライアントが未設定のため、モックデータのメールを取り込みます。',
-      'settings.reminders' => 'リマインド',
-      'settings.permissionGranted' => '通知は許可されています',
-      'settings.permissionDenied' => '通知が許可されていません。端末の設定アプリから許可してください。',
-      'settings.permissionUnknown' => '初めて期限を登録したときに、通知の許可を求めます',
       'settings.display' => '表示',
       'settings.showAmounts' => '金額を表示する',
       'settings.showAmountsNote' =>
-        'オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演と通知には金額を表示しません。',
+        'オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演には金額を表示しません。',
       'settings.theme' => 'テーマ',
       'settings.themeSystem' => '端末に合わせる',
       'settings.themeLight' => 'ライト',
@@ -1647,9 +1311,6 @@ extension on Translations {
       'settings.defaultBasis' => '計上基準の初期値',
       'settings.defaultBasisNote' =>
         'カレンダーとリストで支出をどの日に置くかの初期値です。残高は常に支払日で計算します。',
-      'settings.reminderApplyWhen' => '前日 20:00 と3時間前',
-      'settings.reminderResultWhen' => '発表の時刻',
-      'settings.reminderPaymentWhen' => '前日 20:00 と3時間前',
       'settings.overrideSaved' => '上書きを保存しました',
       'settings.budgetSaved' => '推し活代を保存しました',
       'settings.gmailAccount' => '連携中のアカウント',
@@ -1660,8 +1321,8 @@ extension on Translations {
       'onboarding.featureBudgetBody' => '使わなかった分も、使いすぎた分も翌月へ繰り越します。',
       'onboarding.featureRecordTitle' => '会場ですぐ記録',
       'onboarding.featureRecordBody' => 'ドリンク代は前回の金額で、チェキ代は相手を選んで枚数を入れるだけ。',
-      'onboarding.featureReminderTitle' => 'チケットの期限を逃さない',
-      'onboarding.featureReminderBody' => '抽選の申込締切・当落発表・入金期限を通知でお知らせします。',
+      'onboarding.featureGmailTitle' => 'チケット代は自動で記録',
+      'onboarding.featureGmailBody' => 'Gmail と連携すると、決済完了のメールからチケット代と公演を登録します。',
       'onboarding.privacy' => 'データはこの端末の中だけに保存します。登録やログインは要りません。',
       'onboarding.start' => 'はじめる',
       'onboarding.budgetStep' => '1 / 2',
@@ -1676,7 +1337,7 @@ extension on Translations {
       'onboarding.gmailStep' => '2 / 2 · 任意',
       'onboarding.gmailTitle' => 'チケットのメールから自動で記録',
       'onboarding.gmailBody' =>
-        'Gmail と連携すると、チケットの購入や抽選のメールを読み取り、チケット代とチケット申込を自動で登録します。',
+        'Gmail と連携すると、チケットの決済完了のメールを読み取り、チケット代と公演を自動で登録します。',
       'onboarding.gmailScope' =>
         '読むのは eplus・ライブポケットのチケットのメールだけ。メールの送信や削除はしません。',
       'onboarding.gmailPrivacy' => 'メールの本文は保存せず、読み取った内容はこの端末の中だけに置きます。',
@@ -1687,16 +1348,6 @@ extension on Translations {
       'onboarding.gmailLaterNote' => '連携と解除は設定画面からいつでもできます',
       'onboarding.sampleSubject' => '決済に関するご案内',
       'onboarding.sampleAuto' => '自動',
-      'reminder.channelName' => 'チケット申込のリマインド',
-      'reminder.channelDescription' => '申込締切・当落発表・入金期限をお知らせします',
-      'reminder.applyEve' => ({required Object time}) => '明日 ${time} が申込締切です',
-      'reminder.applySoon' =>
-        ({required Object time}) => '申込締切まであと3時間（${time}）',
-      'reminder.resultAt' =>
-        ({required Object dateTime}) => '当落発表の時刻です（${dateTime}）。結果を記録しましょう',
-      'reminder.paymentEve' => ({required Object time}) => '明日 ${time} が入金期限です',
-      'reminder.paymentSoon' =>
-        ({required Object time}) => '入金期限まであと3時間（${time}）',
       'errors.unexpected' => '予期しないエラーが発生しました。もう一度お試しください。',
       'errors.settingsWrite' => '設定を保存できませんでした。もう一度お試しください。',
       'errors.recordStorage' => '記録を保存できませんでした。もう一度お試しください。',
@@ -1705,7 +1356,6 @@ extension on Translations {
       'errors.partnerIcon' => '画像を読み込めませんでした。',
       'errors.gmailReauthRequired' => 'Gmail の再連携が必要です。',
       'errors.gmailSync' => 'Gmail と同期できませんでした。時間をおいてもう一度お試しください。',
-      'errors.reminderSchedule' => '通知を予約できませんでした。',
       _ => null,
     };
   }

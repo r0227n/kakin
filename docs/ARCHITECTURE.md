@@ -15,7 +15,7 @@ presentation / infrastructure → core（外側の共通処理のみ）
 ```
 
 - `domain` は業務領域ごとの純粋なルールです。`budget`（推し活代・残高）、`calendar`（暦日・日本時間）、
-  `expense`（カテゴリ・二重計上）、`ticket`（申込段階・リマインド計画）に分けます。
+  `expense`（カテゴリ・二重計上）に分けます。
 - `application` は `models`・`ports`・`use_cases`・`errors` に分けます。
   domain 以外の app layer、Flutter、Riverpod、plugin、外部 I/O に依存しません。
 - `infrastructure` は port の具象 adapter です。保存キーと plugin の知識を所有し、Riverpod に依存しません。
@@ -55,8 +55,8 @@ Dart の型は PascalCase、メンバーは camelCase、ファイルは snake_ca
 `application_providers.dart` は use case と初期 snapshot、`observability_providers.dart` は ErrorReporter の必須 token です。
 未注入の token は即座に失敗し、暗黙の本番実装へ fallback しません。
 
-`openKakinApp` は DB・通知・SharedPreferences・画像の保存先を開き、初期 snapshot と表示言語を解決して root widget を返します。
-`bootstrap` は binding・エラーハンドラーを用意して `runApp` し、起動後にリマインドの再予約と未使用アイコンの掃除を行います。
+`openKakinApp` は DB・SharedPreferences・画像の保存先を開き、初期 snapshot と表示言語を解決して root widget を返します。
+`bootstrap` は binding・エラーハンドラーを用意して `runApp` し、起動後に未使用アイコンの掃除を行います。
 Patrol の E2E は `openKakinApp` の root widget を `pumpWidget` で起動し、`runApp` とエラーハンドラーの差し替えを避けます。
 root widget と controller は同じ snapshot を使うため、最初のフレームに既定値が混ざりません。
 router の定義は navigation、生成・破棄は app が所有します。
@@ -64,15 +64,13 @@ router の定義は navigation、生成・破棄は app が所有します。
 
 ## 外部能力の adapter
 
-| port                 | adapter                                         | 備考                                                                                  |
-| -------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------- |
-| 支出・公演・申込など | `infrastructure/persistence/drift/repositories` | 書き込みは `LocalDataChanges` へ通知し、画面は revision で再読込する                  |
-| `ReminderScheduler`  | `LocalReminderScheduler`                        | 通知の操作ボタンの応答は top-level の `handleBackgroundNotificationResponse` が受ける |
-| `GmailMailbox`       | `GoogleGmailMailbox` / `DemoGmailMailbox`       | OAuth の `--dart-define` がなければデモを選ぶ                                         |
-| `PartnerIconStore`   | `FilePartnerIconStore`                          | アプリのドキュメント領域に保存する                                                    |
-| `PartnerIconPicker`  | `PluginPartnerIconPicker`                       | image_picker と image_cropper で正方形に切り抜く                                      |
+| port                | adapter                                         | 備考                                                                 |
+| ------------------- | ----------------------------------------------- | -------------------------------------------------------------------- |
+| 支出・公演など      | `infrastructure/persistence/drift/repositories` | 書き込みは `LocalDataChanges` へ通知し、画面は revision で再読込する |
+| `GmailMailbox`      | `GoogleGmailMailbox` / `DemoGmailMailbox`       | OAuth の `--dart-define` がなければデモを選ぶ                        |
+| `PartnerIconStore`  | `FilePartnerIconStore`                          | アプリのドキュメント領域に保存する                                   |
+| `PartnerIconPicker` | `PluginPartnerIconPicker`                       | image_picker と image_cropper で正方形に切り抜く                     |
 
-iOS の通知許可は、一度も求めていないときも OS が拒否と答えるため、`ReminderUseCase` が未確認として扱います。
 Gmail の検索クエリと MIME の本文抽出は `packages/gmail_ticket_source`、メールの解析はチケットサービスごとの package が所有します。
 
 ## 設定の状態所有
@@ -123,7 +121,7 @@ Firebase や Sentry は初期化せず、外部送信も行いません。
 
 テストは実装と同じレイヤー構造で配置します。保存・復旧・連続操作は unit test、
 DI・遷移・翻訳・テーマ・大きな文字は widget test、依存方向は architecture test で検証します。
-端末の通知許可やネイティブのダイアログを含む利用者の流れは `app/patrol_test/` の Patrol で検証します。
+画面をまたぐ利用者の流れは `app/patrol_test/` の Patrol で検証します。
 テストで触る Widget の key は `presentation/shared/keys/app_keys.dart` の `AppKeys` に置き、アプリとテストで共有します。
 一覧の項目には ID や enum を引数に取る key を使います。
 

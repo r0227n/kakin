@@ -21,9 +21,6 @@ enum AppErrorCode {
   /// Gmail の連携や同期に失敗した。
   gmailSync('gmail.sync'),
 
-  /// 通知の予約に失敗した。
-  reminderSchedule('reminder.schedule'),
-
   /// 分類されていない不具合。
   unexpected('unexpected');
 

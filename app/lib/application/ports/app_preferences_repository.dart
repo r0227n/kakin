@@ -18,15 +18,6 @@ abstract interface class AppPreferencesRepository {
   /// 金額を表示するかを保存する。
   Future<void> saveAmountsVisible({required bool visible});
 
-  /// 期限の種類ごとのリマインドのオンとオフを保存する。
-  Future<void> saveReminderEnabled(
-    TicketDeadlineKind kind, {
-    required bool enabled,
-  });
-
   /// 初回起動の案内を最後まで進めたことを保存する。
   Future<void> saveOnboardingCompleted();
-
-  /// OS に通知の許可を求めたことを保存する。
-  Future<void> saveNotificationPermissionRequested();
 }

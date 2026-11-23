@@ -80,30 +80,6 @@
     "locker": "ロッカー",
     "other": "その他"
   },
-  "stage": {
-    "planned": "申込予定",
-    "awaitingResult": "結果待ち",
-    "awaitingPayment": "入金待ち",
-    "secured": "確保済み",
-    "lost": "落選"
-  },
-  "service": {
-    "eplus": "eplus",
-    "livepocket": "ライブポケット",
-    "other": "その他"
-  },
-  "deadline": {
-    "apply": "申込締切",
-    "result": "当落発表日時",
-    "payment": "入金期限",
-    "resultShort": "当落発表"
-  },
-  "quickAction": {
-    "applied": "申し込んだ",
-    "won": "当選",
-    "lost": "落選",
-    "paid": "支払った"
-  },
   "basis": {
     "label": "計上基準",
     "paidOn": "支払日",
@@ -149,20 +125,9 @@
     "filterLabel": "カテゴリで絞り込む"
   },
   "upcoming": {
-    "addApplication": "申込を追加",
-    "todo": "やること",
-    "todoOrder": "期限が近い順",
-    "noTodo": "期限が近いチケット申込はありません。",
-    "performances": "公演",
-    "noPerformances": "これからの公演はまだありません。チケット代かチケット申込を登録すると表示します。",
-    "overdue": "${kind}を過ぎました · 結果を記録",
-    "needsUpdate": "要更新",
-    "stageChanged": "「${title}」を${stage}にしました",
-    "actionLabel": "${title}を${stage}にする",
+    "noPerformances": "これからの公演はまだありません。チケット代を記録すると表示します。",
     "startsAt": "${time} 開演",
-    "startsAtVenue": "${time} 開演 · ${venue}",
-    "noApplication": "申込なし",
-    "notificationsDenied": "通知が許可されていないため、リマインドは届きません。端末の設定アプリから通知を許可してください。"
+    "startsAtVenue": "${time} 開演 · ${venue}"
   },
   "performance": {
     "title": "公演",
@@ -178,11 +143,9 @@
     "none": "紐づけない",
     "noPerformances": "登録済みの公演はありません",
     "createNew": "新しい公演を登録",
-    "applications": "チケット申込",
-    "noApplications": "チケット申込はまだありません",
     "delete": "この公演を削除",
     "deleteTitle": "公演を削除しますか？",
-    "deleteBody": "チケット代・ドリンク代・チェキ代 ${count}件（${amount}）と、チケット申込 ${applications}件も一緒に削除します。グッズ代などは公演との紐づけだけを外します。",
+    "deleteBody": "チケット代・ドリンク代・チェキ代 ${count}件（${amount}）も一緒に削除します。グッズ代などは公演との紐づけだけを外します。",
     "titleRequired": "公演名を入力してください"
   },
   "expense": {
@@ -253,30 +216,6 @@
     "nameRequired": "名前を入力してください",
     "empty": "登録済みのチェキ相手はいません"
   },
-  "application": {
-    "title": "チケット申込",
-    "performance": "公演",
-    "stage": "申込段階",
-    "service": "チケットサービス",
-    "referenceNo": "受付番号",
-    "referenceHint": "任意 · Gmail の照合に使います",
-    "deadlines": "期限",
-    "reminded": "リマインド対象",
-    "pickDateTime": "日時を選ぶ",
-    "clear": "クリア",
-    "note": "メモ",
-    "delete": "このチケット申込を削除",
-    "imported": "Gmail から取り込み",
-    "overdueApply": "申込締切を過ぎています。申し込んだら、段階を「結果待ち」にしてください。",
-    "overdueResult": "当落発表日時を過ぎています。結果が出たら段階を更新してください。",
-    "overduePayment": "入金期限を過ぎています。支払ったら段階を「確保済み」にしてください。",
-    "willNotify": "${times} に通知します。",
-    "noReminder": "この段階ではリマインドしません。発券の状況はメモに残せます。",
-    "noDeadline": "${kind}を入れると、期限の前に通知します。",
-    "reminderOff": "${kind}のリマインドは設定でオフになっています。",
-    "performanceRequired": "公演を選んでください",
-    "add": "チケット申込を追加"
-  },
   "settings": {
     "budget": "推し活代",
     "monthly": "月額",
@@ -312,13 +251,9 @@
     "disconnectTitle": "Gmail の連携を解除しますか？",
     "demo": "デモデータ",
     "demoNote": "OAuth クライアントが未設定のため、モックデータのメールを取り込みます。",
-    "reminders": "リマインド",
-    "permissionGranted": "通知は許可されています",
-    "permissionDenied": "通知が許可されていません。端末の設定アプリから許可してください。",
-    "permissionUnknown": "初めて期限を登録したときに、通知の許可を求めます",
     "display": "表示",
     "showAmounts": "金額を表示する",
-    "showAmountsNote": "オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演と通知には金額を表示しません。",
+    "showAmountsNote": "オフにすると、カレンダーとリストの金額を「•••」で隠します。各画面の目のボタンでも、その場で切り替えられます。今後の公演には金額を表示しません。",
     "theme": "テーマ",
     "themeSystem": "端末に合わせる",
     "themeLight": "ライト",
@@ -328,9 +263,6 @@
     "languageEnglish": "English",
     "defaultBasis": "計上基準の初期値",
     "defaultBasisNote": "カレンダーとリストで支出をどの日に置くかの初期値です。残高は常に支払日で計算します。",
-    "reminderApplyWhen": "前日 20:00 と3時間前",
-    "reminderResultWhen": "発表の時刻",
-    "reminderPaymentWhen": "前日 20:00 と3時間前",
     "overrideSaved": "上書きを保存しました",
     "budgetSaved": "推し活代を保存しました",
     "gmailAccount": "連携中のアカウント",
@@ -343,8 +275,8 @@
     "featureBudgetBody": "使わなかった分も、使いすぎた分も翌月へ繰り越します。",
     "featureRecordTitle": "会場ですぐ記録",
     "featureRecordBody": "ドリンク代は前回の金額で、チェキ代は相手を選んで枚数を入れるだけ。",
-    "featureReminderTitle": "チケットの期限を逃さない",
-    "featureReminderBody": "抽選の申込締切・当落発表・入金期限を通知でお知らせします。",
+    "featureGmailTitle": "チケット代は自動で記録",
+    "featureGmailBody": "Gmail と連携すると、決済完了のメールからチケット代と公演を登録します。",
     "privacy": "データはこの端末の中だけに保存します。登録やログインは要りません。",
     "start": "はじめる",
     "budgetStep": "1 / 2",
@@ -355,7 +287,7 @@
     "budgetLater": "推し活代は設定画面からいつでも変更できます",
     "gmailStep": "2 / 2 · 任意",
     "gmailTitle": "チケットのメールから自動で記録",
-    "gmailBody": "Gmail と連携すると、チケットの購入や抽選のメールを読み取り、チケット代とチケット申込を自動で登録します。",
+    "gmailBody": "Gmail と連携すると、チケットの決済完了のメールを読み取り、チケット代と公演を自動で登録します。",
     "gmailScope": "読むのは eplus・ライブポケットのチケットのメールだけ。メールの送信や削除はしません。",
     "gmailPrivacy": "メールの本文は保存せず、読み取った内容はこの端末の中だけに置きます。",
     "gmailBackfill": "連携すると、3ヶ月前までのメールをさかのぼって取り込みます。",
@@ -365,15 +297,6 @@
     "sampleSubject": "決済に関するご案内",
     "sampleAuto": "自動"
   },
-  "reminder": {
-    "channelName": "チケット申込のリマインド",
-    "channelDescription": "申込締切・当落発表・入金期限をお知らせします",
-    "applyEve": "明日 ${time} が申込締切です",
-    "applySoon": "申込締切まであと3時間（${time}）",
-    "resultAt": "当落発表の時刻です（${dateTime}）。結果を記録しましょう",
-    "paymentEve": "明日 ${time} が入金期限です",
-    "paymentSoon": "入金期限まであと3時間（${time}）"
-  },
   "errors": {
     "unexpected": "予期しないエラーが発生しました。もう一度お試しください。",
     "settingsWrite": "設定を保存できませんでした。もう一度お試しください。",
@@ -382,7 +305,6 @@
     "partnerInUse": "チェキ代の記録があるため削除できません。",
     "partnerIcon": "画像を読み込めませんでした。",
     "gmailReauthRequired": "Gmail の再連携が必要です。",
-    "gmailSync": "Gmail と同期できませんでした。時間をおいてもう一度お試しください。",
-    "reminderSchedule": "通知を予約できませんでした。"
+    "gmailSync": "Gmail と同期できませんでした。時間をおいてもう一度お試しください。"
   }
 }

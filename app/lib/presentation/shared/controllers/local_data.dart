@@ -53,23 +53,11 @@ Future<List<Partner>> partners(Ref ref) async {
   return ref.read(partnerUseCaseProvider).listAll();
 }
 
-/// やることと今後の公演。
+/// 今後の公演。開始日時の早い順。
 @riverpod
-Future<UpcomingOverview> upcomingOverview(Ref ref) async {
+Future<List<UpcomingPerformance>> upcomingPerformances(Ref ref) async {
   await ref.watch(localDataRevisionProvider.future);
-  return ref.read(ticketApplicationUseCaseProvider).loadUpcoming();
-}
-
-/// [performanceId] のチケット申込。
-@riverpod
-Future<List<TicketApplication>> performanceApplications(
-  Ref ref,
-  int performanceId,
-) async {
-  await ref.watch(localDataRevisionProvider.future);
-  return ref
-      .read(ticketApplicationUseCaseProvider)
-      .listForPerformance(performanceId);
+  return ref.read(performanceUseCaseProvider).listUpcoming();
 }
 
 /// Gmail 連携の状態。
@@ -78,8 +66,3 @@ Future<GmailStatus> gmailStatus(Ref ref) async {
   await ref.watch(localDataRevisionProvider.future);
   return ref.read(gmailUseCaseProvider).loadStatus();
 }
-
-/// OS の通知の許可の状態。画面に戻ったときは呼び出し側が invalidate する。
-@riverpod
-Future<NotificationPermission> notificationPermission(Ref ref) =>
-    ref.read(reminderUseCaseProvider).permissionStatus();

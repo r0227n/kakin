@@ -306,59 +306,6 @@ final class PerformanceUseCaseProvider
 String _$performanceUseCaseHash() =>
     r'd94e47b088397ca837691c973f1dc399b31c72c9';
 
-/// チケット申込の入力境界。
-
-@ProviderFor(ticketApplicationUseCase)
-final ticketApplicationUseCaseProvider = TicketApplicationUseCaseProvider._();
-
-/// チケット申込の入力境界。
-
-final class TicketApplicationUseCaseProvider
-    extends
-        $FunctionalProvider<
-          TicketApplicationUseCase,
-          TicketApplicationUseCase,
-          TicketApplicationUseCase
-        >
-    with $Provider<TicketApplicationUseCase> {
-  /// チケット申込の入力境界。
-  TicketApplicationUseCaseProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'ticketApplicationUseCaseProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$ticketApplicationUseCaseHash();
-
-  @$internal
-  @override
-  $ProviderElement<TicketApplicationUseCase> $createElement(
-    $ProviderPointer pointer,
-  ) => $ProviderElement(pointer);
-
-  @override
-  TicketApplicationUseCase create(Ref ref) {
-    return ticketApplicationUseCase(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(TicketApplicationUseCase value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<TicketApplicationUseCase>(value),
-    );
-  }
-}
-
-String _$ticketApplicationUseCaseHash() =>
-    r'f32f9e9d6cdab182cf5a1dd0e9cd945fe4ee206f';
-
 /// チェキ相手の入力境界。
 
 @ProviderFor(partnerUseCase)
@@ -404,53 +351,6 @@ final class PartnerUseCaseProvider
 }
 
 String _$partnerUseCaseHash() => r'2b1406db6d28570481c7ff9cbb4d82660dd1edb5';
-
-/// リマインドの入力境界。
-
-@ProviderFor(reminderUseCase)
-final reminderUseCaseProvider = ReminderUseCaseProvider._();
-
-/// リマインドの入力境界。
-
-final class ReminderUseCaseProvider
-    extends
-        $FunctionalProvider<ReminderUseCase, ReminderUseCase, ReminderUseCase>
-    with $Provider<ReminderUseCase> {
-  /// リマインドの入力境界。
-  ReminderUseCaseProvider._()
-    : super(
-        from: null,
-        argument: null,
-        retry: null,
-        name: r'reminderUseCaseProvider',
-        isAutoDispose: false,
-        dependencies: null,
-        $allTransitiveDependencies: null,
-      );
-
-  @override
-  String debugGetCreateSourceHash() => _$reminderUseCaseHash();
-
-  @$internal
-  @override
-  $ProviderElement<ReminderUseCase> $createElement($ProviderPointer pointer) =>
-      $ProviderElement(pointer);
-
-  @override
-  ReminderUseCase create(Ref ref) {
-    return reminderUseCase(ref);
-  }
-
-  /// {@macro riverpod.override_with_value}
-  Override overrideWithValue(ReminderUseCase value) {
-    return $ProviderOverride(
-      origin: this,
-      providerOverride: $SyncValueProvider<ReminderUseCase>(value),
-    );
-  }
-}
-
-String _$reminderUseCaseHash() => r'857c59d9375a0e7755d4ad639d9782320f2b4581';
 
 /// Gmail 連携の入力境界。
 

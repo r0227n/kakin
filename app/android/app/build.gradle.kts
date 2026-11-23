@@ -25,8 +25,7 @@ val appName = dartDefines["APP_NAME"] ?: "Kakin"
 
 android {
     namespace = "com.example.app"
-    // flutter_local_notifications 23 は compileSdk 37 以上を求める。
-    compileSdk = maxOf(flutter.compileSdkVersion, 37)
+    compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
     buildFeatures {
@@ -34,8 +33,6 @@ android {
     }
 
     compileOptions {
-        // 予約通知の後方互換のため flutter_local_notifications が desugaring を求める。
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
@@ -85,6 +82,5 @@ flutter {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     androidTestUtil("androidx.test:orchestrator:1.5.1")
 }

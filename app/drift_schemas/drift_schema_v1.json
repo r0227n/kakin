@@ -283,168 +283,7 @@
     },
     {
       "id": 4,
-      "references": [
-        2
-      ],
-      "type": "table",
-      "data": {
-        "name": "ticket_applications",
-        "was_declared_in_moor": false,
-        "columns": [
-          {
-            "name": "id",
-            "getter_name": "id",
-            "moor_type": "int",
-            "nullable": false,
-            "customConstraints": null,
-            "defaultConstraints": "PRIMARY KEY AUTOINCREMENT",
-            "dialectAwareDefaultConstraints": {
-              "sqlite": "PRIMARY KEY AUTOINCREMENT"
-            },
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": [
-              "auto-increment"
-            ]
-          },
-          {
-            "name": "performance_id",
-            "getter_name": "performanceId",
-            "moor_type": "int",
-            "nullable": false,
-            "customConstraints": null,
-            "defaultConstraints": "REFERENCES performances (id) ON DELETE CASCADE",
-            "dialectAwareDefaultConstraints": {
-              "sqlite": "REFERENCES performances (id) ON DELETE CASCADE"
-            },
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": [
-              {
-                "foreign_key": {
-                  "to": {
-                    "table": "performances",
-                    "column": "id"
-                  },
-                  "initially_deferred": false,
-                  "on_update": null,
-                  "on_delete": "cascade"
-                }
-              }
-            ]
-          },
-          {
-            "name": "service",
-            "getter_name": "service",
-            "moor_type": "string",
-            "nullable": true,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": [],
-            "type_converter": {
-              "dart_expr": "const EnumNameConverter<TicketServiceKind>(TicketServiceKind.values)",
-              "dart_type_name": "TicketServiceKind"
-            }
-          },
-          {
-            "name": "stage",
-            "getter_name": "stage",
-            "moor_type": "string",
-            "nullable": false,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": [],
-            "type_converter": {
-              "dart_expr": "const TicketStageConverter()",
-              "dart_type_name": "TicketApplicationStage"
-            }
-          },
-          {
-            "name": "reference_no",
-            "getter_name": "referenceNo",
-            "moor_type": "string",
-            "nullable": true,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
-          },
-          {
-            "name": "apply_deadline_at",
-            "getter_name": "applyDeadlineAt",
-            "moor_type": "dateTime",
-            "nullable": true,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
-          },
-          {
-            "name": "result_at",
-            "getter_name": "resultAt",
-            "moor_type": "dateTime",
-            "nullable": true,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
-          },
-          {
-            "name": "payment_deadline_at",
-            "getter_name": "paymentDeadlineAt",
-            "moor_type": "dateTime",
-            "nullable": true,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
-          },
-          {
-            "name": "note",
-            "getter_name": "note",
-            "moor_type": "string",
-            "nullable": true,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": []
-          },
-          {
-            "name": "created_at",
-            "getter_name": "createdAt",
-            "moor_type": "dateTime",
-            "nullable": false,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": "() => DateTime.now().toUtc()",
-            "dsl_features": []
-          },
-          {
-            "name": "updated_at",
-            "getter_name": "updatedAt",
-            "moor_type": "dateTime",
-            "nullable": false,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": "() => DateTime.now().toUtc()",
-            "dsl_features": []
-          }
-        ],
-        "is_virtual": false,
-        "without_rowid": false,
-        "constraints": [
-          "CHECK (stage IN ('planned', 'awaiting_result', 'awaiting_payment', 'secured', 'lost'))",
-          "CHECK (service IS NULL OR service IN ('eplus', 'livepocket', 'other'))"
-        ]
-      }
-    },
-    {
-      "id": 5,
-      "references": [
-        4
-      ],
+      "references": [],
       "type": "table",
       "data": {
         "name": "email_imports",
@@ -501,46 +340,6 @@
             }
           },
           {
-            "name": "mail_kind",
-            "getter_name": "mailKind",
-            "moor_type": "string",
-            "nullable": false,
-            "customConstraints": null,
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": [],
-            "type_converter": {
-              "dart_expr": "const EnumNameConverter<StoredMailKind>(StoredMailKind.values)",
-              "dart_type_name": "StoredMailKind"
-            }
-          },
-          {
-            "name": "ticket_application_id",
-            "getter_name": "ticketApplicationId",
-            "moor_type": "int",
-            "nullable": true,
-            "customConstraints": null,
-            "defaultConstraints": "REFERENCES ticket_applications (id) ON DELETE SET NULL",
-            "dialectAwareDefaultConstraints": {
-              "sqlite": "REFERENCES ticket_applications (id) ON DELETE SET NULL"
-            },
-            "default_dart": null,
-            "default_client_dart": null,
-            "dsl_features": [
-              {
-                "foreign_key": {
-                  "to": {
-                    "table": "ticket_applications",
-                    "column": "id"
-                  },
-                  "initially_deferred": false,
-                  "on_update": null,
-                  "on_delete": "setNull"
-                }
-              }
-            ]
-          },
-          {
             "name": "subject",
             "getter_name": "subject",
             "moor_type": "string",
@@ -574,8 +373,7 @@
         "is_virtual": false,
         "without_rowid": false,
         "constraints": [
-          "CHECK (service IN ('eplus', 'livepocket'))",
-          "CHECK (mail_kind IN ('application', 'win', 'lose', 'payment'))"
+          "CHECK (service IN ('eplus', 'livepocket'))"
         ],
         "unique_keys": [
           [
@@ -586,11 +384,11 @@
       }
     },
     {
-      "id": 6,
+      "id": 5,
       "references": [
         2,
         3,
-        5
+        4
       ],
       "type": "table",
       "data": {
@@ -776,7 +574,7 @@
       }
     },
     {
-      "id": 7,
+      "id": 6,
       "references": [],
       "type": "table",
       "data": {
@@ -880,7 +678,7 @@
       }
     },
     {
-      "id": 8,
+      "id": 7,
       "references": [
         2
       ],
@@ -899,7 +697,7 @@
       }
     },
     {
-      "id": 9,
+      "id": 8,
       "references": [
         2
       ],
@@ -922,13 +720,13 @@
       }
     },
     {
-      "id": 10,
+      "id": 9,
       "references": [
-        6
+        5
       ],
       "type": "index",
       "data": {
-        "on": 6,
+        "on": 5,
         "name": "expenses_paid_on",
         "sql": null,
         "unique": false,
@@ -941,13 +739,13 @@
       }
     },
     {
-      "id": 11,
+      "id": 10,
       "references": [
-        6
+        5
       ],
       "type": "index",
       "data": {
-        "on": 6,
+        "on": 5,
         "name": "expenses_performance_id_category",
         "sql": null,
         "unique": false,
@@ -964,13 +762,13 @@
       }
     },
     {
-      "id": 12,
+      "id": 11,
       "references": [
-        6
+        5
       ],
       "type": "index",
       "data": {
-        "on": 6,
+        "on": 5,
         "name": "expenses_partner_id",
         "sql": null,
         "unique": false,
@@ -983,13 +781,13 @@
       }
     },
     {
-      "id": 13,
+      "id": 12,
       "references": [
-        6
+        5
       ],
       "type": "index",
       "data": {
-        "on": 6,
+        "on": 5,
         "name": "expenses_email_import_id",
         "sql": null,
         "unique": false,
@@ -1002,7 +800,7 @@
       }
     },
     {
-      "id": 14,
+      "id": 13,
       "references": [
         3
       ],
@@ -1015,48 +813,6 @@
         "columns": [
           {
             "column": "name",
-            "order_by": null
-          }
-        ]
-      }
-    },
-    {
-      "id": 15,
-      "references": [
-        4
-      ],
-      "type": "index",
-      "data": {
-        "on": 4,
-        "name": "ticket_applications_performance_id",
-        "sql": null,
-        "unique": false,
-        "columns": [
-          {
-            "column": "performance_id",
-            "order_by": null
-          }
-        ]
-      }
-    },
-    {
-      "id": 16,
-      "references": [
-        4
-      ],
-      "type": "index",
-      "data": {
-        "on": 4,
-        "name": "ticket_applications_service_reference_no",
-        "sql": null,
-        "unique": false,
-        "columns": [
-          {
-            "column": "service",
-            "order_by": null
-          },
-          {
-            "column": "reference_no",
             "order_by": null
           }
         ]
@@ -1101,20 +857,11 @@
       ]
     },
     {
-      "name": "ticket_applications",
-      "sql": [
-        {
-          "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"ticket_applications\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"performance_id\" INTEGER NOT NULL REFERENCES performances (id) ON DELETE CASCADE, \"service\" TEXT NULL, \"stage\" TEXT NOT NULL, \"reference_no\" TEXT NULL, \"apply_deadline_at\" TEXT NULL, \"result_at\" TEXT NULL, \"payment_deadline_at\" TEXT NULL, \"note\" TEXT NULL, \"created_at\" TEXT NOT NULL, \"updated_at\" TEXT NOT NULL, CHECK (stage IN ('planned', 'awaiting_result', 'awaiting_payment', 'secured', 'lost')), CHECK (service IS NULL OR service IN ('eplus', 'livepocket', 'other')));"
-        }
-      ]
-    },
-    {
       "name": "email_imports",
       "sql": [
         {
           "dialect": "sqlite",
-          "sql": "CREATE TABLE IF NOT EXISTS \"email_imports\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"account_email\" TEXT NOT NULL, \"gmail_message_id\" TEXT NOT NULL, \"service\" TEXT NOT NULL, \"mail_kind\" TEXT NOT NULL, \"ticket_application_id\" INTEGER NULL REFERENCES ticket_applications (id) ON DELETE SET NULL, \"subject\" TEXT NOT NULL, \"received_at\" TEXT NOT NULL, \"imported_at\" TEXT NOT NULL, UNIQUE (\"account_email\", \"gmail_message_id\"), CHECK (service IN ('eplus', 'livepocket')), CHECK (mail_kind IN ('application', 'win', 'lose', 'payment')));"
+          "sql": "CREATE TABLE IF NOT EXISTS \"email_imports\" (\"id\" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, \"account_email\" TEXT NOT NULL, \"gmail_message_id\" TEXT NOT NULL, \"service\" TEXT NOT NULL, \"subject\" TEXT NOT NULL, \"received_at\" TEXT NOT NULL, \"imported_at\" TEXT NOT NULL, UNIQUE (\"account_email\", \"gmail_message_id\"), CHECK (service IN ('eplus', 'livepocket')));"
         }
       ]
     },
@@ -1196,24 +943,6 @@
         {
           "dialect": "sqlite",
           "sql": "CREATE INDEX partners_name ON partners (name)"
-        }
-      ]
-    },
-    {
-      "name": "ticket_applications_performance_id",
-      "sql": [
-        {
-          "dialect": "sqlite",
-          "sql": "CREATE INDEX ticket_applications_performance_id ON ticket_applications (performance_id)"
-        }
-      ]
-    },
-    {
-      "name": "ticket_applications_service_reference_no",
-      "sql": [
-        {
-          "dialect": "sqlite",
-          "sql": "CREATE INDEX ticket_applications_service_reference_no ON ticket_applications (service, reference_no)"
         }
       ]
     }

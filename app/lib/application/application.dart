@@ -1,6 +1,6 @@
 export 'models/app_preferences.dart';
 export 'models/gmail.dart';
-export 'models/notifications.dart';
+export 'models/partner_icon_source.dart';
 export 'models/records.dart';
 export 'models/views.dart';
 export 'ports/app_preferences_repository.dart';
@@ -14,5 +14,3 @@ export 'use_cases/gmail_use_case.dart';
 export 'use_cases/ledger_use_case.dart';
 export 'use_cases/partner_use_case.dart';
 export 'use_cases/performance_use_case.dart';
-export 'use_cases/reminder_use_case.dart';
-export 'use_cases/ticket_application_use_case.dart';

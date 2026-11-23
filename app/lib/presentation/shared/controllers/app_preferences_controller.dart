@@ -19,7 +19,6 @@ abstract class AppPreferences with _$AppPreferences {
     required ThemeMode themeMode,
     required AccountingBasis defaultAccountingBasis,
     required bool amountsVisible,
-    required Set<TicketDeadlineKind> enabledReminderKinds,
     required bool onboardingCompleted,
     @Default(false) bool isSaving,
   }) = _AppPreferences;
@@ -45,7 +44,6 @@ class AppPreferencesController extends _$AppPreferencesController {
       },
       defaultAccountingBasis: stored.defaultAccountingBasis,
       amountsVisible: stored.amountsVisible,
-      enabledReminderKinds: stored.enabledReminderKinds,
       onboardingCompleted: stored.onboardingCompleted,
     );
   }
@@ -83,20 +81,6 @@ class AppPreferencesController extends _$AppPreferencesController {
         .read(appPreferencesUseCaseProvider)
         .saveAmountsVisible(visible: visible),
     (current) => current.copyWith(amountsVisible: visible),
-  );
-
-  /// 期限の種類ごとのリマインドを保存し、通知を予約し直す。
-  Future<void> setReminderEnabled(
-    TicketDeadlineKind kind, {
-    required bool enabled,
-  }) => _save(
-    (_) => ref.read(reminderUseCaseProvider).setEnabled(kind, enabled: enabled),
-    (current) => current.copyWith(
-      enabledReminderKinds: {
-        ...current.enabledReminderKinds.where((k) => k != kind),
-        if (enabled) kind,
-      },
-    ),
   );
 
   /// 初回起動の案内を最後まで進めたことを保存する。

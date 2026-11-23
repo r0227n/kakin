@@ -2,7 +2,7 @@
 
 ## 1. 目的と範囲
 
-Kakin の端末内DBです。[SPEC.md](SPEC.md) が定める推し活代・公演・支出・チケット申込・Gmail 自動転記を記録し、月ごとの残高と繰越を計算できる形で保持します。
+Kakin の端末内DBです。[SPEC.md](SPEC.md) が定める推し活代・公演・支出・Gmail 自動転記を記録し、月ごとの残高と繰越を計算できる形で保持します。
 
 ### 対象
 
@@ -10,7 +10,6 @@ Kakin の端末内DBです。[SPEC.md](SPEC.md) が定める推し活代・公�
 - 公演（公演名・開始日時・会場）
 - 支出（7カテゴリ。チェキ代はチェキ相手と撮影枚数を含む）
 - チェキ相手
-- チケット申込（申込段階・期限・受付番号）
 - Gmail 同期の状態と取り込み済みメール
 
 ### 対象外
@@ -19,8 +18,7 @@ Kakin の端末内DBです。[SPEC.md](SPEC.md) が定める推し活代・公�
 - 複数端末間の同期
 - メール本文の保存
 - Gmail の OAuth トークン（端末のセキュアストレージに保存し、DB には置かない）
-- 計上基準の初期値・リマインドのオンとオフなどの設定（既存の端末設定ストアに置く）
-- 予約済みの通知（OS が持つ。DB のチケット申込から毎回組み立て直す。4.8）
+- 計上基準の初期値などの設定（既存の端末設定ストアに置く）
 - チェキ相手のアイコン画像そのもの（アプリ専用の領域にファイルで置き、DB はファイル名だけを持つ。4.5）
 
 アプリの振る舞いの正は [SPEC.md](SPEC.md)、用語の正は [GLOSSARY.md](../GLOSSARY.md) です。
@@ -105,27 +103,11 @@ erDiagram
     text updated_at
   }
 
-  TICKET_APPLICATIONS {
-    integer id PK
-    integer performance_id FK
-    text service
-    text stage
-    text reference_no
-    text apply_deadline_at
-    text result_at
-    text payment_deadline_at
-    text note
-    text created_at
-    text updated_at
-  }
-
   EMAIL_IMPORTS {
     integer id PK
     text account_email
     text gmail_message_id
     text service
-    text mail_kind
-    integer ticket_application_id FK
     text subject
     text received_at
     text imported_at
@@ -145,8 +127,6 @@ erDiagram
   PERFORMANCES |o--o{ EXPENSES : "has"
   PARTNERS |o--o{ EXPENSES : "shot with"
   EMAIL_IMPORTS |o--o{ EXPENSES : "imports"
-  PERFORMANCES ||--o{ TICKET_APPLICATIONS : "applied for"
-  TICKET_APPLICATIONS |o--o{ EMAIL_IMPORTS : "updated by"
 ```
 
 `BUDGET_RATES` と `BUDGET_OVERRIDES` は月の値で他の表と論理的に対応し、外部キーは持ちません。
@@ -261,9 +241,8 @@ CHECK (
 公演の削除（SPEC 4）:
 
 1. 1つのトランザクションで、削除する公演の `ticket` / `drink` / `cheki` の行を削除します。
-2. 続けて公演を削除します。残った `goods` / `transport` / `locker` / `other` の行は `ON DELETE SET NULL` で紐づけが外れます。その公演の `ticket_applications` は `ON DELETE CASCADE` で削除され、それを参照する `email_imports.ticket_application_id` は NULL になります。
-3. 確認画面の支出の件数と合計額、チケット申込の件数は、削除前に同じ条件で集計します。
-4. 削除の後、予約済みの通知を組み立て直します（4.8）。
+2. 続けて公演を削除します。残った `goods` / `transport` / `locker` / `other` の行は `ON DELETE SET NULL` で紐づけが外れます。
+3. 確認画面の支出の件数と合計額は、削除前に同じ条件で集計します。
 
 手順1を飛ばすと、`SET NULL` の結果が「公演が必須のカテゴリには公演が要る」という CHECK 制約に違反し、公演の削除そのものが失敗します。必須カテゴリの支出が公演なしで残ることはありません。
 
@@ -301,17 +280,15 @@ CHECK (
 
 Gmail から取り込みに成功したメールを残します。同じメールの再取り込みを防ぎ、支出の取り込み元を表示するために使います。
 
-| 列                      | SQLite型 | NULL | 既定 | 制約                                                | 説明                                         |
-| ----------------------- | -------- | ---- | ---- | --------------------------------------------------- | -------------------------------------------- |
-| `id`                    | INTEGER  | NO   | -    | PK, AUTOINCREMENT                                   | 主キー                                       |
-| `account_email`         | TEXT     | NO   | -    | 空文字不可（アプリ側）                              | Gmail アカウント                             |
-| `gmail_message_id`      | TEXT     | NO   | -    | 空文字不可（アプリ側）                              | Gmail のメッセージID                         |
-| `service`               | TEXT     | NO   | -    | `eplus` / `livepocket`                              | チケットサービス                             |
-| `mail_kind`             | TEXT     | NO   | -    | `application` / `win` / `lose` / `payment`（CHECK） | メールの種類。申込受付・当選・落選・決済完了 |
-| `ticket_application_id` | INTEGER  | YES  | NULL | FK `ticket_applications(id)` `ON DELETE SET NULL`   | このメールで作成・更新したチケット申込       |
-| `subject`               | TEXT     | NO   | -    | -                                                   | メール件名                                   |
-| `received_at`           | TEXT     | NO   | -    | ISO-8601 UTC                                        | メール受信日時（Gmail の internalDate）      |
-| `imported_at`           | TEXT     | NO   | -    | ISO-8601 UTC                                        | 取り込み日時                                 |
+| 列                 | SQLite型 | NULL | 既定 | 制約                   | 説明                                    |
+| ------------------ | -------- | ---- | ---- | ---------------------- | --------------------------------------- |
+| `id`               | INTEGER  | NO   | -    | PK, AUTOINCREMENT      | 主キー                                  |
+| `account_email`    | TEXT     | NO   | -    | 空文字不可（アプリ側） | Gmail アカウント                        |
+| `gmail_message_id` | TEXT     | NO   | -    | 空文字不可（アプリ側） | Gmail のメッセージID                    |
+| `service`          | TEXT     | NO   | -    | `eplus` / `livepocket` | チケットサービス                        |
+| `subject`          | TEXT     | NO   | -    | -                      | メール件名                              |
+| `received_at`      | TEXT     | NO   | -    | ISO-8601 UTC           | メール受信日時（Gmail の internalDate） |
+| `imported_at`      | TEXT     | NO   | -    | ISO-8601 UTC           | 取り込み日時                            |
 
 一意制約:
 
@@ -321,9 +298,8 @@ Gmail から取り込みに成功したメールを残します。同じメー�
 
 - 取り込みに成功したメールだけを保存します。公演情報を読み取れなかったメールや対象外のメールは保存しません（SPEC 6.2）。
 - メール本文は保存しません。件名・受信日時・メッセージIDだけを残します。
-- 支出・公演・チケット申込を削除しても `email_imports` は残します。次回同期で同じメッセージIDをスキップでき、削除したものが戻りません（SPEC 6.2）。
-- 決済完了（`payment`）のメールは支出とチケット申込の両方に、それ以外の種類はチケット申込だけに使います。
-- チケット申込の「Gmail から取り込み」の印は、そのチケット申込を参照する `email_imports` の行があることで表します。
+- 支出や公演を削除しても `email_imports` は残します。次回同期で同じメッセージIDをスキップでき、削除したものが戻りません（SPEC 6.2）。
+- 取り込むのは決済完了メールだけで、1通がチケット代の支出1件に対応します（SPEC 6.1）。
 - 連携を解除しても `email_imports` は残します（SPEC 6.4）。
 - 1通から複数公演が取れた場合は、複数の支出が同じ `email_import_id` を参照します。現行の `TicketService.extract` は1通1公演を返すため、複数公演の抽出は将来の拡張です。スキーマの変更は要りません。
 
@@ -350,61 +326,10 @@ CHECK ((last_failed_at IS NULL) = (last_failure_kind IS NULL))
 
 意味と制約:
 
-- `last_fetched_at` は同期が成功したときだけ更新します。失敗した同期では更新しません。設定画面の「最終同期日時」に使います（SPEC 9.5）。
+- `last_fetched_at` は同期が成功したときだけ更新します。失敗した同期では更新しません。設定画面の「最終同期日時」に使います（SPEC 8.5）。
 - `last_message_received_at` は取り込んだメールの `received_at` の最大値です。取り込んだメールがない同期では変わりません。
 - `last_failed_at` と `last_failure_kind` は、バックグラウンド同期の失敗を次にアプリを開いたときに表示するために残します（SPEC 6.4）。`reauth_required` のときは再連携の案内を表示します。
 - 連携を解除するときはこの行を削除します。`email_imports` は残すため、再連携しても同じメールは再び取り込まれません。
-
-### 4.8 ticket_applications
-
-チケット申込を1行で表します（SPEC 7）。金額は持ちません。払った金額は `expenses` のチケット代として持ちます。
-
-| 列                    | SQLite型 | NULL | 既定 | 制約                                      | 説明                            |
-| --------------------- | -------- | ---- | ---- | ----------------------------------------- | ------------------------------- |
-| `id`                  | INTEGER  | NO   | -    | PK, AUTOINCREMENT                         | 主キー                          |
-| `performance_id`      | INTEGER  | NO   | -    | FK `performances(id)` `ON DELETE CASCADE` | 申し込む公演                    |
-| `service`             | TEXT     | YES  | NULL | `eplus` / `livepocket` / `other`（CHECK） | チケットサービス。NULL は未入力 |
-| `stage`               | TEXT     | NO   | -    | 5種類のいずれか（表の CHECK 制約）        | 申込段階                        |
-| `reference_no`        | TEXT     | YES  | NULL | 空文字不可（アプリ側）                    | 受付番号                        |
-| `apply_deadline_at`   | TEXT     | YES  | NULL | ISO-8601 UTC                              | 申込締切                        |
-| `result_at`           | TEXT     | YES  | NULL | ISO-8601 UTC                              | 当落発表日時                    |
-| `payment_deadline_at` | TEXT     | YES  | NULL | ISO-8601 UTC                              | 入金期限                        |
-| `note`                | TEXT     | YES  | NULL | -                                         | メモ                            |
-| `created_at`          | TEXT     | NO   | -    | ISO-8601 UTC                              | 作成日時                        |
-| `updated_at`          | TEXT     | NO   | -    | ISO-8601 UTC                              | 更新日時                        |
-
-表の CHECK 制約:
-
-```sql
-CHECK (stage IN ('planned', 'awaiting_result', 'awaiting_payment', 'secured', 'lost'))
-```
-
-| `stage`            | SPEC の申込段階 | Gmail での順位 |
-| ------------------ | --------------- | -------------- |
-| `planned`          | 申込予定        | 0              |
-| `awaiting_result`  | 結果待ち        | 1              |
-| `awaiting_payment` | 入金待ち        | 2              |
-| `lost`             | 落選            | 2              |
-| `secured`          | 確保済み        | 3              |
-
-索引:
-
-- `ticket_applications_performance_id`（`performance_id`）: 公演ごとのチケット申込、今後の公演用
-- `ticket_applications_service_reference_no`（`service`, `reference_no`）: Gmail 同期での受付番号の照合用
-
-意味と制約:
-
-- 1つの公演に複数行を持てます（SPEC 7.2）。
-- 期限の列は瞬間として持ちます。時刻を入れなかった期限は、申込締切と入金期限を日本時間の 23:59、当落発表日時を 12:00 として保存します（SPEC 7.2）。
-- 段階を戻す手での変更は許します。Gmail 同期は上の順位が今より大きい段階にだけ進め、`secured` と `lost` の行は変えません（SPEC 6.5）。
-- 状態遷移の正しさ（どの段階からどの段階へ進めるか）は DB では制約せず、application の規則として持ちます。
-
-リマインドの予約（SPEC 7.3）:
-
-- 予約済みの通知は DB に保存しません。チケット申込の追加・編集・削除、Gmail 同期、公演の削除、リマインド設定の変更、アプリの起動のたびに、`ticket_applications` から予約をすべて組み立て直します。
-- 通知 ID は `id × 8 + 枠番号` で決めます。枠番号は 0: 申込締切の前日 20:00、1: 申込締切の3時間前、2: 当落発表日時、3: 入金期限の前日 20:00、4: 入金期限の3時間前です。同じ申込・同じ枠の通知は常に同じ ID になるため、組み立て直しても重複しません。
-- iOS は予約できるローカル通知が64件までのため、通知のタイミングが近い順に60件までを予約します。残りは次に組み立て直すときに予約します。
-- 通知には、チケット申込の `id` と、ボタンごとの進める段階（SPEC 7.4）を載せます。ボタンが押されたら、アプリを前面に出さずに `stage` と `updated_at` を更新し、予約を組み立て直します。押された時点の段階がその通知の対象の段階でなければ（すでに手で進めていた場合など）、何も変えません。
 
 ## 5. 制約と索引のまとめ
 
@@ -412,14 +337,12 @@ CHECK (stage IN ('planned', 'awaiting_result', 'awaiting_payment', 'secured', 'l
 
 SQLite の外部キーは既定で無効です。DB を開くたびに `PRAGMA foreign_keys = ON` を実行します。
 
-| 親の削除              | 子                                    | 動作     | 理由                                                        |
-| --------------------- | ------------------------------------- | -------- | ----------------------------------------------------------- |
-| `performances`        | `expenses.performance_id`             | SET NULL | 任意カテゴリは紐づけを外す。必須カテゴリは事前に削除（4.4） |
-| `partners`            | `expenses.partner_id`                 | RESTRICT | 履歴がある相手を誤って消さない                              |
-| `email_imports`       | `expenses.email_import_id`            | SET NULL | 取り込み元を消しても支出は残す                              |
-| `performances`        | `ticket_applications.performance_id`  | CASCADE  | 公演を消すとチケット申込も消す（SPEC 4）                    |
-| `ticket_applications` | `email_imports.ticket_application_id` | SET NULL | チケット申込を消しても取り込み履歴は残す                    |
-| `gmail_sync_states`   | `email_imports.account_email`         | FK なし  | 連携解除後も取り込み履歴を残す                              |
+| 親の削除            | 子                            | 動作     | 理由                                                        |
+| ------------------- | ----------------------------- | -------- | ----------------------------------------------------------- |
+| `performances`      | `expenses.performance_id`     | SET NULL | 任意カテゴリは紐づけを外す。必須カテゴリは事前に削除（4.4） |
+| `partners`          | `expenses.partner_id`         | RESTRICT | 履歴がある相手を誤って消さない                              |
+| `email_imports`     | `expenses.email_import_id`    | SET NULL | 取り込み元を消しても支出は残す                              |
+| `gmail_sync_states` | `email_imports.account_email` | FK なし  | 連携解除後も取り込み履歴を残す                              |
 
 ### 一意制約
 
@@ -431,31 +354,28 @@ SQLite の外部キーは既定で無効です。DB を開くたびに `PRAGMA f
 
 ### 索引
 
-| テーブル              | 索引名                                     | 列                           | 用途                               |
-| --------------------- | ------------------------------------------ | ---------------------------- | ---------------------------------- |
-| `performances`        | `performances_starts_at`                   | `starts_at`                  | 今後の公演・公演日での集計         |
-| `performances`        | `performances_title_starts_at`             | `title`, `starts_at`         | Gmail 自動転記の公演照合           |
-| `expenses`            | `expenses_paid_on`                         | `paid_on`                    | 支払日での集計・残高計算           |
-| `expenses`            | `expenses_performance_id_category`         | `performance_id`, `category` | 公演ごとの支出・今後の公演         |
-| `expenses`            | `expenses_partner_id`                      | `partner_id`                 | チェキ相手の参照確認               |
-| `expenses`            | `expenses_email_import_id`                 | `email_import_id`            | 取り込み元との照合                 |
-| `partners`            | `partners_name`                            | `name`                       | 検索・候補表示                     |
-| `ticket_applications` | `ticket_applications_performance_id`       | `performance_id`             | 公演ごとのチケット申込・今後の公演 |
-| `ticket_applications` | `ticket_applications_service_reference_no` | `service`, `reference_no`    | 受付番号の照合                     |
+| テーブル       | 索引名                             | 列                           | 用途                       |
+| -------------- | ---------------------------------- | ---------------------------- | -------------------------- |
+| `performances` | `performances_starts_at`           | `starts_at`                  | 今後の公演・公演日での集計 |
+| `performances` | `performances_title_starts_at`     | `title`, `starts_at`         | Gmail 自動転記の公演照合   |
+| `expenses`     | `expenses_paid_on`                 | `paid_on`                    | 支払日での集計・残高計算   |
+| `expenses`     | `expenses_performance_id_category` | `performance_id`, `category` | 公演ごとの支出・今後の公演 |
+| `expenses`     | `expenses_partner_id`              | `partner_id`                 | チェキ相手の参照確認       |
+| `expenses`     | `expenses_email_import_id`         | `email_import_id`            | 取り込み元との照合         |
+| `partners`     | `partners_name`                    | `name`                       | 検索・候補表示             |
 
 ### CHECK 制約
 
-| テーブル              | 制約                                                             |
-| --------------------- | ---------------------------------------------------------------- |
-| `budget_rates`        | `amount_yen >= 0`、`effective_month` が実在する暦月              |
-| `budget_overrides`    | `amount_yen >= 0`、`month` が実在する暦月                        |
-| `expenses`            | `category` が7種類のいずれか                                     |
-| `expenses`            | `amount_yen >= 0`、`paid_on` が実在する暦日                      |
-| `expenses`            | `ticket` / `drink` / `cheki` は `performance_id` が必須          |
-| `expenses`            | `cheki` だけが `partner_id` と `shot_count`（1以上）を持つ       |
-| `gmail_sync_states`   | `last_failed_at` と `last_failure_kind` は両方 NULL か両方値あり |
-| `email_imports`       | `mail_kind` が4種類のいずれか                                    |
-| `ticket_applications` | `stage` が5種類のいずれか、`service` が3種類のいずれか           |
+| テーブル            | 制約                                                             |
+| ------------------- | ---------------------------------------------------------------- |
+| `budget_rates`      | `amount_yen >= 0`、`effective_month` が実在する暦月              |
+| `budget_overrides`  | `amount_yen >= 0`、`month` が実在する暦月                        |
+| `expenses`          | `category` が7種類のいずれか                                     |
+| `expenses`          | `amount_yen >= 0`、`paid_on` が実在する暦日                      |
+| `expenses`          | `ticket` / `drink` / `cheki` は `performance_id` が必須          |
+| `expenses`          | `cheki` だけが `partner_id` と `shot_count`（1以上）を持つ       |
+| `gmail_sync_states` | `last_failed_at` と `last_failure_kind` は両方 NULL か両方値あり |
+| `email_imports`     | `service` が2種類のいずれか                                      |
 
 ## 6. 集計クエリ
 
@@ -533,7 +453,7 @@ WHERE paid_on >= :from_on AND paid_on < :to_on
 GROUP BY category;
 ```
 
-計上基準が公演日のときは、紐づく公演の開始日（日本時間）に置き、公演に紐づかない支出は支払日に置きます（SPEC 8）。
+計上基準が公演日のときは、紐づく公演の開始日（日本時間）に置き、公演に紐づかない支出は支払日に置きます（SPEC 7）。
 
 ```sql
 WITH placed AS (
@@ -563,48 +483,14 @@ GROUP BY category;
 SELECT p.id, p.title, p.starts_at, p.venue
 FROM performances p
 WHERE date(p.starts_at, '+9 hours') >= :today_on
-  AND (
-    EXISTS (
-      SELECT 1 FROM expenses e
-      WHERE e.performance_id = p.id AND e.category = 'ticket'
-    )
-    OR EXISTS (
-      SELECT 1 FROM ticket_applications a
-      WHERE a.performance_id = p.id AND a.stage <> 'lost'
-    )
+  AND EXISTS (
+    SELECT 1 FROM expenses e
+    WHERE e.performance_id = p.id AND e.category = 'ticket'
   )
 ORDER BY p.starts_at;
 ```
 
-`:today_on` は日本時間の今日です。この画面は金額を表示しないため、金額は集計しません（SPEC 9.4）。
-各公演の申込段階は、結果の公演の `ticket_applications` を `performance_id` で引いて表示します。
-
-### やること
-
-リマインドの対象になる期限を、近い順に並べます（SPEC 9.4）。期限を過ぎて段階が変わっていない行も含めます。
-
-```sql
-WITH due AS (
-  SELECT
-    a.id,
-    a.performance_id,
-    a.stage,
-    CASE a.stage
-      WHEN 'planned' THEN a.apply_deadline_at
-      WHEN 'awaiting_result' THEN a.result_at
-      WHEN 'awaiting_payment' THEN a.payment_deadline_at
-    END AS due_at
-  FROM ticket_applications a
-  WHERE a.stage IN ('planned', 'awaiting_result', 'awaiting_payment')
-)
-SELECT due.*, p.title
-FROM due
-JOIN performances p ON p.id = due.performance_id
-WHERE due.due_at IS NOT NULL
-ORDER BY due.due_at;
-```
-
-`due_at` が現在時刻より前の行は、段階の更新を促す表示にします（SPEC 7.3）。
+`:today_on` は日本時間の今日です。この画面は金額を表示しないため、金額は集計しません（SPEC 8.4）。
 
 ### 公演の支出
 
@@ -642,16 +528,14 @@ GROUP BY category;
 1. `gmail_sync_states` から対象アカウントの状態を読む。
 2. 取得範囲を決め、Gmail API で対象メールを取得する。
 3. 各メールについて `(account_email, gmail_message_id)` が `email_imports` にあればスキップする。
-4. `TicketService.extract` でメールの種類・公演情報・申込の項目を抽出する。null ならスキップし、`email_imports` には保存しない。
+4. `TicketService.extract` で決済完了メールの公演情報を抽出する。null ならスキップし、`email_imports` には保存しない。
 5. 取り込みと状態の更新を1つのトランザクションで行う。
    - `email_imports` を1行挿入する。
    - `title` と `starts_at` が一致する公演のうち `id` が最小のものを探し、なければ `performances` に1行挿入する。
-   - 決済完了（`payment`）のメールなら、`expenses` に `category = 'ticket'` の行を挿入する（下のマッピング）。
-   - チケット申込を作成または更新し、`email_imports.ticket_application_id` に入れる（下の「チケット申込の更新」）。
+   - `expenses` に `category = 'ticket'` の行を挿入する（下のマッピング）。
    - 取り込んだメールの `received_at` の最大値で `last_message_received_at` を更新する。
    - `last_fetched_at` を現在時刻で更新し、`last_failed_at` と `last_failure_kind` を NULL に戻す。
-6. コミットの後、予約済みの通知を組み立て直す（4.8）。
-7. 失敗したらトランザクションをロールバックし、`last_fetched_at` と `last_message_received_at` は更新しない。そのうえで、別の書き込みとして `last_failed_at` と `last_failure_kind` を記録する。認証の期限切れや権限の取り消しは `reauth_required`、それ以外は `other` とする。
+6. 失敗したらトランザクションをロールバックし、`last_fetched_at` と `last_message_received_at` は更新しない。そのうえで、別の書き込みとして `last_failed_at` と `last_failure_kind` を記録する。認証の期限切れや権限の取り消しは `reauth_required`、それ以外は `other` とする。
 
 ### 公演情報のマッピング
 
@@ -670,28 +554,6 @@ SPEC 6.2 の「支払総額を優先」を満たすには、`TicketInfo` に支�
 追加するまでは `price` を `amount_yen` に使います。
 
 既存の公演に紐づける場合、その公演の公演名・開始日時・会場は変更しません。ユーザーが手で直した値を上書きしないためです。
-
-現行の `TicketService.extract` は決済完了メールの `TicketInfo` だけを返します。チケット申込の更新には、メールの種類・受付番号・当落発表日時・入金期限を返し、チケット料金のない申込受付・当選・落選のメールも扱える戻り値への拡張が必要です。
-申込受付・当選・落選メールの件名キーワードは未決定です（SPEC 11）。決まるまでは、決済完了メールだけがチケット申込を進めます。
-
-### チケット申込の更新
-
-SPEC 6.5 を次の手順で行います。
-
-1. メールに受付番号があれば、`service` と `reference_no` が一致する行を探す。
-2. なければ、同じ `performance_id`・同じ `service` で `stage NOT IN ('secured', 'lost')` の行のうち、`created_at` が最も新しい行を探す。
-3. どちらもなければ、メールの種類に応じた段階で1行挿入する。
-
-| `mail_kind`   | 進める段階                                               | 書き込む列                            |
-| ------------- | -------------------------------------------------------- | ------------------------------------- |
-| `application` | `awaiting_result`                                        | `reference_no`, `result_at`           |
-| `win`         | `awaiting_payment`。支払い済みと書かれていれば `secured` | `reference_no`, `payment_deadline_at` |
-| `lose`        | `lost`                                                   | `reference_no`                        |
-| `payment`     | `secured`                                                | `reference_no`                        |
-
-- 見つけた行の段階が `secured` か `lost`、または4.8の順位が進める段階以上のときは、その行を変えない。`email_imports.ticket_application_id` だけを入れる。
-- 書き込む列は、メールに値があるものだけを更新する。
-- 手順1で見つけた行の `performance_id` がメールの公演と違えば、メールの公演に付け替える。
 
 ### 重複排除と再取り込み
 
@@ -752,7 +614,6 @@ part 'app_database.g.dart';
     Partners,
     EmailImports,
     GmailSyncStates,
-    TicketApplications,
   ],
 )
 final class AppDatabase extends _$AppDatabase {
@@ -782,17 +643,7 @@ final class AppDatabase extends _$AppDatabase {
 ```dart
 enum ExpenseCategory { ticket, drink, cheki, goods, transport, locker, other }
 
-enum TicketServiceKind { eplus, livepocket }
-
-enum EmailMailKind { application, win, lose, payment }
-
-enum TicketApplicationStage {
-  planned,
-  awaitingResult,
-  awaitingPayment,
-  secured,
-  lost,
-}
+enum StoredMailService { eplus, livepocket }
 
 @TableIndex(name: 'expenses_paid_on', columns: {#paidOn})
 @TableIndex(
@@ -867,8 +718,7 @@ class BudgetRates extends Table {
 - `textEnum` は enum の名前を保存しますが CHECK 制約は付けないため、許す値を表の CHECK 制約で固定します。enum に値を足すときは CHECK 制約とマイグレーションも同時に変えます。
 - `paid_on` と `_month` 列は `DateTime` ではなく文字列で持ちます。application では暦日・暦月の値オブジェクトに変換し、infrastructure の外へ文字列を出しません。
 - `created_at` と `updated_at` は挿入時に UTC を入れ、`updated_at` は更新処理でも明示的に更新します。
-- `EmailImports.service` は `textEnum<TicketServiceKind>()`、`EmailImports.mailKind` は `textEnum<EmailMailKind>()`、`GmailSyncStates.lastFailureKind` は失敗の種類の enum で保存します。
-- `TicketApplications.stage` は保存値が `awaiting_result` などの snake_case のため、`textEnum` ではなく enum と保存値を対応させる `TypeConverter` で保存します。`service` も `other` を含む別の enum で保存します。
+- `EmailImports.service` は `textEnum<StoredMailService>()`、`GmailSyncStates.lastFailureKind` は失敗の種類の enum で保存します。
 
 ### 配置と依存方向
 
@@ -925,8 +775,6 @@ v1 のスキーマは `drift` を一時的に 2.34.0 へ下げて `schema dump` 
 - 残高を検証する: 繰越のマイナス、月額の変更、月の上書き、開始月より前の支出の除外、推し活代が未設定のとき。
 - 計上基準を検証する: 日本時間の深夜の公演が正しい暦日に置かれる、公演のない支出が支払日に置かれる。
 - Gmail 同期を検証する: 同じメールのスキップ、既存公演への紐づけ、失敗時のロールバックと失敗種類の記録、削除した支出が戻らない。
-- チケット申込を検証する: 公演の削除で申込も消える、受付番号での照合と公演の付け替え、段階を戻さない、`secured` と `lost` を変えない、やることの期限の選び方。
-- リマインドの予約を検証する: 段階ごとの対象の期限、過ぎたタイミングを除く、通知 ID の重複がない、60件の上限。
 - チェキ相手のアイコン画像を検証する: 差し替えで古いファイルが消える、相手の削除でファイルが消える、参照されないファイルの掃除、ファイルがないときの表示。
 - `_at` 列を UTC で保存し、読み出し時に UTC の `DateTime` として復元できることを検証する。
 
@@ -940,7 +788,6 @@ v1 のスキーマは `drift` を一時的に 2.34.0 へ下げて `schema dump` 
 - 推し活代は月額の履歴と月ごとの上書きの2つの表で持つ。開始月は月額の履歴の最も古い月とする。
 - 1公演=1行。開始日時は1つで、複数日の公演は初日で登録する。
 - チケット代は支払いごとに1行。同じ公演に複数行を許す。
-- チケット申込は公演ごとに複数行を持ち、金額を持たない。段階と期限から通知を毎回組み立て直し、予約の状態は保存しない。
 - チェキ代は金額と撮影枚数を持ち、単価は保存しない。
 - チェキ相手はマスタで管理し、同名を許す。同一性は ID で保証する。
 - チェキ相手のアイコン画像は DB に入れず、アプリ専用の領域にファイルで置き、DB はファイル名だけを持つ。
@@ -952,12 +799,12 @@ v1 のスキーマは `drift` を一時的に 2.34.0 へ下げて `schema dump` 
 
 | 要件                           | 追加するもの                                        |
 | ------------------------------ | --------------------------------------------------- |
-| 新しいチケットサービスの追加   | `TicketServiceKind` と `email_imports.service` の値 |
+| 新しいチケットサービスの追加   | `TicketMailService` と `email_imports.service` の値 |
 | 支払総額の自動転記             | `TicketInfo` の支払総額と各サービスの抽出処理       |
 | チケットの枚数                 | `TicketInfo` の枚数と `expenses` の任意列           |
 | チェキ相手の非表示・アーカイブ | `partners.archived_at`                              |
 | 公演の中止・返金の履歴         | 公演の状態と返金額、または返金テーブル              |
-| 発券開始日のリマインド         | `ticket_applications.issue_starts_at` と通知の枠    |
+| チケット申込とリマインド       | 申込段階と期限を持つ表、通知の予約                  |
 | 海外公演                       | `performances.time_zone`                            |
 | 複数端末同期                   | 主キーを UUID/ULID へ移行し、同期用の更新履歴を追加 |
 | バックアップ・エクスポート     | DB ファイルの書き出しと読み込み                     |

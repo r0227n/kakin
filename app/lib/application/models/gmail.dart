@@ -1,29 +1,13 @@
-import 'package:app/domain/domain.dart';
+/// 決済完了メールを取り込めるチケットサービス。
+enum TicketMailService {
+  /// eplus。
+  eplus,
 
-/// Gmail のメールの種類。
-enum TicketMailKind {
-  /// 申込受付。
-  application,
-
-  /// 当選。
-  win,
-
-  /// 落選。
-  lose,
-
-  /// 決済完了。
-  payment;
-
-  /// このメールで進める申込段階。
-  TicketApplicationStage get targetStage => switch (this) {
-    application => TicketApplicationStage.awaitingResult,
-    win => TicketApplicationStage.awaitingPayment,
-    lose => TicketApplicationStage.lost,
-    payment => TicketApplicationStage.secured,
-  };
+  /// ライブポケット。
+  livepocket,
 }
 
-/// 公演情報を読み取れたチケットサービスのメール。本文は持たない。
+/// 公演情報を読み取れたチケットサービスの決済完了メール。本文は持たない。
 final class TicketMail {
   /// 読み取った値を保持する。
   const TicketMail({
@@ -31,14 +15,10 @@ final class TicketMail {
     required this.receivedAt,
     required this.subject,
     required this.service,
-    required this.kind,
     required this.title,
     required this.startsAt,
+    required this.priceYen,
     this.venue,
-    this.priceYen,
-    this.referenceNo,
-    this.resultAt,
-    this.paymentDeadlineAt,
   });
 
   /// Gmail のメッセージ ID。
@@ -50,11 +30,8 @@ final class TicketMail {
   /// 件名。
   final String subject;
 
-  /// チケットサービス（eplus かライブポケット）。
-  final TicketServiceKind service;
-
-  /// メールの種類。
-  final TicketMailKind kind;
+  /// チケットサービス。
+  final TicketMailService service;
 
   /// 公演名。
   final String title;
@@ -65,17 +42,8 @@ final class TicketMail {
   /// 会場名。
   final String? venue;
 
-  /// 支払った金額。決済完了メールだけが持つ。
-  final int? priceYen;
-
-  /// 受付番号。
-  final String? referenceNo;
-
-  /// 当落発表日時。
-  final DateTime? resultAt;
-
-  /// 入金期限。
-  final DateTime? paymentDeadlineAt;
+  /// 支払った金額（円）。
+  final int priceYen;
 }
 
 /// 同期の失敗の種類。
@@ -141,14 +109,8 @@ final class GmailStatus {
 /// 1回の同期の結果。
 final class GmailSyncResult {
   /// 取り込んだ件数を持つ。
-  const GmailSyncResult({
-    required this.importedMailCount,
-    required this.createdExpenseCount,
-  });
+  const GmailSyncResult({required this.importedMailCount});
 
-  /// 取り込んだメールの数。
+  /// 取り込んだメールの数。メール1通につきチケット代を1件登録する。
   final int importedMailCount;
-
-  /// 登録したチケット代の数。
-  final int createdExpenseCount;
 }

@@ -71,17 +71,6 @@ class TranslationsEn
   late final _TranslationsCategoryShortEn categoryShort =
       _TranslationsCategoryShortEn._(_root);
   @override
-  late final _TranslationsStageEn stage = _TranslationsStageEn._(_root);
-  @override
-  late final _TranslationsServiceEn service = _TranslationsServiceEn._(_root);
-  @override
-  late final _TranslationsDeadlineEn deadline = _TranslationsDeadlineEn._(
-    _root,
-  );
-  @override
-  late final _TranslationsQuickActionEn quickAction =
-      _TranslationsQuickActionEn._(_root);
-  @override
   late final _TranslationsBasisEn basis = _TranslationsBasisEn._(_root);
   @override
   late final _TranslationsSummaryEn summary = _TranslationsSummaryEn._(_root);
@@ -103,18 +92,11 @@ class TranslationsEn
   @override
   late final _TranslationsPartnerEn partner = _TranslationsPartnerEn._(_root);
   @override
-  late final _TranslationsApplicationEn application =
-      _TranslationsApplicationEn._(_root);
-  @override
   late final _TranslationsSettingsEn settings = _TranslationsSettingsEn._(
     _root,
   );
   @override
   late final _TranslationsOnboardingEn onboarding = _TranslationsOnboardingEn._(
-    _root,
-  );
-  @override
-  late final _TranslationsReminderEn reminder = _TranslationsReminderEn._(
     _root,
   );
   @override
@@ -296,74 +278,6 @@ class _TranslationsCategoryShortEn implements TranslationsCategoryShortJa {
   String get other => 'Other';
 }
 
-// Path: stage
-class _TranslationsStageEn implements TranslationsStageJa {
-  _TranslationsStageEn._(this._root);
-
-  final TranslationsEn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get planned => 'Planned';
-  @override
-  String get awaitingResult => 'Awaiting result';
-  @override
-  String get awaitingPayment => 'Awaiting payment';
-  @override
-  String get secured => 'Secured';
-  @override
-  String get lost => 'Not won';
-}
-
-// Path: service
-class _TranslationsServiceEn implements TranslationsServiceJa {
-  _TranslationsServiceEn._(this._root);
-
-  final TranslationsEn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get eplus => 'eplus';
-  @override
-  String get livepocket => 'LivePocket';
-  @override
-  String get other => 'Other';
-}
-
-// Path: deadline
-class _TranslationsDeadlineEn implements TranslationsDeadlineJa {
-  _TranslationsDeadlineEn._(this._root);
-
-  final TranslationsEn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get apply => 'Application deadline';
-  @override
-  String get result => 'Result announcement';
-  @override
-  String get payment => 'Payment deadline';
-  @override
-  String get resultShort => 'Result';
-}
-
-// Path: quickAction
-class _TranslationsQuickActionEn implements TranslationsQuickActionJa {
-  _TranslationsQuickActionEn._(this._root);
-
-  final TranslationsEn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get applied => 'Applied';
-  @override
-  String get won => 'Won';
-  @override
-  String get lost => 'Not won';
-  @override
-  String get paid => 'Paid';
-}
-
 // Path: basis
 class _TranslationsBasisEn implements TranslationsBasisJa {
   _TranslationsBasisEn._(this._root);
@@ -484,39 +398,13 @@ class _TranslationsUpcomingEn implements TranslationsUpcomingJa {
 
   // Translations
   @override
-  String get addApplication => 'Add application';
-  @override
-  String get todo => 'To do';
-  @override
-  String get todoOrder => 'Soonest first';
-  @override
-  String get noTodo => 'No ticket deadlines coming up.';
-  @override
-  String get performances => 'Shows';
-  @override
   String get noPerformances =>
-      'No upcoming shows yet. Record a ticket or a ticket application to see it here.';
-  @override
-  String overdue({required Object kind}) =>
-      '${kind} passed · record the result';
-  @override
-  String get needsUpdate => 'Update';
-  @override
-  String stageChanged({required Object title, required Object stage}) =>
-      'Moved “${title}” to ${stage}';
-  @override
-  String actionLabel({required Object title, required Object stage}) =>
-      'Move ${title} to ${stage}';
+      'No upcoming shows yet. Record a ticket to see it here.';
   @override
   String startsAt({required Object time}) => 'Starts ${time}';
   @override
   String startsAtVenue({required Object time, required Object venue}) =>
       'Starts ${time} · ${venue}';
-  @override
-  String get noApplication => 'No application';
-  @override
-  String get notificationsDenied =>
-      'Notifications are off, so reminders won\'t arrive. Allow notifications in the Settings app.';
 }
 
 // Path: performance
@@ -553,20 +441,12 @@ class _TranslationsPerformanceEn implements TranslationsPerformanceJa {
   @override
   String get createNew => 'Add a new show';
   @override
-  String get applications => 'Ticket applications';
-  @override
-  String get noApplications => 'No ticket applications yet';
-  @override
   String get delete => 'Delete this show';
   @override
   String get deleteTitle => 'Delete this show?';
   @override
-  String deleteBody({
-    required Object count,
-    required Object amount,
-    required Object applications,
-  }) =>
-      'This also deletes ${count} ticket, drink and cheki expenses (${amount}) and ${applications} ticket applications. Merch and other expenses stay, without the show.';
+  String deleteBody({required Object count, required Object amount}) =>
+      'This also deletes ${count} ticket, drink and cheki expenses (${amount}). Merch and other expenses stay, without the show.';
   @override
   String get titleRequired => 'Enter a show name';
 }
@@ -724,66 +604,6 @@ class _TranslationsPartnerEn implements TranslationsPartnerJa {
   String get empty => 'No cheki partners yet';
 }
 
-// Path: application
-class _TranslationsApplicationEn implements TranslationsApplicationJa {
-  _TranslationsApplicationEn._(this._root);
-
-  final TranslationsEn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get title => 'Ticket application';
-  @override
-  String get performance => 'Show';
-  @override
-  String get stage => 'Stage';
-  @override
-  String get service => 'Ticket service';
-  @override
-  String get referenceNo => 'Reference number';
-  @override
-  String get referenceHint => 'Optional · used to match Gmail';
-  @override
-  String get deadlines => 'Deadlines';
-  @override
-  String get reminded => 'Reminder on';
-  @override
-  String get pickDateTime => 'Choose date and time';
-  @override
-  String get clear => 'Clear';
-  @override
-  String get note => 'Note';
-  @override
-  String get delete => 'Delete this application';
-  @override
-  String get imported => 'Imported from Gmail';
-  @override
-  String get overdueApply =>
-      'The application deadline has passed. Once you\'ve applied, move it to “Awaiting result”.';
-  @override
-  String get overdueResult =>
-      'The result announcement has passed. Update the stage once you know the result.';
-  @override
-  String get overduePayment =>
-      'The payment deadline has passed. Once you\'ve paid, move it to “Secured”.';
-  @override
-  String willNotify({required Object times}) =>
-      'You\'ll be notified at ${times}.';
-  @override
-  String get noReminder =>
-      'No reminders at this stage. You can note ticket issuing in the memo.';
-  @override
-  String noDeadline({required Object kind}) =>
-      'Add the ${kind} to get a reminder before it.';
-  @override
-  String reminderOff({required Object kind}) =>
-      'Reminders for the ${kind} are turned off in Settings.';
-  @override
-  String get performanceRequired => 'Choose a show';
-  @override
-  String get add => 'Add ticket application';
-}
-
 // Path: settings
 class _TranslationsSettingsEn implements TranslationsSettingsJa {
   _TranslationsSettingsEn._(this._root);
@@ -864,22 +684,12 @@ class _TranslationsSettingsEn implements TranslationsSettingsJa {
   String get demoNote =>
       'No OAuth client is configured, so mock emails are imported.';
   @override
-  String get reminders => 'Reminders';
-  @override
-  String get permissionGranted => 'Notifications are allowed';
-  @override
-  String get permissionDenied =>
-      'Notifications aren\'t allowed. Allow them in the Settings app.';
-  @override
-  String get permissionUnknown =>
-      'You\'ll be asked to allow notifications when you first add a deadline';
-  @override
   String get display => 'Display';
   @override
   String get showAmounts => 'Show amounts';
   @override
   String get showAmountsNote =>
-      'When off, amounts in the calendar and list show as “•••”. The eye button on each screen toggles it too. Upcoming shows and notifications never show amounts.';
+      'When off, amounts in the calendar and list show as “•••”. The eye button on each screen toggles it too. Upcoming shows never show amounts.';
   @override
   String get theme => 'Theme';
   @override
@@ -899,12 +709,6 @@ class _TranslationsSettingsEn implements TranslationsSettingsJa {
   @override
   String get defaultBasisNote =>
       'Which day the calendar and list place expenses on by default. The balance always uses the paid date.';
-  @override
-  String get reminderApplyWhen => '8:00 PM the day before and 3 hours before';
-  @override
-  String get reminderResultWhen => 'At the announcement time';
-  @override
-  String get reminderPaymentWhen => '8:00 PM the day before and 3 hours before';
   @override
   String get overrideSaved => 'Override saved';
   @override
@@ -938,10 +742,10 @@ class _TranslationsOnboardingEn implements TranslationsOnboardingJa {
   String get featureRecordBody =>
       'Drinks reuse your last price; for cheki, just pick who and how many.';
   @override
-  String get featureReminderTitle => 'Never miss a ticket deadline';
+  String get featureGmailTitle => 'Tickets recorded for you';
   @override
-  String get featureReminderBody =>
-      'Get notified about lottery deadlines, results and payment due dates.';
+  String get featureGmailBody =>
+      'Connect Gmail to record tickets and shows from payment confirmation emails.';
   @override
   String get privacy =>
       'Your data stays on this device. No sign-up or login needed.';
@@ -968,7 +772,7 @@ class _TranslationsOnboardingEn implements TranslationsOnboardingJa {
   String get gmailTitle => 'Record tickets from your email';
   @override
   String get gmailBody =>
-      'Connect Gmail to read ticket purchase and lottery emails and record tickets and applications automatically.';
+      'Connect Gmail to read ticket payment confirmation emails and record tickets and shows automatically.';
   @override
   String get gmailScope =>
       'Only eplus and LivePocket ticket emails are read. Nothing is sent or deleted.';
@@ -990,35 +794,6 @@ class _TranslationsOnboardingEn implements TranslationsOnboardingJa {
   String get sampleSubject => 'Payment confirmation';
   @override
   String get sampleAuto => 'Auto';
-}
-
-// Path: reminder
-class _TranslationsReminderEn implements TranslationsReminderJa {
-  _TranslationsReminderEn._(this._root);
-
-  final TranslationsEn _root; // ignore: unused_field
-
-  // Translations
-  @override
-  String get channelName => 'Ticket reminders';
-  @override
-  String get channelDescription =>
-      'Application deadlines, results and payment due dates';
-  @override
-  String applyEve({required Object time}) =>
-      'The application deadline is tomorrow at ${time}';
-  @override
-  String applySoon({required Object time}) =>
-      '3 hours until the application deadline (${time})';
-  @override
-  String resultAt({required Object dateTime}) =>
-      'Results are out (${dateTime}). Record how it went';
-  @override
-  String paymentEve({required Object time}) =>
-      'Payment is due tomorrow at ${time}';
-  @override
-  String paymentSoon({required Object time}) =>
-      '3 hours until payment is due (${time})';
 }
 
 // Path: errors
@@ -1044,8 +819,6 @@ class _TranslationsErrorsEn implements TranslationsErrorsJa {
   String get gmailReauthRequired => 'Please reconnect Gmail.';
   @override
   String get gmailSync => 'Couldn\'t sync with Gmail. Please try again later.';
-  @override
-  String get reminderSchedule => 'Couldn\'t schedule notifications.';
 }
 
 /// The flat map containing all translations for locale <en>.
@@ -1142,22 +915,6 @@ extension on TranslationsEn {
       'categoryShort.transport' => 'Travel',
       'categoryShort.locker' => 'Locker',
       'categoryShort.other' => 'Other',
-      'stage.planned' => 'Planned',
-      'stage.awaitingResult' => 'Awaiting result',
-      'stage.awaitingPayment' => 'Awaiting payment',
-      'stage.secured' => 'Secured',
-      'stage.lost' => 'Not won',
-      'service.eplus' => 'eplus',
-      'service.livepocket' => 'LivePocket',
-      'service.other' => 'Other',
-      'deadline.apply' => 'Application deadline',
-      'deadline.result' => 'Result announcement',
-      'deadline.payment' => 'Payment deadline',
-      'deadline.resultShort' => 'Result',
-      'quickAction.applied' => 'Applied',
-      'quickAction.won' => 'Won',
-      'quickAction.lost' => 'Not won',
-      'quickAction.paid' => 'Paid',
       'basis.label' => 'Accounting basis',
       'basis.paidOn' => 'Paid date',
       'basis.performanceDate' => 'Show date',
@@ -1200,29 +957,12 @@ extension on TranslationsEn {
       'list.performanceOn' => ({required Object date}) => 'Show ${date}',
       'list.overspent' => 'Over',
       'list.filterLabel' => 'Filter by category',
-      'upcoming.addApplication' => 'Add application',
-      'upcoming.todo' => 'To do',
-      'upcoming.todoOrder' => 'Soonest first',
-      'upcoming.noTodo' => 'No ticket deadlines coming up.',
-      'upcoming.performances' => 'Shows',
       'upcoming.noPerformances' =>
-        'No upcoming shows yet. Record a ticket or a ticket application to see it here.',
-      'upcoming.overdue' =>
-        ({required Object kind}) => '${kind} passed · record the result',
-      'upcoming.needsUpdate' => 'Update',
-      'upcoming.stageChanged' =>
-        ({required Object title, required Object stage}) =>
-            'Moved “${title}” to ${stage}',
-      'upcoming.actionLabel' =>
-        ({required Object title, required Object stage}) =>
-            'Move ${title} to ${stage}',
+        'No upcoming shows yet. Record a ticket to see it here.',
       'upcoming.startsAt' => ({required Object time}) => 'Starts ${time}',
       'upcoming.startsAtVenue' =>
         ({required Object time, required Object venue}) =>
             'Starts ${time} · ${venue}',
-      'upcoming.noApplication' => 'No application',
-      'upcoming.notificationsDenied' =>
-        'Notifications are off, so reminders won\'t arrive. Allow notifications in the Settings app.',
       'performance.title' => 'Show',
       'performance.newTitle' => 'New show',
       'performance.editTitle' => 'Edit show',
@@ -1236,17 +976,11 @@ extension on TranslationsEn {
       'performance.none' => 'No show',
       'performance.noPerformances' => 'No shows yet',
       'performance.createNew' => 'Add a new show',
-      'performance.applications' => 'Ticket applications',
-      'performance.noApplications' => 'No ticket applications yet',
       'performance.delete' => 'Delete this show',
       'performance.deleteTitle' => 'Delete this show?',
       'performance.deleteBody' =>
-        ({
-          required Object count,
-          required Object amount,
-          required Object applications,
-        }) =>
-            'This also deletes ${count} ticket, drink and cheki expenses (${amount}) and ${applications} ticket applications. Merch and other expenses stay, without the show.',
+        ({required Object count, required Object amount}) =>
+            'This also deletes ${count} ticket, drink and cheki expenses (${amount}). Merch and other expenses stay, without the show.',
       'performance.titleRequired' => 'Enter a show name',
       'expense.addTitle' => 'Add expense',
       'expense.editTitle' => 'Edit expense',
@@ -1327,37 +1061,6 @@ extension on TranslationsEn {
       'partner.inUse' => 'Partners with cheki records can\'t be deleted',
       'partner.nameRequired' => 'Enter a name',
       'partner.empty' => 'No cheki partners yet',
-      'application.title' => 'Ticket application',
-      'application.performance' => 'Show',
-      'application.stage' => 'Stage',
-      'application.service' => 'Ticket service',
-      'application.referenceNo' => 'Reference number',
-      'application.referenceHint' => 'Optional · used to match Gmail',
-      'application.deadlines' => 'Deadlines',
-      'application.reminded' => 'Reminder on',
-      'application.pickDateTime' => 'Choose date and time',
-      'application.clear' => 'Clear',
-      'application.note' => 'Note',
-      'application.delete' => 'Delete this application',
-      'application.imported' => 'Imported from Gmail',
-      'application.overdueApply' =>
-        'The application deadline has passed. Once you\'ve applied, move it to “Awaiting result”.',
-      'application.overdueResult' =>
-        'The result announcement has passed. Update the stage once you know the result.',
-      'application.overduePayment' =>
-        'The payment deadline has passed. Once you\'ve paid, move it to “Secured”.',
-      'application.willNotify' =>
-        ({required Object times}) => 'You\'ll be notified at ${times}.',
-      'application.noReminder' =>
-        'No reminders at this stage. You can note ticket issuing in the memo.',
-      'application.noDeadline' =>
-        ({required Object kind}) =>
-            'Add the ${kind} to get a reminder before it.',
-      'application.reminderOff' =>
-        ({required Object kind}) =>
-            'Reminders for the ${kind} are turned off in Settings.',
-      'application.performanceRequired' => 'Choose a show',
-      'application.add' => 'Add ticket application',
       'settings.budget' => 'Monthly budget',
       'settings.monthly' => 'Per month',
       'settings.startMonth' => 'Starts',
@@ -1400,16 +1103,10 @@ extension on TranslationsEn {
       'settings.demo' => 'Demo data',
       'settings.demoNote' =>
         'No OAuth client is configured, so mock emails are imported.',
-      'settings.reminders' => 'Reminders',
-      'settings.permissionGranted' => 'Notifications are allowed',
-      'settings.permissionDenied' =>
-        'Notifications aren\'t allowed. Allow them in the Settings app.',
-      'settings.permissionUnknown' =>
-        'You\'ll be asked to allow notifications when you first add a deadline',
       'settings.display' => 'Display',
       'settings.showAmounts' => 'Show amounts',
       'settings.showAmountsNote' =>
-        'When off, amounts in the calendar and list show as “•••”. The eye button on each screen toggles it too. Upcoming shows and notifications never show amounts.',
+        'When off, amounts in the calendar and list show as “•••”. The eye button on each screen toggles it too. Upcoming shows never show amounts.',
       'settings.theme' => 'Theme',
       'settings.themeSystem' => 'System',
       'settings.themeLight' => 'Light',
@@ -1420,11 +1117,6 @@ extension on TranslationsEn {
       'settings.defaultBasis' => 'Default accounting basis',
       'settings.defaultBasisNote' =>
         'Which day the calendar and list place expenses on by default. The balance always uses the paid date.',
-      'settings.reminderApplyWhen' =>
-        '8:00 PM the day before and 3 hours before',
-      'settings.reminderResultWhen' => 'At the announcement time',
-      'settings.reminderPaymentWhen' =>
-        '8:00 PM the day before and 3 hours before',
       'settings.overrideSaved' => 'Override saved',
       'settings.budgetSaved' => 'Budget saved',
       'settings.gmailAccount' => 'Connected account',
@@ -1438,9 +1130,9 @@ extension on TranslationsEn {
       'onboarding.featureRecordTitle' => 'Record right at the venue',
       'onboarding.featureRecordBody' =>
         'Drinks reuse your last price; for cheki, just pick who and how many.',
-      'onboarding.featureReminderTitle' => 'Never miss a ticket deadline',
-      'onboarding.featureReminderBody' =>
-        'Get notified about lottery deadlines, results and payment due dates.',
+      'onboarding.featureGmailTitle' => 'Tickets recorded for you',
+      'onboarding.featureGmailBody' =>
+        'Connect Gmail to record tickets and shows from payment confirmation emails.',
       'onboarding.privacy' =>
         'Your data stays on this device. No sign-up or login needed.',
       'onboarding.start' => 'Get started',
@@ -1458,7 +1150,7 @@ extension on TranslationsEn {
       'onboarding.gmailStep' => '2 / 2 · Optional',
       'onboarding.gmailTitle' => 'Record tickets from your email',
       'onboarding.gmailBody' =>
-        'Connect Gmail to read ticket purchase and lottery emails and record tickets and applications automatically.',
+        'Connect Gmail to read ticket payment confirmation emails and record tickets and shows automatically.',
       'onboarding.gmailScope' =>
         'Only eplus and LivePocket ticket emails are read. Nothing is sent or deleted.',
       'onboarding.gmailPrivacy' =>
@@ -1473,22 +1165,6 @@ extension on TranslationsEn {
         'You can connect or disconnect in Settings anytime',
       'onboarding.sampleSubject' => 'Payment confirmation',
       'onboarding.sampleAuto' => 'Auto',
-      'reminder.channelName' => 'Ticket reminders',
-      'reminder.channelDescription' =>
-        'Application deadlines, results and payment due dates',
-      'reminder.applyEve' =>
-        ({required Object time}) =>
-            'The application deadline is tomorrow at ${time}',
-      'reminder.applySoon' =>
-        ({required Object time}) =>
-            '3 hours until the application deadline (${time})',
-      'reminder.resultAt' =>
-        ({required Object dateTime}) =>
-            'Results are out (${dateTime}). Record how it went',
-      'reminder.paymentEve' =>
-        ({required Object time}) => 'Payment is due tomorrow at ${time}',
-      'reminder.paymentSoon' =>
-        ({required Object time}) => '3 hours until payment is due (${time})',
       'errors.unexpected' => 'Something went wrong. Please try again.',
       'errors.settingsWrite' => 'Could not save settings. Please try again.',
       'errors.recordStorage' => 'Could not save the record. Please try again.',
@@ -1498,7 +1174,6 @@ extension on TranslationsEn {
       'errors.gmailReauthRequired' => 'Please reconnect Gmail.',
       'errors.gmailSync' =>
         'Couldn\'t sync with Gmail. Please try again later.',
-      'errors.reminderSchedule' => 'Couldn\'t schedule notifications.',
       _ => null,
     };
   }

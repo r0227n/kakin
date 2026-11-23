@@ -20,13 +20,7 @@ final class AppPreferencesSnapshot {
     this.locale,
     this.defaultAccountingBasis = AccountingBasis.paidOn,
     this.amountsVisible = true,
-    this.enabledReminderKinds = const {
-      TicketDeadlineKind.apply,
-      TicketDeadlineKind.result,
-      TicketDeadlineKind.payment,
-    },
     this.onboardingCompleted = false,
-    this.notificationPermissionRequested = false,
   });
 
   /// 保存済みのテーマ。未設定の場合は端末の明暗設定に従う。
@@ -41,12 +35,6 @@ final class AppPreferencesSnapshot {
   /// カレンダーとリストに金額を表示するか。
   final bool amountsVisible;
 
-  /// リマインドする期限の種類。
-  final Set<TicketDeadlineKind> enabledReminderKinds;
-
   /// 初回起動の案内を最後まで進めたか。
   final bool onboardingCompleted;
-
-  /// OS に通知の許可を一度求めたか。
-  final bool notificationPermissionRequested;
 }

@@ -7,33 +7,8 @@ import 'package:drift/drift.dart';
 /// `email_imports.service` に保存するチケットサービス。
 enum StoredMailService { eplus, livepocket }
 
-/// `email_imports.mail_kind` に保存するメールの種類。
-enum StoredMailKind { application, win, lose, payment }
-
 /// `gmail_sync_states.last_failure_kind` に保存する失敗の種類。
 enum StoredFailureKind { reauthRequired, other }
-
-/// 申込段階を snake_case の保存値に対応させる。
-class TicketStageConverter
-    extends TypeConverter<TicketApplicationStage, String> {
-  /// 保存値と enum を相互に変換する。
-  const TicketStageConverter();
-
-  static const Map<TicketApplicationStage, String> _values = {
-    TicketApplicationStage.planned: 'planned',
-    TicketApplicationStage.awaitingResult: 'awaiting_result',
-    TicketApplicationStage.awaitingPayment: 'awaiting_payment',
-    TicketApplicationStage.secured: 'secured',
-    TicketApplicationStage.lost: 'lost',
-  };
-
-  @override
-  TicketApplicationStage fromSql(String fromDb) =>
-      _values.entries.firstWhere((e) => e.value == fromDb).key;
-
-  @override
-  String toSql(TicketApplicationStage value) => _values[value]!;
-}
 
 /// 失敗の種類を snake_case の保存値に対応させる。
 class FailureKindConverter extends TypeConverter<StoredFailureKind, String> {
@@ -175,12 +150,6 @@ class EmailImports extends Table {
   TextColumn get accountEmail => text()();
   TextColumn get gmailMessageId => text()();
   TextColumn get service => textEnum<StoredMailService>()();
-  TextColumn get mailKind => textEnum<StoredMailKind>()();
-  IntColumn get ticketApplicationId => integer().nullable().references(
-    TicketApplications,
-    #id,
-    onDelete: KeyAction.setNull,
-  )();
   TextColumn get subject => text()();
   DateTimeColumn get receivedAt => dateTime()();
   DateTimeColumn get importedAt => dateTime()();
@@ -193,7 +162,6 @@ class EmailImports extends Table {
   @override
   List<String> get customConstraints => [
     "CHECK (service IN ('eplus', 'livepocket'))",
-    "CHECK (mail_kind IN ('application', 'win', 'lose', 'payment'))",
   ];
 }
 
@@ -220,42 +188,5 @@ class GmailSyncStates extends Table {
     'CHECK (last_failure_kind IS NULL OR last_failure_kind IN '
         "('reauth_required', 'other'))",
     'CHECK ((last_failed_at IS NULL) = (last_failure_kind IS NULL))',
-  ];
-}
-
-/// チケット申込。
-@TableIndex(
-  name: 'ticket_applications_performance_id',
-  columns: {#performanceId},
-)
-@TableIndex(
-  name: 'ticket_applications_service_reference_no',
-  columns: {#service, #referenceNo},
-)
-@DataClassName('TicketApplicationRow')
-class TicketApplications extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  IntColumn get performanceId => integer().references(
-    Performances,
-    #id,
-    onDelete: KeyAction.cascade,
-  )();
-  TextColumn get service => textEnum<TicketServiceKind>().nullable()();
-  TextColumn get stage => text().map(const TicketStageConverter())();
-  TextColumn get referenceNo => text().nullable()();
-  DateTimeColumn get applyDeadlineAt => dateTime().nullable()();
-  DateTimeColumn get resultAt => dateTime().nullable()();
-  DateTimeColumn get paymentDeadlineAt => dateTime().nullable()();
-  TextColumn get note => text().nullable()();
-  DateTimeColumn get createdAt =>
-      dateTime().clientDefault(() => DateTime.now().toUtc())();
-  DateTimeColumn get updatedAt =>
-      dateTime().clientDefault(() => DateTime.now().toUtc())();
-
-  @override
-  List<String> get customConstraints => [
-    "CHECK (stage IN ('planned', 'awaiting_result', 'awaiting_payment', "
-        "'secured', 'lost'))",
-    "CHECK (service IS NULL OR service IN ('eplus', 'livepocket', 'other'))",
   ];
 }

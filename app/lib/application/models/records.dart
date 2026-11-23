@@ -51,7 +51,6 @@ final class PerformanceDeletionImpact {
   const PerformanceDeletionImpact({
     required this.expenseCount,
     required this.expenseTotalYen,
-    required this.applicationCount,
   });
 
   /// 消える支出（チケット代・ドリンク代・チェキ代）の件数。
@@ -59,9 +58,6 @@ final class PerformanceDeletionImpact {
 
   /// 消える支出の合計額。
   final int expenseTotalYen;
-
-  /// 消えるチケット申込の件数。
-  final int applicationCount;
 }
 
 /// チェキ相手。同じ名前の相手を複数登録でき、所属で見分ける。
@@ -205,114 +201,4 @@ final class ExpenseDraft {
 
   /// メモ。空なら未入力として扱う。
   final String? note;
-}
-
-/// チケット申込。金額は持たない。
-final class TicketApplication {
-  /// 保存済みのチケット申込。
-  const TicketApplication({
-    required this.id,
-    required this.performance,
-    required this.stage,
-    required this.createdAt,
-    required this.isImported,
-    this.service,
-    this.referenceNo,
-    this.applyDeadlineAt,
-    this.resultAt,
-    this.paymentDeadlineAt,
-    this.note,
-  });
-
-  /// 主キー。
-  final int id;
-
-  /// 申し込む公演。
-  final Performance performance;
-
-  /// 申込段階。
-  final TicketApplicationStage stage;
-
-  /// 登録日時（UTC）。
-  final DateTime createdAt;
-
-  /// Gmail から作られた、または Gmail で段階が進んだか。
-  final bool isImported;
-
-  /// チケットサービス。
-  final TicketServiceKind? service;
-
-  /// 受付番号。
-  final String? referenceNo;
-
-  /// 申込締切（UTC）。
-  final DateTime? applyDeadlineAt;
-
-  /// 当落発表日時（UTC）。
-  final DateTime? resultAt;
-
-  /// 入金期限（UTC）。
-  final DateTime? paymentDeadlineAt;
-
-  /// メモ。
-  final String? note;
-
-  /// [kind] の期限。
-  DateTime? deadlineOf(TicketDeadlineKind kind) => switch (kind) {
-    TicketDeadlineKind.apply => applyDeadlineAt,
-    TicketDeadlineKind.result => resultAt,
-    TicketDeadlineKind.payment => paymentDeadlineAt,
-  };
-
-  /// リマインドの予約に使う事実。
-  ReminderFacts get reminderFacts => ReminderFacts(
-    applicationId: id,
-    stage: stage,
-    applyDeadlineAt: applyDeadlineAt,
-    resultAt: resultAt,
-    paymentDeadlineAt: paymentDeadlineAt,
-  );
-}
-
-/// チケット申込の入力値。
-final class TicketApplicationDraft {
-  /// 期限は瞬間（UTC）で渡す。
-  const TicketApplicationDraft({
-    required this.performanceId,
-    required this.stage,
-    this.service,
-    this.referenceNo,
-    this.applyDeadlineAt,
-    this.resultAt,
-    this.paymentDeadlineAt,
-    this.note,
-  });
-
-  /// 申し込む公演。
-  final int performanceId;
-
-  /// 申込段階。
-  final TicketApplicationStage stage;
-
-  /// チケットサービス。
-  final TicketServiceKind? service;
-
-  /// 受付番号。空なら未入力として扱う。
-  final String? referenceNo;
-
-  /// 申込締切。
-  final DateTime? applyDeadlineAt;
-
-  /// 当落発表日時。
-  final DateTime? resultAt;
-
-  /// 入金期限。
-  final DateTime? paymentDeadlineAt;
-
-  /// メモ。空なら未入力として扱う。
-  final String? note;
-
-  /// 期限を1つ以上持つか。
-  bool get hasDeadline =>
-      applyDeadlineAt != null || resultAt != null || paymentDeadlineAt != null;
 }

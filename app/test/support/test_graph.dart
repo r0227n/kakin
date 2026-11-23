@@ -12,13 +12,7 @@ import 'fakes.dart';
 
 /// 端末 API の代わりに fake とメモリ上の DB で組み立てた本番の依存。
 final class TestGraph {
-  TestGraph._(
-    this.graph,
-    this.database,
-    this.preferences,
-    this.scheduler,
-    this.clock,
-  );
+  TestGraph._(this.graph, this.database, this.preferences, this.clock);
 
   /// [prefs] を保存済みの設定として、[now] の時計で組み立てる。
   static Future<TestGraph> create({
@@ -28,18 +22,16 @@ final class TestGraph {
     SharedPreferences.setMockInitialValues(prefs);
     final preferences = await SharedPreferences.getInstance();
     final database = AppDatabase(NativeDatabase.memory());
-    final scheduler = FakeReminderScheduler();
     final clock = FixedClock(now ?? DateTime.utc(2026, 11, 22, 3));
     final graph = AppDependencyGraph(
       sharedPreferences: preferences,
       talker: Talker(settings: TalkerSettings(enabled: false)),
       database: database,
-      scheduler: scheduler,
       iconStore: FakePartnerIconStore(),
       iconPicker: FakePartnerIconPicker(),
       clock: clock,
     );
-    return TestGraph._(graph, database, preferences, scheduler, clock);
+    return TestGraph._(graph, database, preferences, clock);
   }
 
   /// 結線済みの依存。
@@ -50,9 +42,6 @@ final class TestGraph {
 
   /// 保存済みの設定。
   final SharedPreferences preferences;
-
-  /// 予約した通知。
-  final FakeReminderScheduler scheduler;
 
   /// 時計。
   final FixedClock clock;

@@ -16,7 +16,6 @@ String errorMessageFor(Translations t, AppException failure) =>
       AppErrorCode.partnerIcon => t.errors.partnerIcon,
       AppErrorCode.gmailReauthRequired => t.errors.gmailReauthRequired,
       AppErrorCode.gmailSync => t.errors.gmailSync,
-      AppErrorCode.reminderSchedule => t.errors.reminderSchedule,
       AppErrorCode.unexpected => t.errors.unexpected,
     };
 

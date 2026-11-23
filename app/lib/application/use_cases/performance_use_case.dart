@@ -1,18 +1,33 @@
 import 'package:app/application/errors/record_error.dart';
 import 'package:app/application/models/records.dart';
+import 'package:app/application/models/views.dart';
+import 'package:app/application/ports/device_ports.dart';
 import 'package:app/application/ports/record_repositories.dart';
-import 'package:app/application/use_cases/reminder_use_case.dart';
+import 'package:app/domain/domain.dart';
 
-/// 公演の登録・編集・削除の入力境界。
+/// 公演の登録・編集・削除と、今後の公演の入力境界。
 final class PerformanceUseCase {
-  /// 保存先とリマインドを注入する。
-  const PerformanceUseCase(this._performances, this._reminders);
+  /// 保存先と時計を注入する。
+  const PerformanceUseCase(this._performances, this._clock);
 
   final PerformanceRepository _performances;
-  final ReminderUseCase _reminders;
+  final Clock _clock;
 
   /// すべての公演。開始日時の新しい順。
   Future<List<Performance>> listAll() => _performances.listAll();
+
+  /// 今日以降に開始する、チケット代を記録した公演。開始日時の早い順。
+  Future<List<UpcomingPerformance>> listUpcoming() async {
+    final today = JapanTime.dateOf(_clock.now());
+    final performances = await _performances.listUpcoming(today);
+    return [
+      for (final performance in performances)
+        UpcomingPerformance(
+          performance: performance,
+          daysUntil: today.daysUntil(performance.startsOn),
+        ),
+    ];
+  }
 
   /// [id] の公演。
   Future<Performance?> find(int id) => _performances.find(id);
@@ -21,21 +36,16 @@ final class PerformanceUseCase {
   Future<int> create(PerformanceDraft draft) =>
       _performances.create(_validated(draft));
 
-  /// 公演を編集する。開始日時が変わっても期限は変わらないが、表示のため予約し直す。
-  Future<void> update(int id, PerformanceDraft draft) async {
-    await _performances.update(id, _validated(draft));
-    await _reminders.rebuild();
-  }
+  /// 公演を編集する。
+  Future<void> update(int id, PerformanceDraft draft) =>
+      _performances.update(id, _validated(draft));
 
-  /// 削除すると一緒に消える支出とチケット申込。
+  /// 削除すると一緒に消える支出。
   Future<PerformanceDeletionImpact> deletionImpact(int id) =>
       _performances.deletionImpact(id);
 
-  /// 公演を削除し、予約済みの通知を組み立て直す。
-  Future<void> delete(int id) async {
-    await _performances.delete(id);
-    await _reminders.rebuild();
-  }
+  /// 公演を、その公演が必須の支出と一緒に削除する。
+  Future<void> delete(int id) => _performances.delete(id);
 
   PerformanceDraft _validated(PerformanceDraft draft) {
     final title = draft.title.trim();

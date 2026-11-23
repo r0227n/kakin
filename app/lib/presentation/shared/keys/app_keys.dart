@@ -3,44 +3,11 @@ import 'package:flutter/widgets.dart';
 
 /// アプリと E2E テストで共有する Widget の key。
 abstract final class AppKeys {
-  /// `add_application`。
-  static const addApplication = Key('add_application');
-
-  /// `add_application_for_performance`。
-  static const addApplicationForPerformance = Key(
-    'add_application_for_performance',
-  );
-
   /// `add_expense`。
   static const addExpense = Key('add_expense');
 
   /// `amount_visibility`。
   static const amountVisibility = Key('amount_visibility');
-
-  /// `application_…`。
-  static Key application(int applicationId) =>
-      Key('application_$applicationId');
-
-  /// `application_delete`。
-  static const applicationDelete = Key('application_delete');
-
-  /// `application_note`。
-  static const applicationNote = Key('application_note');
-
-  /// `application_performance`。
-  static const applicationPerformance = Key('application_performance');
-
-  /// `application_reference`。
-  static const applicationReference = Key('application_reference');
-
-  /// `application_reminder_note`。
-  static const applicationReminderNote = Key('application_reminder_note');
-
-  /// `application_save`。
-  static const applicationSave = Key('application_save');
-
-  /// `application_scroll`。
-  static const applicationScroll = Key('application_scroll');
 
   /// `basis_toggle`。
   static const basisToggle = Key('basis_toggle');
@@ -100,13 +67,6 @@ abstract final class AppKeys {
 
   /// `day_records_total`。
   static const dayRecordsTotal = Key('day_records_total');
-
-  /// `deadline_…`。
-  static Key deadline(TicketDeadlineKind kind) => Key('deadline_${kind.name}');
-
-  /// `deadline_clear_…`。
-  static Key deadlineClear(TicketDeadlineKind kind) =>
-      Key('deadline_clear_${kind.name}');
 
   /// `delete_performance`。
   static const deletePerformance = Key('delete_performance');
@@ -210,17 +170,6 @@ abstract final class AppKeys {
   /// `month_title`。
   static const monthTitle = Key('month_title');
 
-  /// `notification_permission_status`。
-  static const notificationPermissionStatus = Key(
-    'notification_permission_status',
-  );
-
-  /// `notifications_denied`。
-  static const notificationsDenied = Key('notifications_denied');
-
-  /// `no_todo`。
-  static const noTodo = Key('no_todo');
-
   /// `no_upcoming_performances`。
   static const noUpcomingPerformances = Key('no_upcoming_performances');
 
@@ -312,15 +261,8 @@ abstract final class AppKeys {
   /// `quick_amount_…`。
   static Key quickAmount(int amountYen) => Key('quick_amount_$amountYen');
 
-  /// `reminder_…`。
-  static Key reminder(TicketDeadlineKind kind) => Key('reminder_${kind.name}');
-
   /// セグメントの選択肢。
   static Key segment(Object? value) => ValueKey('segment_$value');
-
-  /// `service_…`。
-  static Key service(TicketServiceKind service) =>
-      Key('service_${service.name}');
 
   /// `settings_budget_monthly`。
   static const settingsBudgetMonthly = Key('settings_budget_monthly');
@@ -349,9 +291,6 @@ abstract final class AppKeys {
   /// `settings_theme`。
   static const settingsTheme = Key('settings_theme');
 
-  /// `stage_…`。
-  static Key stage(TicketApplicationStage stage) => Key('stage_${stage.name}');
-
   /// `summary_balance`。
   static const summaryBalance = Key('summary_balance');
 
@@ -369,20 +308,6 @@ abstract final class AppKeys {
 
   /// `tab_upcoming`。
   static const tabUpcoming = Key('tab_upcoming');
-
-  /// `todo_…`。
-  static Key todo(int applicationId, TicketDeadlineKind kind) =>
-      Key('todo_${applicationId}_${kind.name}');
-
-  /// `todo_action_…`。
-  static Key todoAction(int applicationId, QuickStageAction action) =>
-      Key('todo_action_${applicationId}_${action.name}');
-
-  /// `undo_banner`。
-  static const undoBanner = Key('undo_banner');
-
-  /// `undo_stage_change`。
-  static const undoStageChange = Key('undo_stage_change');
 
   /// `upcoming_performance_…`。
   static Key upcomingPerformance(int performanceId) =>

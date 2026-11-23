@@ -17,7 +17,6 @@ mixin _$AppPreferences {
   ThemeMode get themeMode;
   AccountingBasis get defaultAccountingBasis;
   bool get amountsVisible;
-  Set<TicketDeadlineKind> get enabledReminderKinds;
   bool get onboardingCompleted;
   bool get isSaving;
 
@@ -43,10 +42,6 @@ mixin _$AppPreferences {
                 other.defaultAccountingBasis == defaultAccountingBasis) &&
             (identical(other.amountsVisible, amountsVisible) ||
                 other.amountsVisible == amountsVisible) &&
-            const DeepCollectionEquality().equals(
-              other.enabledReminderKinds,
-              enabledReminderKinds,
-            ) &&
             (identical(other.onboardingCompleted, onboardingCompleted) ||
                 other.onboardingCompleted == onboardingCompleted) &&
             (identical(other.isSaving, isSaving) ||
@@ -60,14 +55,13 @@ mixin _$AppPreferences {
     themeMode,
     defaultAccountingBasis,
     amountsVisible,
-    const DeepCollectionEquality().hash(enabledReminderKinds),
     onboardingCompleted,
     isSaving,
   );
 
   @override
   String toString() {
-    return 'AppPreferences(locale: $locale, themeMode: $themeMode, defaultAccountingBasis: $defaultAccountingBasis, amountsVisible: $amountsVisible, enabledReminderKinds: $enabledReminderKinds, onboardingCompleted: $onboardingCompleted, isSaving: $isSaving)';
+    return 'AppPreferences(locale: $locale, themeMode: $themeMode, defaultAccountingBasis: $defaultAccountingBasis, amountsVisible: $amountsVisible, onboardingCompleted: $onboardingCompleted, isSaving: $isSaving)';
   }
 }
 
@@ -83,7 +77,6 @@ abstract mixin class $AppPreferencesCopyWith<$Res> {
     ThemeMode themeMode,
     AccountingBasis defaultAccountingBasis,
     bool amountsVisible,
-    Set<TicketDeadlineKind> enabledReminderKinds,
     bool onboardingCompleted,
     bool isSaving,
   });
@@ -106,7 +99,6 @@ class _$AppPreferencesCopyWithImpl<$Res>
     Object? themeMode = null,
     Object? defaultAccountingBasis = null,
     Object? amountsVisible = null,
-    Object? enabledReminderKinds = null,
     Object? onboardingCompleted = null,
     Object? isSaving = null,
   }) {
@@ -128,10 +120,6 @@ class _$AppPreferencesCopyWithImpl<$Res>
             ? _self.amountsVisible
             : amountsVisible // ignore: cast_nullable_to_non_nullable
                   as bool,
-        enabledReminderKinds: null == enabledReminderKinds
-            ? _self.enabledReminderKinds
-            : enabledReminderKinds // ignore: cast_nullable_to_non_nullable
-                  as Set<TicketDeadlineKind>,
         onboardingCompleted: null == onboardingCompleted
             ? _self.onboardingCompleted
             : onboardingCompleted // ignore: cast_nullable_to_non_nullable
@@ -243,7 +231,6 @@ extension AppPreferencesPatterns on AppPreferences {
       ThemeMode themeMode,
       AccountingBasis defaultAccountingBasis,
       bool amountsVisible,
-      Set<TicketDeadlineKind> enabledReminderKinds,
       bool onboardingCompleted,
       bool isSaving,
     )?
@@ -258,7 +245,6 @@ extension AppPreferencesPatterns on AppPreferences {
           _that.themeMode,
           _that.defaultAccountingBasis,
           _that.amountsVisible,
-          _that.enabledReminderKinds,
           _that.onboardingCompleted,
           _that.isSaving,
         );
@@ -287,7 +273,6 @@ extension AppPreferencesPatterns on AppPreferences {
       ThemeMode themeMode,
       AccountingBasis defaultAccountingBasis,
       bool amountsVisible,
-      Set<TicketDeadlineKind> enabledReminderKinds,
       bool onboardingCompleted,
       bool isSaving,
     )
@@ -301,7 +286,6 @@ extension AppPreferencesPatterns on AppPreferences {
           _that.themeMode,
           _that.defaultAccountingBasis,
           _that.amountsVisible,
-          _that.enabledReminderKinds,
           _that.onboardingCompleted,
           _that.isSaving,
         );
@@ -329,7 +313,6 @@ extension AppPreferencesPatterns on AppPreferences {
       ThemeMode themeMode,
       AccountingBasis defaultAccountingBasis,
       bool amountsVisible,
-      Set<TicketDeadlineKind> enabledReminderKinds,
       bool onboardingCompleted,
       bool isSaving,
     )?
@@ -343,7 +326,6 @@ extension AppPreferencesPatterns on AppPreferences {
           _that.themeMode,
           _that.defaultAccountingBasis,
           _that.amountsVisible,
-          _that.enabledReminderKinds,
           _that.onboardingCompleted,
           _that.isSaving,
         );
@@ -361,10 +343,9 @@ class _AppPreferences implements AppPreferences {
     required this.themeMode,
     required this.defaultAccountingBasis,
     required this.amountsVisible,
-    required final Set<TicketDeadlineKind> enabledReminderKinds,
     required this.onboardingCompleted,
     this.isSaving = false,
-  }) : _enabledReminderKinds = enabledReminderKinds;
+  });
 
   @override
   final Locale locale;
@@ -374,15 +355,6 @@ class _AppPreferences implements AppPreferences {
   final AccountingBasis defaultAccountingBasis;
   @override
   final bool amountsVisible;
-  final Set<TicketDeadlineKind> _enabledReminderKinds;
-  @override
-  Set<TicketDeadlineKind> get enabledReminderKinds {
-    if (_enabledReminderKinds is EqualUnmodifiableSetView)
-      return _enabledReminderKinds;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableSetView(_enabledReminderKinds);
-  }
-
   @override
   final bool onboardingCompleted;
   @override
@@ -409,10 +381,6 @@ class _AppPreferences implements AppPreferences {
                 other.defaultAccountingBasis == defaultAccountingBasis) &&
             (identical(other.amountsVisible, amountsVisible) ||
                 other.amountsVisible == amountsVisible) &&
-            const DeepCollectionEquality().equals(
-              other._enabledReminderKinds,
-              _enabledReminderKinds,
-            ) &&
             (identical(other.onboardingCompleted, onboardingCompleted) ||
                 other.onboardingCompleted == onboardingCompleted) &&
             (identical(other.isSaving, isSaving) ||
@@ -426,14 +394,13 @@ class _AppPreferences implements AppPreferences {
     themeMode,
     defaultAccountingBasis,
     amountsVisible,
-    const DeepCollectionEquality().hash(_enabledReminderKinds),
     onboardingCompleted,
     isSaving,
   );
 
   @override
   String toString() {
-    return 'AppPreferences(locale: $locale, themeMode: $themeMode, defaultAccountingBasis: $defaultAccountingBasis, amountsVisible: $amountsVisible, enabledReminderKinds: $enabledReminderKinds, onboardingCompleted: $onboardingCompleted, isSaving: $isSaving)';
+    return 'AppPreferences(locale: $locale, themeMode: $themeMode, defaultAccountingBasis: $defaultAccountingBasis, amountsVisible: $amountsVisible, onboardingCompleted: $onboardingCompleted, isSaving: $isSaving)';
   }
 }
 
@@ -451,7 +418,6 @@ abstract mixin class _$AppPreferencesCopyWith<$Res>
     ThemeMode themeMode,
     AccountingBasis defaultAccountingBasis,
     bool amountsVisible,
-    Set<TicketDeadlineKind> enabledReminderKinds,
     bool onboardingCompleted,
     bool isSaving,
   });
@@ -474,7 +440,6 @@ class __$AppPreferencesCopyWithImpl<$Res>
     Object? themeMode = null,
     Object? defaultAccountingBasis = null,
     Object? amountsVisible = null,
-    Object? enabledReminderKinds = null,
     Object? onboardingCompleted = null,
     Object? isSaving = null,
   }) {
@@ -496,10 +461,6 @@ class __$AppPreferencesCopyWithImpl<$Res>
             ? _self.amountsVisible
             : amountsVisible // ignore: cast_nullable_to_non_nullable
                   as bool,
-        enabledReminderKinds: null == enabledReminderKinds
-            ? _self._enabledReminderKinds
-            : enabledReminderKinds // ignore: cast_nullable_to_non_nullable
-                  as Set<TicketDeadlineKind>,
         onboardingCompleted: null == onboardingCompleted
             ? _self.onboardingCompleted
             : onboardingCompleted // ignore: cast_nullable_to_non_nullable

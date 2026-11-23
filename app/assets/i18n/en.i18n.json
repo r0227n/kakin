@@ -80,30 +80,6 @@
     "locker": "Locker",
     "other": "Other"
   },
-  "stage": {
-    "planned": "Planned",
-    "awaitingResult": "Awaiting result",
-    "awaitingPayment": "Awaiting payment",
-    "secured": "Secured",
-    "lost": "Not won"
-  },
-  "service": {
-    "eplus": "eplus",
-    "livepocket": "LivePocket",
-    "other": "Other"
-  },
-  "deadline": {
-    "apply": "Application deadline",
-    "result": "Result announcement",
-    "payment": "Payment deadline",
-    "resultShort": "Result"
-  },
-  "quickAction": {
-    "applied": "Applied",
-    "won": "Won",
-    "lost": "Not won",
-    "paid": "Paid"
-  },
   "basis": {
     "label": "Accounting basis",
     "paidOn": "Paid date",
@@ -149,20 +125,9 @@
     "filterLabel": "Filter by category"
   },
   "upcoming": {
-    "addApplication": "Add application",
-    "todo": "To do",
-    "todoOrder": "Soonest first",
-    "noTodo": "No ticket deadlines coming up.",
-    "performances": "Shows",
-    "noPerformances": "No upcoming shows yet. Record a ticket or a ticket application to see it here.",
-    "overdue": "${kind} passed · record the result",
-    "needsUpdate": "Update",
-    "stageChanged": "Moved “${title}” to ${stage}",
-    "actionLabel": "Move ${title} to ${stage}",
+    "noPerformances": "No upcoming shows yet. Record a ticket to see it here.",
     "startsAt": "Starts ${time}",
-    "startsAtVenue": "Starts ${time} · ${venue}",
-    "noApplication": "No application",
-    "notificationsDenied": "Notifications are off, so reminders won't arrive. Allow notifications in the Settings app."
+    "startsAtVenue": "Starts ${time} · ${venue}"
   },
   "performance": {
     "title": "Show",
@@ -178,11 +143,9 @@
     "none": "No show",
     "noPerformances": "No shows yet",
     "createNew": "Add a new show",
-    "applications": "Ticket applications",
-    "noApplications": "No ticket applications yet",
     "delete": "Delete this show",
     "deleteTitle": "Delete this show?",
-    "deleteBody": "This also deletes ${count} ticket, drink and cheki expenses (${amount}) and ${applications} ticket applications. Merch and other expenses stay, without the show.",
+    "deleteBody": "This also deletes ${count} ticket, drink and cheki expenses (${amount}). Merch and other expenses stay, without the show.",
     "titleRequired": "Enter a show name"
   },
   "expense": {
@@ -253,30 +216,6 @@
     "nameRequired": "Enter a name",
     "empty": "No cheki partners yet"
   },
-  "application": {
-    "title": "Ticket application",
-    "performance": "Show",
-    "stage": "Stage",
-    "service": "Ticket service",
-    "referenceNo": "Reference number",
-    "referenceHint": "Optional · used to match Gmail",
-    "deadlines": "Deadlines",
-    "reminded": "Reminder on",
-    "pickDateTime": "Choose date and time",
-    "clear": "Clear",
-    "note": "Note",
-    "delete": "Delete this application",
-    "imported": "Imported from Gmail",
-    "overdueApply": "The application deadline has passed. Once you've applied, move it to “Awaiting result”.",
-    "overdueResult": "The result announcement has passed. Update the stage once you know the result.",
-    "overduePayment": "The payment deadline has passed. Once you've paid, move it to “Secured”.",
-    "willNotify": "You'll be notified at ${times}.",
-    "noReminder": "No reminders at this stage. You can note ticket issuing in the memo.",
-    "noDeadline": "Add the ${kind} to get a reminder before it.",
-    "reminderOff": "Reminders for the ${kind} are turned off in Settings.",
-    "performanceRequired": "Choose a show",
-    "add": "Add ticket application"
-  },
   "settings": {
     "budget": "Monthly budget",
     "monthly": "Per month",
@@ -312,13 +251,9 @@
     "disconnectTitle": "Disconnect Gmail?",
     "demo": "Demo data",
     "demoNote": "No OAuth client is configured, so mock emails are imported.",
-    "reminders": "Reminders",
-    "permissionGranted": "Notifications are allowed",
-    "permissionDenied": "Notifications aren't allowed. Allow them in the Settings app.",
-    "permissionUnknown": "You'll be asked to allow notifications when you first add a deadline",
     "display": "Display",
     "showAmounts": "Show amounts",
-    "showAmountsNote": "When off, amounts in the calendar and list show as “•••”. The eye button on each screen toggles it too. Upcoming shows and notifications never show amounts.",
+    "showAmountsNote": "When off, amounts in the calendar and list show as “•••”. The eye button on each screen toggles it too. Upcoming shows never show amounts.",
     "theme": "Theme",
     "themeSystem": "System",
     "themeLight": "Light",
@@ -328,9 +263,6 @@
     "languageEnglish": "English",
     "defaultBasis": "Default accounting basis",
     "defaultBasisNote": "Which day the calendar and list place expenses on by default. The balance always uses the paid date.",
-    "reminderApplyWhen": "8:00 PM the day before and 3 hours before",
-    "reminderResultWhen": "At the announcement time",
-    "reminderPaymentWhen": "8:00 PM the day before and 3 hours before",
     "overrideSaved": "Override saved",
     "budgetSaved": "Budget saved",
     "gmailAccount": "Connected account",
@@ -343,8 +275,8 @@
     "featureBudgetBody": "Leftovers and overspending both carry over to next month.",
     "featureRecordTitle": "Record right at the venue",
     "featureRecordBody": "Drinks reuse your last price; for cheki, just pick who and how many.",
-    "featureReminderTitle": "Never miss a ticket deadline",
-    "featureReminderBody": "Get notified about lottery deadlines, results and payment due dates.",
+    "featureGmailTitle": "Tickets recorded for you",
+    "featureGmailBody": "Connect Gmail to record tickets and shows from payment confirmation emails.",
     "privacy": "Your data stays on this device. No sign-up or login needed.",
     "start": "Get started",
     "budgetStep": "1 / 2",
@@ -355,7 +287,7 @@
     "budgetLater": "You can change the budget in Settings anytime",
     "gmailStep": "2 / 2 · Optional",
     "gmailTitle": "Record tickets from your email",
-    "gmailBody": "Connect Gmail to read ticket purchase and lottery emails and record tickets and applications automatically.",
+    "gmailBody": "Connect Gmail to read ticket payment confirmation emails and record tickets and shows automatically.",
     "gmailScope": "Only eplus and LivePocket ticket emails are read. Nothing is sent or deleted.",
     "gmailPrivacy": "Email bodies aren't stored; what's read stays on this device.",
     "gmailBackfill": "After connecting, emails from the past 3 months are imported.",
@@ -365,15 +297,6 @@
     "sampleSubject": "Payment confirmation",
     "sampleAuto": "Auto"
   },
-  "reminder": {
-    "channelName": "Ticket reminders",
-    "channelDescription": "Application deadlines, results and payment due dates",
-    "applyEve": "The application deadline is tomorrow at ${time}",
-    "applySoon": "3 hours until the application deadline (${time})",
-    "resultAt": "Results are out (${dateTime}). Record how it went",
-    "paymentEve": "Payment is due tomorrow at ${time}",
-    "paymentSoon": "3 hours until payment is due (${time})"
-  },
   "errors": {
     "unexpected": "Something went wrong. Please try again.",
     "settingsWrite": "Could not save settings. Please try again.",
@@ -382,7 +305,6 @@
     "partnerInUse": "Partners with cheki records can't be deleted.",
     "partnerIcon": "Couldn't load the image.",
     "gmailReauthRequired": "Please reconnect Gmail.",
-    "gmailSync": "Couldn't sync with Gmail. Please try again later.",
-    "reminderSchedule": "Couldn't schedule notifications."
+    "gmailSync": "Couldn't sync with Gmail. Please try again later."
   }
 }

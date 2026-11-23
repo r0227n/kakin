@@ -1,5 +1,4 @@
 import 'package:app/application/application.dart';
-import 'package:app/domain/domain.dart';
 import 'package:app/infrastructure/gmail/ticket_mail_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -33,8 +32,7 @@ void main() {
     expect(mail.messageId, 'm1');
     expect(mail.receivedAt, receivedAt);
     expect(mail.subject, eplusSubject);
-    expect(mail.service, TicketServiceKind.eplus);
-    expect(mail.kind, TicketMailKind.payment);
+    expect(mail.service, TicketMailService.eplus);
     expect(mail.title, '定期公演');
     expect(mail.venue, '新宿 ステージ7');
     expect(mail.priceYen, 4980);
@@ -57,7 +55,7 @@ void main() {
 ''',
     )!;
 
-    expect(mail.service, TicketServiceKind.livepocket);
+    expect(mail.service, TicketMailService.livepocket);
     expect(mail.priceYen, 8000);
     expect(mail.startsAt, DateTime.utc(2026, 12, 5, 8));
   });

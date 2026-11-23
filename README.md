@@ -1,7 +1,7 @@
 # Kakin
 
 推し活のお金を、月の「推し活代」から残高で管理する Flutter アプリです。
-カレンダー・リスト・今後の公演・設定の4タブで、支出・公演・チケット申込・チェキ相手を記録します。
+カレンダー・リスト・今後の公演・設定の4タブで、支出・公演・チェキ相手を記録します。
 データは端末内の SQLite（drift）だけに保存し、登録やログインは不要です。
 振る舞いの正は [SPEC](docs/SPEC.md)、用語の正は [GLOSSARY](GLOSSARY.md)、スキーマの正は [DB](docs/DB.md) です。
 
@@ -21,10 +21,6 @@ flutter run --dart-define-from-file=.dart_define/development.json
 Melos はルート `pubspec.yaml` の版数に固定し、常に `dart run melos` で実行します。
 `.dart_define/*.json` の `APP_ID`・`APP_ID_SUFFIX`・`APP_NAME` は Android の application ID とランチャー名、
 iOS の bundle ID と表示名に反映されます。実プロジェクト用 JSON は Git 管理から除外し、`sample.json` だけを管理します。
-
-### Android
-
-`flutter_local_notifications` 23 のため compileSdk 37 以上・AGP 9.1.1 以上・core library desugaring を有効にしています。
 
 ### Gmail 連携（OAuth）
 
@@ -54,10 +50,10 @@ Google の OAuth クライアント ID を `--dart-define` で渡すと、実際
 
 ```text
 app/lib/
-├── app/                 # bootstrap、依存の結線、通知の応答、root widget
-├── domain/              # 推し活代・残高、暦日と日本時間、二重計上、リマインド計画
+├── app/                 # bootstrap、依存の結線、root widget
+├── domain/              # 推し活代・残高、暦日と日本時間、二重計上
 ├── application/         # models・ports・use_cases・errors
-├── infrastructure/      # drift・SharedPreferences・通知・Gmail・画像の adapter
+├── infrastructure/      # drift・SharedPreferences・Gmail・画像の adapter
 ├── presentation/
 │   ├── dependencies/    # 必ず注入する use case / ErrorReporter の token
 │   ├── features/        # calendar・expense_list・upcoming・settings・onboarding などの画面

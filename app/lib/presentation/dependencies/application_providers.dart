@@ -33,20 +33,10 @@ ExpenseUseCase expenseUseCase(Ref ref) =>
 PerformanceUseCase performanceUseCase(Ref ref) =>
     throw UnimplementedError('PerformanceUseCase must be injected.');
 
-/// チケット申込の入力境界。
-@Riverpod(keepAlive: true)
-TicketApplicationUseCase ticketApplicationUseCase(Ref ref) =>
-    throw UnimplementedError('TicketApplicationUseCase must be injected.');
-
 /// チェキ相手の入力境界。
 @Riverpod(keepAlive: true)
 PartnerUseCase partnerUseCase(Ref ref) =>
     throw UnimplementedError('PartnerUseCase must be injected.');
-
-/// リマインドの入力境界。
-@Riverpod(keepAlive: true)
-ReminderUseCase reminderUseCase(Ref ref) =>
-    throw UnimplementedError('ReminderUseCase must be injected.');
 
 /// Gmail 連携の入力境界。
 @Riverpod(keepAlive: true)

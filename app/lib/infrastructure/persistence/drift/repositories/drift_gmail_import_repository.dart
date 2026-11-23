@@ -1,5 +1,4 @@
 import 'package:app/application/application.dart';
-import 'package:app/domain/domain.dart';
 import 'package:app/infrastructure/persistence/drift/app_database.dart';
 import 'package:app/infrastructure/persistence/drift/repositories/row_mapping.dart';
 import 'package:drift/drift.dart';
@@ -77,26 +76,16 @@ final class DriftGmailImportRepository implements GmailImportRepository {
               EmailImportsCompanion.insert(
                 accountEmail: accountEmail,
                 gmailMessageId: mail.messageId,
-                service: mail.service == TicketServiceKind.livepocket
-                    ? StoredMailService.livepocket
-                    : StoredMailService.eplus,
-                mailKind: StoredMailKind.values.byName(mail.kind.name),
+                service: switch (mail.service) {
+                  TicketMailService.eplus => StoredMailService.eplus,
+                  TicketMailService.livepocket => StoredMailService.livepocket,
+                },
                 subject: mail.subject,
                 receivedAt: mail.receivedAt.toUtc(),
                 importedAt: DateTime.now().toUtc(),
               ),
             ),
       );
-
-  @override
-  Future<void> linkApplication(int importId, int applicationId) => guardStorage(
-    () =>
-        (_db.update(
-          _db.emailImports,
-        )..where((i) => i.id.equals(importId))).write(
-          EmailImportsCompanion(ticketApplicationId: Value(applicationId)),
-        ),
-  );
 
   @override
   Future<void> recordSuccess(

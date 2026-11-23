@@ -29,9 +29,7 @@ class FakeAppPreferencesRepository implements AppPreferencesRepository {
     LocalePreference? locale,
     AccountingBasis? basis,
     bool? amountsVisible,
-    Set<TicketDeadlineKind>? reminders,
     bool? onboardingCompleted,
-    bool? permissionRequested,
   }) async {
     operations.add(operation);
     await beforeSave?.call();
@@ -41,10 +39,7 @@ class FakeAppPreferencesRepository implements AppPreferencesRepository {
       locale: locale ?? s.locale,
       defaultAccountingBasis: basis ?? s.defaultAccountingBasis,
       amountsVisible: amountsVisible ?? s.amountsVisible,
-      enabledReminderKinds: reminders ?? s.enabledReminderKinds,
       onboardingCompleted: onboardingCompleted ?? s.onboardingCompleted,
-      notificationPermissionRequested:
-          permissionRequested ?? s.notificationPermissionRequested,
     );
   }
 
@@ -65,24 +60,8 @@ class FakeAppPreferencesRepository implements AppPreferencesRepository {
       _save('amounts:$visible', amountsVisible: visible);
 
   @override
-  Future<void> saveReminderEnabled(
-    TicketDeadlineKind kind, {
-    required bool enabled,
-  }) => _save(
-    'reminder:${kind.name}:$enabled',
-    reminders: {
-      ...snapshot.enabledReminderKinds.where((k) => k != kind),
-      if (enabled) kind,
-    },
-  );
-
-  @override
   Future<void> saveOnboardingCompleted() =>
       _save('onboarding', onboardingCompleted: true);
-
-  @override
-  Future<void> saveNotificationPermissionRequested() =>
-      _save('permission', permissionRequested: true);
 }
 
 /// 報告を記録し、外部への送信を行わない。
@@ -93,39 +72,6 @@ class RecordingErrorReporter implements ErrorReporter {
   @override
   void report(Object error, StackTrace? stackTrace, {required String message}) {
     errors.add(error);
-  }
-}
-
-/// 予約した通知を記録する。
-class FakeReminderScheduler implements ReminderScheduler {
-  /// 現在の許可の状態。
-  NotificationPermission permission = NotificationPermission.notDetermined;
-
-  /// 許可を求めたときの結果。
-  NotificationPermission requestResult = NotificationPermission.granted;
-
-  /// 許可を求めた回数。
-  int requestCount = 0;
-
-  /// 最後に予約した通知。
-  List<ReminderNotification> scheduled = const [];
-
-  /// 予約の失敗を注入する。
-  Exception? replaceError;
-
-  @override
-  Future<NotificationPermission> permissionStatus() async => permission;
-
-  @override
-  Future<NotificationPermission> requestPermission() async {
-    requestCount++;
-    return permission = requestResult;
-  }
-
-  @override
-  Future<void> replaceAll(List<ReminderNotification> reminders) async {
-    if (replaceError case final error?) throw error;
-    scheduled = reminders;
   }
 }
 

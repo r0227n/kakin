@@ -5,7 +5,6 @@ import 'package:app/domain/domain.dart';
 import 'package:app/presentation/navigation/routes.dart';
 import 'package:app/presentation/shared/keys/app_keys.dart';
 import 'package:app/presentation/shared/widgets/common_widgets.dart';
-import 'package:app/presentation/shared/widgets/visuals.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
 
@@ -162,24 +161,6 @@ class _PerformanceRow extends StatelessWidget {
                       fontSize: 12,
                       color: palette.textSecondary,
                     ),
-                  ),
-                  Wrap(
-                    spacing: AppSpacing.xs,
-                    runSpacing: AppSpacing.xs,
-                    children: [
-                      if (item.stages.isEmpty)
-                        TagChip(
-                          label: t.upcoming.noApplication,
-                          foreground: palette.textTertiary,
-                          background: palette.surfaceMuted,
-                        ),
-                      for (final stage in item.stages)
-                        TagChip(
-                          label: stage.label(t),
-                          foreground: stage.tone(palette).ink,
-                          background: stage.tone(palette).soft,
-                        ),
-                    ],
                   ),
                 ],
               ),

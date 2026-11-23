@@ -31,14 +31,8 @@ final class LocalAppPreferencesRepository implements AppPreferencesRepository {
         ? AccountingBasis.performanceDate
         : AccountingBasis.paidOn,
     amountsVisible: _bool(SharedPreferencesKey.amountsVisible) ?? true,
-    enabledReminderKinds: {
-      for (final kind in TicketDeadlineKind.values)
-        if (_bool(SharedPreferencesKey.reminder(kind)) ?? true) kind,
-    },
     onboardingCompleted:
         _bool(SharedPreferencesKey.onboardingCompleted) ?? false,
-    notificationPermissionRequested:
-        _bool(SharedPreferencesKey.notificationPermissionRequested) ?? false,
   );
 
   bool? _bool(SharedPreferencesKey key) => switch (_preferences.get(
@@ -79,28 +73,9 @@ final class LocalAppPreferencesRepository implements AppPreferencesRepository {
   );
 
   @override
-  Future<void> saveReminderEnabled(
-    TicketDeadlineKind kind, {
-    required bool enabled,
-  }) => _write(
-    () => _preferences.setBool(
-      SharedPreferencesKey.reminder(kind).value,
-      enabled,
-    ),
-  );
-
-  @override
   Future<void> saveOnboardingCompleted() => _write(
     () => _preferences.setBool(
       SharedPreferencesKey.onboardingCompleted.value,
-      true,
-    ),
-  );
-
-  @override
-  Future<void> saveNotificationPermissionRequested() => _write(
-    () => _preferences.setBool(
-      SharedPreferencesKey.notificationPermissionRequested.value,
       true,
     ),
   );

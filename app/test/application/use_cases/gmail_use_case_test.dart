@@ -28,8 +28,6 @@ void main() {
       unitOfWork: DriftUnitOfWork(db),
       performances: DriftPerformanceRepository(db),
       expenses: DriftExpenseRepository(db),
-      applications: DriftTicketApplicationRepository(db),
-      reminders: t.graph.reminders,
       clock: t.clock,
     );
   }
@@ -57,37 +55,41 @@ void main() {
       final result = (await t.graph.gmail.sync())!;
 
       expect(result.importedMailCount, 4);
-      expect(result.createdExpenseCount, 4);
       expect(
         await DriftExpenseRepository(t.database).monthlySpendByPaidOn(),
         {YearMonth(2026, 10): 3500, YearMonth(2026, 11): 4000 + 6800 + 12000},
       );
     });
 
+    test('sync creates one performance per mail', () async {
+      await t.graph.gmail.connect();
+      await t.graph.gmail.sync();
+
+      final performances = await t.graph.performance.listAll();
+
+      expect(performances.map((p) => p.title).toSet(), {
+        '定期公演 vol.11',
+        'ナイトサーキット 2026',
+        'クリスマス公演',
+        '春ツアー2027 東京公演',
+      });
+    });
+
     test(
-      'sync creates performances and secured, imported applications',
+      'sync links the expense to an existing matching performance',
       () async {
+        // クリスマス公演: 31日後の 18:30 JST。
+        await t.graph.performance.create(
+          PerformanceDraft(
+            title: 'クリスマス公演',
+            startsAt: DateTime.utc(2026, 12, 23, 9, 30),
+          ),
+        );
         await t.graph.gmail.connect();
+
         await t.graph.gmail.sync();
 
-        final performances = await t.graph.performance.listAll();
-        final applications = await DriftTicketApplicationRepository(
-          t.database,
-        ).listForPerformances(performances.map((p) => p.id));
-
-        expect(performances.map((p) => p.title).toSet(), {
-          '定期公演 vol.11',
-          'ナイトサーキット 2026',
-          'クリスマス公演',
-          '春ツアー2027 東京公演',
-        });
-        expect(applications, hasLength(4));
-        expect(
-          applications.every(
-            (a) => a.stage == TicketApplicationStage.secured && a.isImported,
-          ),
-          isTrue,
-        );
+        expect(await t.graph.performance.listAll(), hasLength(4));
       },
     );
 
@@ -109,40 +111,8 @@ void main() {
       final second = (await t.graph.gmail.sync())!;
 
       expect(second.importedMailCount, 0);
-      expect(second.createdExpenseCount, 0);
       expect(await t.graph.performance.listAll(), hasLength(4));
     });
-
-    test(
-      'advances an existing open application instead of adding one',
-      () async {
-        final performanceId = await t.graph.performance.create(
-          // クリスマス公演: 31日後の 18:30 JST。
-          PerformanceDraft(
-            title: 'クリスマス公演',
-            startsAt: DateTime.utc(2026, 12, 23, 9, 30),
-          ),
-        );
-        final applications = DriftTicketApplicationRepository(t.database);
-        final id = await applications.create(
-          TicketApplicationDraft(
-            performanceId: performanceId,
-            stage: TicketApplicationStage.awaitingPayment,
-            service: TicketServiceKind.eplus,
-          ),
-        );
-        await t.graph.gmail.connect();
-
-        await t.graph.gmail.sync();
-
-        final forPerformance = await applications.listForPerformance(
-          performanceId,
-        );
-        expect(forPerformance.map((a) => a.id), [id]);
-        expect(forPerformance.single.stage, TicketApplicationStage.secured);
-        expect(await t.graph.performance.listAll(), hasLength(4));
-      },
-    );
 
     test('reconnecting the same account keeps the sync state', () async {
       await t.graph.gmail.connect();
@@ -165,23 +135,6 @@ void main() {
         await t.graph.gmail.disconnect();
 
         expect(await connection(), isNull);
-        expect(await t.graph.performance.listAll(), hasLength(4));
-      },
-    );
-
-    test(
-      'a reminder scheduling failure keeps the import and is not a sync '
-      'failure',
-      () async {
-        await t.graph.gmail.connect();
-        final failure = Exception('plugin');
-        t.scheduler.replaceError = failure;
-
-        await expectLater(t.graph.gmail.sync(), throwsA(same(failure)));
-
-        final saved = (await connection())!;
-        expect(saved.lastFetchedAt, isNotNull);
-        expect(saved.lastFailedAt, isNull);
         expect(await t.graph.performance.listAll(), hasLength(4));
       },
     );

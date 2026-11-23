@@ -151,7 +151,15 @@ class TranslationsFormatJa {
   final Translations _root; // ignore: unused_field
 
   // Translations
-  List<String> get weekdays => ['月', '火', '水', '木', '金', '土', '日'];
+  List<String> get weekdays => [
+    '月',
+    '火',
+    '水',
+    '木',
+    '金',
+    '土',
+    '日',
+  ];
   List<String> get monthNames => [
     '1月',
     '2月',

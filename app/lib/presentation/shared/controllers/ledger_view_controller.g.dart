@@ -51,7 +51,7 @@ final class LedgerViewControllerProvider
 }
 
 String _$ledgerViewControllerHash() =>
-    r'30ca1ee011c3fc622f907dba37cb26b9be031b8b';
+    r'00798cd2e293aeca4526a29d67654c5535e2d1d1';
 
 /// カレンダーとリストの表示中の月と計上基準を所有する。
 ///

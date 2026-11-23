@@ -1,13 +1,14 @@
-# Flutter Template
+# Kakin
 
-`oshiki` の命名と設計境界を、新規アプリのための最小構成にした Flutter テンプレートです。
-ホーム、テーマと言語の設定、永続化、翻訳、エラー報告を一通り動かせます。
-Firebase・Sentry などのアカウントや設定ファイルは不要です。
+推し活のお金を、月の「推し活代」から残高で管理する Flutter アプリです。
+カレンダー・リスト・今後の公演・設定の4タブで、支出・公演・チケット申込・チェキ相手を記録します。
+データは端末内の SQLite（drift）だけに保存し、登録やログインは不要です。
+振る舞いの正は [SPEC](docs/SPEC.md)、用語の正は [GLOSSARY](GLOSSARY.md)、スキーマの正は [DB](docs/DB.md) です。
 
 ## セットアップ
 
 SDK とツールの版数は `.mise.toml`、依存とコマンドはルート `pubspec.yaml` を正とします。
-Flutter 3.44.6 / Dart 3.12 系の Pub workspace に、`app` と `packages/design_system` を配置しています。
+Flutter 3.44.6 / Dart 3.12 系の Pub workspace に、`app`・`packages/*`・`clis/*` を配置しています。
 
 ```sh
 mise install
@@ -17,71 +18,61 @@ cd app
 flutter run --dart-define-from-file=.dart_define/development.json
 ```
 
-Melos はルート `pubspec.yaml` の版数に固定し、常に `dart run melos` で実行します。グローバルへのインストールは不要です。
-VS Code の development / staging / production 起動設定では、対応する `.dart_define/*.json` を用意してください。
-実プロジェクト用 JSON は Git 管理から除外され、`sample.json` だけを管理します。
+Melos はルート `pubspec.yaml` の版数に固定し、常に `dart run melos` で実行します。
+`.dart_define/*.json` の `APP_ID`・`APP_ID_SUFFIX`・`APP_NAME` は Android の application ID とランチャー名、
+iOS の bundle ID と表示名に反映されます。実プロジェクト用 JSON は Git 管理から除外し、`sample.json` だけを管理します。
 
-## 新規アプリへの変更手順
+### Android
 
-1. テンプレートを複製し、新しいリポジトリを作成します。
-2. `pubspec.yaml` の Melos 名と `app/pubspec.yaml` の説明・バージョンを更新します。
-   Dart package 名 `app` を変える場合は、すべての `package:app/` import とアーキテクチャテストも変更します。
-3. `.dart_define/*.json` の `APP_ID`・`APP_ID_SUFFIX`・`APP_NAME` を設定します。
-   Android の application ID とランチャー名、iOS の bundle ID と表示名に反映されます。
-   Web の表示名は `app/web/manifest.json` と `index.html`、デスクトップの識別子は各 runner を変更します。
-4. `app/assets/i18n/*.i18n.json` の `appName` と画面文言を変更します。
-   `packages/design_system/lib/src/tokens/colors.dart` の seed が配色の起点です。
-5. `presentation/features/home` をアプリの最初の機能に置き換え、typed route を追加します。
-6. 必要になった外部サービス、権限、端末固有の設定を追加し、署名と配布設定を用意します。
+`flutter_local_notifications` 23 のため compileSdk 37 以上・AGP 9.1.1 以上・core library desugaring を有効にしています。
+
+### Gmail 連携（OAuth）
+
+Google の OAuth クライアント ID を `--dart-define` で渡すと、実際の Gmail を読み取ります（`gmail.readonly`）。
+渡さないときは端末内のデモデータ（`demo@kakin.example`）で連携の流れを確認でき、設定画面に「デモデータ」と表示します。
+
+1. Google Cloud Console でプロジェクトを作り、Gmail API を有効にします。
+2. OAuth 同意画面を設定し、スコープ `https://www.googleapis.com/auth/gmail.readonly` とテストユーザーを追加します。
+3. 認証情報で次の OAuth クライアント ID を作ります。
+   - iOS: bundle ID は `APP_ID`（既定 `com.example.app`）
+   - Android: package 名は `APP_ID`、SHA-1 は署名鍵のもの
+   - ウェブアプリケーション: Android がサーバー用クライアント ID として使います
+4. iOS は `app/ios/Runner/Info.plist` に `GIDClientID` と、逆順クライアント ID の URL スキーム（`CFBundleURLTypes`）を追加します。
+5. 次の値を `.dart_define/development.json` に追加して起動します。
+
+```json
+{
+  "GOOGLE_IOS_CLIENT_ID": "<iOS クライアント ID>",
+  "GOOGLE_SERVER_CLIENT_ID": "<ウェブアプリケーションのクライアント ID>"
+}
+```
+
+クライアント ID の選択は `app/lib/app/dependency_graph.dart` が行い、どちらも未設定ならデモに切り替えます。
+定期バックグラウンドの同期は未実装で、手動同期と初回連携の取り込みだけが動きます。
 
 ## 構成
 
 ```text
 app/lib/
-├── app/                         # bootstrap、依存の結線、root widget
-├── domain/                      # アプリ固有の純粋な業務ルールの追加先
-├── application/                 # 設定モデル、use case、port、公開エラー
-├── infrastructure/              # port の具象 adapter、保存キー
+├── app/                 # bootstrap、依存の結線、通知の応答、root widget
+├── domain/              # 推し活代・残高、暦日と日本時間、二重計上、リマインド計画
+├── application/         # models・ports・use_cases・errors
+├── infrastructure/      # drift・SharedPreferences・通知・Gmail・画像の adapter
 ├── presentation/
-│   ├── dependencies/            # 必ず注入する application / observability token
-│   ├── features/                # home / settings の screens と widgets
-│   ├── navigation/              # typed route と router の組み立て
-│   └── shared/controllers/      # root と画面が共有する設定状態
-└── core/                        # 翻訳生成物、locale 解決、logger
-packages/design_system/          # テーマとトークンのみ
+│   ├── dependencies/    # 必ず注入する use case / ErrorReporter の token
+│   ├── features/        # calendar・expense_list・upcoming・settings・onboarding などの画面
+│   ├── navigation/      # typed route と router の組み立て
+│   └── shared/          # 共有の controller・Widget・AppKeys
+└── core/                # 翻訳生成物、locale 解決、金額と日付の書式、logger
+app/patrol_test/         # Patrol の E2E
+packages/design_system/  # テーマ・ライトとダークのパレット・トークン・数字用フォント
+packages/month_calendar/ # 月のカレンダーの格子
+packages/gmail_ticket_source/ # Gmail の検索クエリと MIME の本文抽出
+packages/ticket_*/       # チケットサービスごとのメール解析
+clis/gmail_ticket_cli/   # 実メールで解析を確かめる CLI
 ```
 
-`AppPreferencesSnapshot` は純 Dart の保存データ、`AppPreferences` は Flutter の表示状態です。
-具象 adapter は `app/dependency_graph.dart` だけで選択し、画面へは use case を注入します。
-業務機能のない初期状態では、domain にダミーの entity や Todo サンプルを追加しません。
-
-詳細は [アーキテクチャ](docs/ARCHITECTURE.md)、[画面仕様](docs/specs/SPECS_INDEX_SPEC.md)、
-[採用した設計判断](docs/specs/ADR-0001-template-architecture.md) を参照してください。
-
-## Agent 向けの作業手順
-
-`.agents/skills/` に、設計・レビュー・不具合調査・ドメイン設計・画面 QA・PR 作成・Agent 文書整備の
-project skill を配置しています。Oshiki の手順を参考に、このテンプレートの構成と利用可能な機能に合わせて作成しています。
-Melos 同梱の公式 skill は Dart skills CLI で取得し、`.config/dart_skills/skills_config.json` で管理します。
-`mise run skills -- list` で管理対象を確認できます。
-用途と管理方針は [Agent skills](docs/agent-skills.md)、共通規約は [AGENTS.md](AGENTS.md) を参照してください。
-
-## 設定とエラー
-
-テーマは端末設定・ライト・ダークから、言語は日本語・English から選べます。
-未設定の言語は起動時の端末の優先言語順で解決し、非対応なら日本語を使用します。
-設定変更は操作順に保存し、成功した値だけを画面に反映します。
-保存に失敗すると直前の設定を維持し、再試行を促すメッセージと Talker のログに記録します。
-起動時の初期化に失敗した場合も、再試行画面を表示します。
-
-## 依存の方針
-
-既存の Riverpod generated Notifier、Freezed、GoRouter typed routes、Slang、SharedPreferences、Talker を使います。
-GoRouter builder は現在の生成 API と合わせて 4.3 系に制限しています。
-画像処理・カメラ・広告・認証・DB・Marionette・Patrol は、利用先アプリで必要になったときに追加します。
-開発依存の `analyzer` は条件付き import を含む依存境界テスト、
-`shared_preferences_platform_interface` は保存拒否と端末例外を再現する fake に使用します。
-ログの外部送信は設定していません。
+詳細は [アーキテクチャ](docs/ARCHITECTURE.md) を参照してください。
 
 ## 検証
 
@@ -91,11 +82,33 @@ GoRouter builder は現在の生成 API と合わせて 4.3 系に制限して�
 dart run melos run gen
 dart run melos run gen:slang
 mise run quality
-cd app
-flutter build web --dart-define-from-file=.dart_define/sample.json
+git diff --check
 ```
 
 `quality` は全 workspace の format check・静的解析・翻訳解析・テスト・dprint を実行します。
-CI でも同じ検証と生成物の同期チェック、Web ビルドを実行します。
 テストは `app/test/` に実装と同じレイヤー構成で配置します。
-モバイルの署名付き配布と各 OS の実機検証は、新しいアプリの識別子・権限設定で行ってください。
+
+### E2E（Patrol）
+
+`patrol_cli` 4.9.0 を使います。iOS Simulator を起動してから `app` で実行します。
+
+```sh
+dart pub global activate patrol_cli 4.9.0
+cd app
+patrol test -d <シミュレーターの UDID>
+```
+
+テストは端末内の DB と設定を消してから日本語で起動します。
+Widget の key は `app/lib/presentation/shared/keys/app_keys.dart` をアプリとテストで共有します。
+iOS は `RunnerUITests` ターゲット、Android は `MainActivityTest` と Test Orchestrator で動きます。
+
+### 動作確認（Marionette）
+
+debug ビルドは `MarionetteBinding` で起動し、`marionette-agent` から VM Service 経由で操作できます。
+手順は `.claude/skills/marionette-agent/SKILL.md` を参照してください。
+
+## Agent 向けの作業手順
+
+`.agents/skills/` に project skill を配置しています。
+Melos 同梱の公式 skill は Dart skills CLI で取得し、`.config/dart_skills/skills_config.json` で管理します。
+用途と管理方針は [Agent skills](docs/agent-skills.md)、共通規約は [AGENTS.md](AGENTS.md) を参照してください。

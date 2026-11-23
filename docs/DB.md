@@ -31,7 +31,7 @@ SPEC.md と食い違う場合は SPEC.md に合わせます。
 
 | 項目       | 決定                                                                                      |
 | ---------- | ----------------------------------------------------------------------------------------- |
-| DB         | drift 2.33 系 + SQLite。端末内のみで、サーバーは持たない                                  |
+| DB         | drift 2.34 系 + SQLite。端末内のみで、サーバーは持たない                                  |
 | 支出       | 全カテゴリを1つの `expenses` テーブルで持つ。カテゴリ固有の項目は CHECK 制約で整合を守る  |
 | 主キー     | 原則 `INTEGER PRIMARY KEY AUTOINCREMENT`。月や Gmail アカウントで一意に決まる表は自然キー |
 | 金額       | 日本円の整数（`INTEGER`）。浮動小数点は使わない                                           |
@@ -714,14 +714,14 @@ Gmail API のスコープは読み取り専用（`gmail.readonly`）に限定し
 
 ```yaml
 dependencies:
-  drift: ">=2.33.0 <2.34.0"
+  drift: ^2.34.4
   drift_flutter: ^0.3.1
 
 dev_dependencies:
-  drift_dev: ">=2.33.0 <2.34.0"
+  drift_dev: ">=2.34.0 <2.34.1"
 ```
 
-このリポジトリは `analyzer: ^12.1.0` に固定されており、`drift_dev` 2.34.1 以降は analyzer 13 以上を要求するため、そのままでは依存解決できません。v1 は analyzer 12 に対応する drift / drift_dev 2.33 系で開始します。drift 2.35 系へ上げる場合は、analyzer・riverpod_generator・freezed などの生成ツールを同時に更新する別作業として扱います。
+このリポジトリは `analyzer: ^12.1.0` に固定されており、`drift_dev` 2.34.1 以降は analyzer 13 以上を要求するため、そのままでは依存解決できません。v1 は analyzer 12 に対応する `drift_dev` 2.34.0 に固定し、ランタイムの `drift` は 2.34 系の最新を使います。`drift_dev` を上げる場合は、analyzer・riverpod_generator・freezed などの生成ツールを同時に更新する別作業として扱います。
 
 ### build.yaml
 
@@ -903,6 +903,10 @@ dart run drift_dev schema generate \
   drift_schemas/ \
   test/infrastructure/persistence/drift/generated_migrations/
 ```
+
+`drift_dev` 2.34.0 の CLI と `SchemaVerifier` は `drift` 2.34.4 とコンパイルできません。
+v1 のスキーマは `drift` を一時的に 2.34.0 へ下げて `schema dump` し、`app/drift_schemas/drift_schema_v1.json` に保存しています（lockfile は 2.34.4 のまま）。
+移行テスト用コードの `schema generate` は、最初のマイグレーションを追加するときに `drift_dev` を `drift` と揃えて上げてから行います。
 
 スキーマを変更するときは、次の順で行います。
 

@@ -21,7 +21,7 @@ val dartDefines = if (project.hasProperty("dart-defines")) {
 }
 
 val appId = dartDefines["APP_ID"] ?: "com.example.app"
-val appName = dartDefines["APP_NAME"] ?: "Flutter Template"
+val appName = dartDefines["APP_NAME"] ?: "Kakin"
 
 android {
     namespace = "com.example.app"
@@ -53,6 +53,13 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         resValue("string", "app_name", appName)
+        // Patrol の E2E は各テストの前にアプリのデータを消して独立させる。
+        testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
+    }
+
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
     }
 
     buildTypes {
@@ -72,4 +79,8 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    androidTestUtil("androidx.test:orchestrator:1.5.1")
 }

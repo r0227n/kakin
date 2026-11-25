@@ -4,10 +4,15 @@ import 'package:go_router/go_router.dart';
 
 /// Typed route を組み立てる。Router の生成と破棄は app が所有する。
 GoRouter buildAppRouter({
+  required bool onboardingCompleted,
   String? initialLocation,
   List<NavigatorObserver> observers = const [],
 }) => GoRouter(
   routes: $appRoutes,
-  initialLocation: initialLocation,
+  initialLocation:
+      initialLocation ??
+      (onboardingCompleted
+          ? const CalendarRoute().location
+          : const WelcomeRoute().location),
   observers: observers,
 );

@@ -55,3 +55,7 @@ node_modules/
 **/test-report.json
 
 .claude/settings.local.json
+
+# Patrol
+app/patrol_test/test_bundle.dart
+.patrol.env

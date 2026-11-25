@@ -1,5 +1,6 @@
 import 'package:app/application/application.dart';
 import 'package:app/application/errors/settings_error.dart';
+import 'package:app/domain/domain.dart';
 import 'package:app/infrastructure/persistence/shared_preferences/shared_preferences_keys.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,7 +25,22 @@ final class LocalAppPreferencesRepository implements AppPreferencesRepository {
       ),
       _ => null,
     },
+    defaultAccountingBasis:
+        _preferences.get(SharedPreferencesKey.defaultAccountingBasis.value) ==
+            'performance_date'
+        ? AccountingBasis.performanceDate
+        : AccountingBasis.paidOn,
+    amountsVisible: _bool(SharedPreferencesKey.amountsVisible) ?? true,
+    onboardingCompleted:
+        _bool(SharedPreferencesKey.onboardingCompleted) ?? false,
   );
+
+  bool? _bool(SharedPreferencesKey key) => switch (_preferences.get(
+    key.value,
+  )) {
+    final bool value => value,
+    _ => null,
+  };
 
   @override
   Future<void> saveTheme(AppThemePreference theme) => _write(
@@ -37,6 +53,30 @@ final class LocalAppPreferencesRepository implements AppPreferencesRepository {
     () => _preferences.setString(
       SharedPreferencesKey.appLocale.value,
       locale.languageCode,
+    ),
+  );
+
+  @override
+  Future<void> saveDefaultAccountingBasis(AccountingBasis basis) => _write(
+    () => _preferences.setString(
+      SharedPreferencesKey.defaultAccountingBasis.value,
+      basis == AccountingBasis.performanceDate ? 'performance_date' : 'paid_on',
+    ),
+  );
+
+  @override
+  Future<void> saveAmountsVisible({required bool visible}) => _write(
+    () => _preferences.setBool(
+      SharedPreferencesKey.amountsVisible.value,
+      visible,
+    ),
+  );
+
+  @override
+  Future<void> saveOnboardingCompleted() => _write(
+    () => _preferences.setBool(
+      SharedPreferencesKey.onboardingCompleted.value,
+      true,
     ),
   );
 

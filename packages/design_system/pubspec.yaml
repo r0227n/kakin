@@ -21,3 +21,9 @@ dev_dependencies:
     sdk: flutter
   theme_extensions_builder: ^7.0.0
   very_good_analysis: ^10.1.0
+
+flutter:
+  fonts:
+    - family: SpaceGrotesk
+      fonts:
+        - asset: fonts/SpaceGrotesk-Variable.ttf

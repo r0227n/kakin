@@ -1,0 +1,22 @@
+name: gmail_ticket_source
+description: Gmail からチケットサービスのメールを検索・取得し、本文テキストへ変換する.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ^3.12.0
+
+resolution: workspace
+
+dependencies:
+  googleapis: ^19.0.0
+  ticket_platform_interface:
+    path: ../ticket_platform_interface
+
+dev_dependencies:
+  test: ^1.25.0
+  ticket_eplus:
+    path: ../ticket_eplus
+  ticket_livepocket:
+    path: ../ticket_livepocket
+  very_good_analysis: ^10.1.0

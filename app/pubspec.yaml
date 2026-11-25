@@ -13,13 +13,28 @@ dependencies:
   cupertino_icons: ^1.0.8
   design_system:
     path: ../packages/design_system
+  drift: ^2.34.4
+  drift_flutter: ^0.3.1
+  extension_google_sign_in_as_googleapis_auth: ^3.0.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^3.3.2
   freezed_annotation: ^3.1.0
+  gmail_ticket_source:
+    path: ../packages/gmail_ticket_source
   go_router: ^17.3.0
+  google_sign_in: ^7.2.0
+  googleapis: ^19.0.0
+  googleapis_auth: ^2.3.7
+  image_cropper: ^12.2.1
+  image_picker: ^1.2.4
+  intl: ^0.20.2
+  marionette_flutter: ^0.7.0
+  month_calendar:
+    path: ../packages/month_calendar
+  path_provider: ^2.1.6
   riverpod_annotation: ^4.0.3
   shared_preferences: ^2.5.3
   slang: ^4.11.1
@@ -27,16 +42,31 @@ dependencies:
   talker: ^5.0.2
   talker_flutter: ^5.0.2
   talker_riverpod_logger: ^5.0.2
+  ticket_eplus:
+    path: ../packages/ticket_eplus
+  ticket_livepocket:
+    path: ../packages/ticket_livepocket
+  ticket_platform_interface:
+    path: ../packages/ticket_platform_interface
 dev_dependencies:
   analyzer: ^12.1.0
   build_runner: ^2.7.1
+  drift_dev: ">=2.34.0 <2.34.1"
   flutter_test:
     sdk: flutter
   freezed: ^3.2.3
   go_router_builder: ">=4.3.1 <4.4.0"
+  patrol: ^4.11.0
   riverpod_generator: ^4.0.4
   shared_preferences_platform_interface: ^2.4.1
   slang_build_runner: ^4.11.0
+
+patrol:
+  app_name: Kakin
+  android:
+    package_name: com.example.app
+  ios:
+    bundle_id: com.example.app
 
 flutter:
   uses-material-design: true

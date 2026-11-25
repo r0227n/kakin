@@ -1,58 +1,39 @@
 import 'package:app/core/gen/slang.g.dart';
-import 'package:app/presentation/features/settings/widgets/settings_save_feedback.dart';
-import 'package:app/presentation/features/settings/widgets/settings_selection_tile.dart';
-import 'package:app/presentation/shared/controllers/app_preferences_controller.dart';
+import 'package:app/presentation/features/settings/widgets/budget_settings.dart';
+import 'package:app/presentation/features/settings/widgets/display_settings.dart';
+import 'package:app/presentation/features/settings/widgets/gmail_settings.dart';
+import 'package:app/presentation/shared/keys/app_keys.dart';
+import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// アプリ全体で共有するテーマと言語を即時保存する画面。
-class SettingsScreen extends ConsumerWidget {
-  /// 設定画面を生成する。
+/// 推し活代・Gmail 連携・表示の設定。
+class SettingsScreen extends StatelessWidget {
+  /// 各設定は節ごとの Widget が保存する。
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final translations = Translations.of(context);
-    final preferences = ref.watch(appPreferencesControllerProvider);
-    final controller = ref.read(appPreferencesControllerProvider.notifier);
+  Widget build(BuildContext context) {
+    final t = Translations.of(context);
     return Scaffold(
-      appBar: AppBar(title: Text(translations.settings)),
-      body: SafeArea(
-        child: ListView(
-          children: [
-            SettingsSelectionTile<ThemeMode>(
-              title: translations.theme,
-              value: preferences.themeMode,
-              enabled: !preferences.isSaving,
-              options: {
-                ThemeMode.system: translations.system,
-                ThemeMode.light: translations.light,
-                ThemeMode.dark: translations.dark,
-              },
-              onSelected: (value) => saveSettingsWithFeedback(
-                context,
-                ref,
-                () => controller.setThemeMode(value),
-              ),
-            ),
-            SettingsSelectionTile<AppLocale>(
-              title: translations.language,
-              value: AppLocaleUtils.parse(preferences.locale.languageCode),
-              enabled: !preferences.isSaving,
-              options: {
-                AppLocale.ja: translations.languageJapanese,
-                AppLocale.en: translations.languageEnglish,
-              },
-              onSelected: (value) => saveSettingsWithFeedback(
-                context,
-                ref,
-                () => controller.setLocale(value),
-              ),
-            ),
-            if (preferences.isSaving)
-              LinearProgressIndicator(semanticsLabel: translations.saving),
-          ],
+      appBar: AppBar(title: Text(t.tabs.settings)),
+      body: ListView(
+        key: AppKeys.settingsScroll,
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.m,
+          AppSpacing.s,
+          AppSpacing.m,
+          AppSpacing.xl,
         ),
+        children: const [
+          GmailReauthBanner(),
+          BudgetSettings(),
+          SizedBox(height: AppSpacing.l),
+          GmailSettings(),
+          SizedBox(height: AppSpacing.l),
+          DisplaySettings(),
+          SizedBox(height: AppSpacing.l),
+          DefaultBasisSettings(),
+        ],
       ),
     );
   }

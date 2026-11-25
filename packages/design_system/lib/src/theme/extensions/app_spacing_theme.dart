@@ -13,12 +13,18 @@ class AppSpacingTheme extends ThemeExtension<AppSpacingTheme>
     with _$AppSpacingTheme {
   /// Creates an [AppSpacingTheme] with the given spacing values.
   const AppSpacingTheme({
+    this.xxs = AppSpacing.xxs,
     this.xs = AppSpacing.xs,
     this.s = AppSpacing.s,
+    this.sm = AppSpacing.sm,
     this.m = AppSpacing.m,
+    this.ml = AppSpacing.ml,
     this.l = AppSpacing.l,
     this.xl = AppSpacing.xl,
   });
+
+  /// Hairline spacing.
+  final double xxs;
 
   /// Extra small spacing.
   final double xs;
@@ -26,8 +32,14 @@ class AppSpacingTheme extends ThemeExtension<AppSpacingTheme>
   /// Small spacing.
   final double s;
 
+  /// Small-medium spacing.
+  final double sm;
+
   /// Medium spacing.
   final double m;
+
+  /// Medium-large spacing.
+  final double ml;
 
   /// Large spacing.
   final double l;

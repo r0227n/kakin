@@ -9,7 +9,7 @@ Oshiki の命名と設計境界を採用しますが、業務機能や外部サ�
 - セットアップと利用方法: [README.md](README.md)。SDK と task: `.mise.toml`。
 - workspace・依存・Melos scripts: ルート `pubspec.yaml`。
 - 責務配置・公開 API・依存注入・状態所有: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)。
-- 画面仕様: [docs/specs/SPECS_INDEX_SPEC.md](docs/specs/SPECS_INDEX_SPEC.md)。
+- 振る舞いの仕様: [docs/SPEC.md](docs/SPEC.md)。用語: [GLOSSARY.md](GLOSSARY.md)。スキーマ: [docs/DB.md](docs/DB.md)。
 - 長期的な設計判断: `docs/specs/ADR-*.md`。
 - 作業別の project skill: [.agents/skills](.agents/skills)。用途と管理方針は [docs/agent-skills.md](docs/agent-skills.md)。
 - Melos 公式 skill は Dart skills CLI と `.config/dart_skills/skills_config.json` で管理し、本文・manifest を手編集しません。

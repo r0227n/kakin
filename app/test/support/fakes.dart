@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:app/application/application.dart';
 import 'package:app/core/logger/error_reporter.dart';
+import 'package:app/domain/domain.dart';
 
 /// 保存順序と失敗を制御できる、端末 API を使わない repository。
 class FakeAppPreferencesRepository implements AppPreferencesRepository {
@@ -20,19 +23,45 @@ class FakeAppPreferencesRepository implements AppPreferencesRepository {
   @override
   AppPreferencesSnapshot load() => snapshot;
 
-  @override
-  Future<void> saveTheme(AppThemePreference theme) async {
-    operations.add('theme:${theme.name}');
+  Future<void> _save(
+    String operation, {
+    AppThemePreference? theme,
+    LocalePreference? locale,
+    AccountingBasis? basis,
+    bool? amountsVisible,
+    bool? onboardingCompleted,
+  }) async {
+    operations.add(operation);
     await beforeSave?.call();
-    snapshot = AppPreferencesSnapshot(theme: theme, locale: snapshot.locale);
+    final s = snapshot;
+    snapshot = AppPreferencesSnapshot(
+      theme: theme ?? s.theme,
+      locale: locale ?? s.locale,
+      defaultAccountingBasis: basis ?? s.defaultAccountingBasis,
+      amountsVisible: amountsVisible ?? s.amountsVisible,
+      onboardingCompleted: onboardingCompleted ?? s.onboardingCompleted,
+    );
   }
 
   @override
-  Future<void> saveLocale(LocalePreference locale) async {
-    operations.add('locale:${locale.languageCode}');
-    await beforeSave?.call();
-    snapshot = AppPreferencesSnapshot(theme: snapshot.theme, locale: locale);
-  }
+  Future<void> saveTheme(AppThemePreference theme) =>
+      _save('theme:${theme.name}', theme: theme);
+
+  @override
+  Future<void> saveLocale(LocalePreference locale) =>
+      _save('locale:${locale.languageCode}', locale: locale);
+
+  @override
+  Future<void> saveDefaultAccountingBasis(AccountingBasis basis) =>
+      _save('basis:${basis.name}', basis: basis);
+
+  @override
+  Future<void> saveAmountsVisible({required bool visible}) =>
+      _save('amounts:$visible', amountsVisible: visible);
+
+  @override
+  Future<void> saveOnboardingCompleted() =>
+      _save('onboarding', onboardingCompleted: true);
 }
 
 /// 報告を記録し、外部への送信を行わない。
@@ -43,5 +72,66 @@ class RecordingErrorReporter implements ErrorReporter {
   @override
   void report(Object error, StackTrace? stackTrace, {required String message}) {
     errors.add(error);
+  }
+}
+
+/// ファイルを書かずに名前だけを管理する。
+class FakePartnerIconStore implements PartnerIconStore {
+  /// 保存済みのファイル名。
+  final Set<String> files = {};
+
+  var _next = 0;
+
+  @override
+  Future<String> save(String sourcePath) async {
+    final name = 'icon_${_next++}.png';
+    files.add(name);
+    return name;
+  }
+
+  @override
+  String? pathOf(String fileName) =>
+      files.contains(fileName) ? '/icons/$fileName' : null;
+
+  @override
+  Future<void> delete(String fileName) async => files.remove(fileName);
+
+  @override
+  Future<void> deleteUnreferenced(Set<String> referenced) async =>
+      files.removeWhere((f) => !referenced.contains(f));
+}
+
+/// 決まったパスを返す画像の選択。
+class FakePartnerIconPicker implements PartnerIconPicker {
+  /// 選ばれる画像。null ならキャンセル。
+  String? result = '/tmp/picked.png';
+
+  @override
+  Future<String?> pick(PartnerIconSource source) async => result;
+}
+
+/// 進めるまで止まっている時計。
+class FixedClock implements Clock {
+  /// [instant] から始める。
+  FixedClock(this.instant);
+
+  /// 現在の瞬間（UTC）。
+  DateTime instant;
+
+  @override
+  DateTime now() => instant;
+}
+
+/// 変更を手動で流す。
+class ManualLocalDataChanges implements LocalDataChanges {
+  final _controller = StreamController<void>.broadcast();
+
+  /// 変更を知らせる。
+  void notify() => _controller.add(null);
+
+  @override
+  Stream<void> watch() async* {
+    yield null;
+    yield* _controller.stream;
   }
 }

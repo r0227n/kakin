@@ -15,6 +15,9 @@ T _$identity<T>(T value) => value;
 mixin _$AppPreferences {
   Locale get locale;
   ThemeMode get themeMode;
+  AccountingBasis get defaultAccountingBasis;
+  bool get amountsVisible;
+  bool get onboardingCompleted;
   bool get isSaving;
 
   /// Create a copy of AppPreferences
@@ -35,16 +38,30 @@ mixin _$AppPreferences {
             (identical(other.locale, locale) || other.locale == locale) &&
             (identical(other.themeMode, themeMode) ||
                 other.themeMode == themeMode) &&
+            (identical(other.defaultAccountingBasis, defaultAccountingBasis) ||
+                other.defaultAccountingBasis == defaultAccountingBasis) &&
+            (identical(other.amountsVisible, amountsVisible) ||
+                other.amountsVisible == amountsVisible) &&
+            (identical(other.onboardingCompleted, onboardingCompleted) ||
+                other.onboardingCompleted == onboardingCompleted) &&
             (identical(other.isSaving, isSaving) ||
                 other.isSaving == isSaving));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, locale, themeMode, isSaving);
+  int get hashCode => Object.hash(
+    runtimeType,
+    locale,
+    themeMode,
+    defaultAccountingBasis,
+    amountsVisible,
+    onboardingCompleted,
+    isSaving,
+  );
 
   @override
   String toString() {
-    return 'AppPreferences(locale: $locale, themeMode: $themeMode, isSaving: $isSaving)';
+    return 'AppPreferences(locale: $locale, themeMode: $themeMode, defaultAccountingBasis: $defaultAccountingBasis, amountsVisible: $amountsVisible, onboardingCompleted: $onboardingCompleted, isSaving: $isSaving)';
   }
 }
 
@@ -55,7 +72,14 @@ abstract mixin class $AppPreferencesCopyWith<$Res> {
     $Res Function(AppPreferences) _then,
   ) = _$AppPreferencesCopyWithImpl;
   @useResult
-  $Res call({Locale locale, ThemeMode themeMode, bool isSaving});
+  $Res call({
+    Locale locale,
+    ThemeMode themeMode,
+    AccountingBasis defaultAccountingBasis,
+    bool amountsVisible,
+    bool onboardingCompleted,
+    bool isSaving,
+  });
 }
 
 /// @nodoc
@@ -73,6 +97,9 @@ class _$AppPreferencesCopyWithImpl<$Res>
   $Res call({
     Object? locale = null,
     Object? themeMode = null,
+    Object? defaultAccountingBasis = null,
+    Object? amountsVisible = null,
+    Object? onboardingCompleted = null,
     Object? isSaving = null,
   }) {
     return _then(
@@ -85,6 +112,18 @@ class _$AppPreferencesCopyWithImpl<$Res>
             ? _self.themeMode
             : themeMode // ignore: cast_nullable_to_non_nullable
                   as ThemeMode,
+        defaultAccountingBasis: null == defaultAccountingBasis
+            ? _self.defaultAccountingBasis
+            : defaultAccountingBasis // ignore: cast_nullable_to_non_nullable
+                  as AccountingBasis,
+        amountsVisible: null == amountsVisible
+            ? _self.amountsVisible
+            : amountsVisible // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        onboardingCompleted: null == onboardingCompleted
+            ? _self.onboardingCompleted
+            : onboardingCompleted // ignore: cast_nullable_to_non_nullable
+                  as bool,
         isSaving: null == isSaving
             ? _self.isSaving
             : isSaving // ignore: cast_nullable_to_non_nullable
@@ -187,14 +226,28 @@ extension AppPreferencesPatterns on AppPreferences {
 
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>(
-    TResult Function(Locale locale, ThemeMode themeMode, bool isSaving)?
+    TResult Function(
+      Locale locale,
+      ThemeMode themeMode,
+      AccountingBasis defaultAccountingBasis,
+      bool amountsVisible,
+      bool onboardingCompleted,
+      bool isSaving,
+    )?
     $default, {
     required TResult orElse(),
   }) {
     final _that = this;
     switch (_that) {
       case _AppPreferences() when $default != null:
-        return $default(_that.locale, _that.themeMode, _that.isSaving);
+        return $default(
+          _that.locale,
+          _that.themeMode,
+          _that.defaultAccountingBasis,
+          _that.amountsVisible,
+          _that.onboardingCompleted,
+          _that.isSaving,
+        );
       case _:
         return orElse();
     }
@@ -215,13 +268,27 @@ extension AppPreferencesPatterns on AppPreferences {
 
   @optionalTypeArgs
   TResult when<TResult extends Object?>(
-    TResult Function(Locale locale, ThemeMode themeMode, bool isSaving)
+    TResult Function(
+      Locale locale,
+      ThemeMode themeMode,
+      AccountingBasis defaultAccountingBasis,
+      bool amountsVisible,
+      bool onboardingCompleted,
+      bool isSaving,
+    )
     $default,
   ) {
     final _that = this;
     switch (_that) {
       case _AppPreferences():
-        return $default(_that.locale, _that.themeMode, _that.isSaving);
+        return $default(
+          _that.locale,
+          _that.themeMode,
+          _that.defaultAccountingBasis,
+          _that.amountsVisible,
+          _that.onboardingCompleted,
+          _that.isSaving,
+        );
       case _:
         throw StateError('Unexpected subclass');
     }
@@ -241,13 +308,27 @@ extension AppPreferencesPatterns on AppPreferences {
 
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>(
-    TResult? Function(Locale locale, ThemeMode themeMode, bool isSaving)?
+    TResult? Function(
+      Locale locale,
+      ThemeMode themeMode,
+      AccountingBasis defaultAccountingBasis,
+      bool amountsVisible,
+      bool onboardingCompleted,
+      bool isSaving,
+    )?
     $default,
   ) {
     final _that = this;
     switch (_that) {
       case _AppPreferences() when $default != null:
-        return $default(_that.locale, _that.themeMode, _that.isSaving);
+        return $default(
+          _that.locale,
+          _that.themeMode,
+          _that.defaultAccountingBasis,
+          _that.amountsVisible,
+          _that.onboardingCompleted,
+          _that.isSaving,
+        );
       case _:
         return null;
     }
@@ -260,6 +341,9 @@ class _AppPreferences implements AppPreferences {
   const _AppPreferences({
     required this.locale,
     required this.themeMode,
+    required this.defaultAccountingBasis,
+    required this.amountsVisible,
+    required this.onboardingCompleted,
     this.isSaving = false,
   });
 
@@ -267,6 +351,12 @@ class _AppPreferences implements AppPreferences {
   final Locale locale;
   @override
   final ThemeMode themeMode;
+  @override
+  final AccountingBasis defaultAccountingBasis;
+  @override
+  final bool amountsVisible;
+  @override
+  final bool onboardingCompleted;
   @override
   @JsonKey()
   final bool isSaving;
@@ -287,16 +377,30 @@ class _AppPreferences implements AppPreferences {
             (identical(other.locale, locale) || other.locale == locale) &&
             (identical(other.themeMode, themeMode) ||
                 other.themeMode == themeMode) &&
+            (identical(other.defaultAccountingBasis, defaultAccountingBasis) ||
+                other.defaultAccountingBasis == defaultAccountingBasis) &&
+            (identical(other.amountsVisible, amountsVisible) ||
+                other.amountsVisible == amountsVisible) &&
+            (identical(other.onboardingCompleted, onboardingCompleted) ||
+                other.onboardingCompleted == onboardingCompleted) &&
             (identical(other.isSaving, isSaving) ||
                 other.isSaving == isSaving));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, locale, themeMode, isSaving);
+  int get hashCode => Object.hash(
+    runtimeType,
+    locale,
+    themeMode,
+    defaultAccountingBasis,
+    amountsVisible,
+    onboardingCompleted,
+    isSaving,
+  );
 
   @override
   String toString() {
-    return 'AppPreferences(locale: $locale, themeMode: $themeMode, isSaving: $isSaving)';
+    return 'AppPreferences(locale: $locale, themeMode: $themeMode, defaultAccountingBasis: $defaultAccountingBasis, amountsVisible: $amountsVisible, onboardingCompleted: $onboardingCompleted, isSaving: $isSaving)';
   }
 }
 
@@ -309,7 +413,14 @@ abstract mixin class _$AppPreferencesCopyWith<$Res>
   ) = __$AppPreferencesCopyWithImpl;
   @override
   @useResult
-  $Res call({Locale locale, ThemeMode themeMode, bool isSaving});
+  $Res call({
+    Locale locale,
+    ThemeMode themeMode,
+    AccountingBasis defaultAccountingBasis,
+    bool amountsVisible,
+    bool onboardingCompleted,
+    bool isSaving,
+  });
 }
 
 /// @nodoc
@@ -327,6 +438,9 @@ class __$AppPreferencesCopyWithImpl<$Res>
   $Res call({
     Object? locale = null,
     Object? themeMode = null,
+    Object? defaultAccountingBasis = null,
+    Object? amountsVisible = null,
+    Object? onboardingCompleted = null,
     Object? isSaving = null,
   }) {
     return _then(
@@ -339,6 +453,18 @@ class __$AppPreferencesCopyWithImpl<$Res>
             ? _self.themeMode
             : themeMode // ignore: cast_nullable_to_non_nullable
                   as ThemeMode,
+        defaultAccountingBasis: null == defaultAccountingBasis
+            ? _self.defaultAccountingBasis
+            : defaultAccountingBasis // ignore: cast_nullable_to_non_nullable
+                  as AccountingBasis,
+        amountsVisible: null == amountsVisible
+            ? _self.amountsVisible
+            : amountsVisible // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        onboardingCompleted: null == onboardingCompleted
+            ? _self.onboardingCompleted
+            : onboardingCompleted // ignore: cast_nullable_to_non_nullable
+                  as bool,
         isSaving: null == isSaving
             ? _self.isSaving
             : isSaving // ignore: cast_nullable_to_non_nullable

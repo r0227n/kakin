@@ -1,6 +1,7 @@
 import 'package:app/application/models/app_preferences.dart';
+import 'package:app/domain/domain.dart';
 
-/// アプリ基本設定の永続化契約。保存失敗は呼び出し元へ伝える。
+/// アプリ設定の永続化契約。保存失敗は呼び出し元へ伝える。
 abstract interface class AppPreferencesRepository {
   /// 初期化済みの保存先から設定を読み込む。
   AppPreferencesSnapshot load();
@@ -10,4 +11,13 @@ abstract interface class AppPreferencesRepository {
 
   /// 他の設定を変更せず言語を保存する。
   Future<void> saveLocale(LocalePreference locale);
+
+  /// 計上基準の初期値を保存する。
+  Future<void> saveDefaultAccountingBasis(AccountingBasis basis);
+
+  /// 金額を表示するかを保存する。
+  Future<void> saveAmountsVisible({required bool visible});
+
+  /// 初回起動の案内を最後まで進めたことを保存する。
+  Future<void> saveOnboardingCompleted();
 }

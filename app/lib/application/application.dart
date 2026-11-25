@@ -1,3 +1,16 @@
 export 'models/app_preferences.dart';
+export 'models/gmail.dart';
+export 'models/partner_icon_source.dart';
+export 'models/records.dart';
+export 'models/views.dart';
 export 'ports/app_preferences_repository.dart';
+export 'ports/device_ports.dart';
+export 'ports/gmail_ports.dart';
+export 'ports/record_repositories.dart';
 export 'use_cases/app_preferences_use_case.dart';
+export 'use_cases/budget_use_case.dart';
+export 'use_cases/expense_use_case.dart';
+export 'use_cases/gmail_use_case.dart';
+export 'use_cases/ledger_use_case.dart';
+export 'use_cases/partner_use_case.dart';
+export 'use_cases/performance_use_case.dart';

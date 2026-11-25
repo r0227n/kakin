@@ -11,10 +11,10 @@ typedef ChekiEntry = ({Partner partner, String? iconPath, int count});
 
 /// チェキ相手ごとの撮影枚数。0枚にすると外す。
 class ChekiPartnerRows extends StatelessWidget {
-  /// [unitPriceYen] は1枚あたりの金額。
+  /// [amountFor] は撮影枚数から相手1人分の金額を求める。
   const ChekiPartnerRows({
     required this.entries,
-    required this.unitPriceYen,
+    required this.amountFor,
     required this.onPick,
     required this.onCountChanged,
     super.key,
@@ -23,8 +23,8 @@ class ChekiPartnerRows extends StatelessWidget {
   /// 選んだ相手と枚数。
   final List<ChekiEntry> entries;
 
-  /// 1枚あたりの金額。
-  final int unitPriceYen;
+  /// 撮影枚数に対する相手1人分の金額。
+  final int Function(int count) amountFor;
 
   /// 相手を選び直す。
   final VoidCallback onPick;
@@ -106,11 +106,10 @@ class ChekiPartnerRows extends StatelessWidget {
               ),
             ),
           ),
-        for (final (index, entry) in entries.indexed)
+        for (final entry in entries)
           _PartnerRow(
             entry: entry,
-            toneIndex: index,
-            amount: KakinFormats.yen(unitPriceYen * entry.count),
+            amount: KakinFormats.yen(amountFor(entry.count)),
             onChanged: (count) => onCountChanged(entry.partner.id, count),
           ),
       ],
@@ -121,13 +120,11 @@ class ChekiPartnerRows extends StatelessWidget {
 class _PartnerRow extends StatelessWidget {
   const _PartnerRow({
     required this.entry,
-    required this.toneIndex,
     required this.amount,
     required this.onChanged,
   });
 
   final ChekiEntry entry;
-  final int toneIndex;
   final String amount;
   final ValueChanged<int> onChanged;
 
@@ -149,7 +146,7 @@ class _PartnerRow extends StatelessWidget {
           PartnerAvatar(
             name: partner.name,
             imagePath: entry.iconPath,
-            toneIndex: toneIndex,
+            toneIndex: partner.id,
           ),
           Expanded(
             child: Column(

@@ -6,15 +6,9 @@
     "save": "保存する",
     "cancel": "キャンセル",
     "delete": "削除する",
-    "close": "閉じる",
     "back": "戻る",
-    "undo": "元に戻す",
-    "optional": "任意",
     "skip": "あとで設定する",
-    "next": "次へ",
     "today": "今日",
-    "notSet": "未設定",
-    "saving": "保存中",
     "deleteConfirmTitle": "削除しますか？",
     "deleteConfirmBody": "この操作は元に戻せません。"
   },
@@ -53,8 +47,7 @@
     "hiddenNumber": "•••",
     "daysLeft": "あと${days}日",
     "shots": "${count}枚",
-    "people": "${count}人",
-    "count": "${count}件"
+    "people": "${count}人"
   },
   "tabs": {
     "calendar": "カレンダー",
@@ -107,7 +100,6 @@
     "nextMonth": "次の月",
     "noRecords": "この日の記録はありません",
     "addExpense": "支出を追加",
-    "dayLabel": "${date}",
     "daySpend": "支出 ${amount}",
     "daySpendHidden": "支出あり",
     "dayHasPerformance": "公演あり",
@@ -121,7 +113,6 @@
     "emptyCategory": "このカテゴリの支出はありません",
     "emptyMonth": "この月の支出はありません",
     "performanceOn": "公演 ${date}",
-    "overspent": "超過",
     "filterLabel": "カテゴリで絞り込む"
   },
   "upcoming": {
@@ -135,9 +126,8 @@
     "editTitle": "公演を編集",
     "name": "公演名",
     "startsAt": "開始日時",
-    "date": "日付",
-    "time": "開演時刻",
     "venue": "会場",
+    "venueOptional": "会場（任意）",
     "pick": "公演を選ぶ",
     "pickOptional": "公演（任意）",
     "none": "紐づけない",
@@ -175,6 +165,7 @@
     "recordAndContinue": "続けて記録",
     "recorded": "記録しました",
     "note": "メモ",
+    "noteOptional": "メモ（任意）",
     "importedNote": "Gmail から取り込み",
     "delete": "この支出を削除",
     "shotCount": "撮影枚数"
@@ -264,9 +255,7 @@
     "defaultBasis": "計上基準の初期値",
     "defaultBasisNote": "カレンダーとリストで支出をどの日に置くかの初期値です。残高は常に支払日で計算します。",
     "overrideSaved": "上書きを保存しました",
-    "budgetSaved": "推し活代を保存しました",
-    "gmailAccount": "連携中のアカウント",
-    "gmailFailedAt": "同期の失敗"
+    "budgetSaved": "推し活代を保存しました"
   },
   "onboarding": {
     "welcomeTitle": "推し活のお金と予定を、ひとつのアプリで。",
@@ -293,9 +282,7 @@
     "gmailBackfill": "連携すると、3ヶ月前までのメールをさかのぼって取り込みます。",
     "gmailConnected": "${email} と連携しました。取り込みはバックグラウンドで続きます。",
     "gmailLater": "あとで連携する",
-    "gmailLaterNote": "連携と解除は設定画面からいつでもできます",
-    "sampleSubject": "決済に関するご案内",
-    "sampleAuto": "自動"
+    "gmailLaterNote": "連携と解除は設定画面からいつでもできます"
   },
   "errors": {
     "unexpected": "予期しないエラーが発生しました。もう一度お試しください。",

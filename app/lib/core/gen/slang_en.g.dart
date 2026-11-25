@@ -117,23 +117,11 @@ class _TranslationsCommonEn implements TranslationsCommonJa {
   @override
   String get delete => 'Delete';
   @override
-  String get close => 'Close';
-  @override
   String get back => 'Back';
-  @override
-  String get undo => 'Undo';
-  @override
-  String get optional => 'Optional';
   @override
   String get skip => 'Set up later';
   @override
-  String get next => 'Next';
-  @override
   String get today => 'Today';
-  @override
-  String get notSet => 'Not set';
-  @override
-  String get saving => 'Saving';
   @override
   String get deleteConfirmTitle => 'Delete this?';
   @override
@@ -211,8 +199,6 @@ class _TranslationsFormatEn implements TranslationsFormatJa {
   String shots({required Object count}) => '${count} shots';
   @override
   String people({required Object count}) => '${count}';
-  @override
-  String count({required Object count}) => '${count}';
 }
 
 // Path: tabs
@@ -351,8 +337,6 @@ class _TranslationsCalendarEn implements TranslationsCalendarJa {
   @override
   String get addExpense => 'Add expense';
   @override
-  String dayLabel({required Object date}) => '${date}';
-  @override
   String daySpend({required Object amount}) => 'spent ${amount}';
   @override
   String get daySpendHidden => 'has expenses';
@@ -384,8 +368,6 @@ class _TranslationsListEn implements TranslationsListJa {
   String get emptyMonth => 'No expenses this month';
   @override
   String performanceOn({required Object date}) => 'Show ${date}';
-  @override
-  String get overspent => 'Over';
   @override
   String get filterLabel => 'Filter by category';
 }
@@ -425,11 +407,9 @@ class _TranslationsPerformanceEn implements TranslationsPerformanceJa {
   @override
   String get startsAt => 'Starts at';
   @override
-  String get date => 'Date';
-  @override
-  String get time => 'Start time';
-  @override
   String get venue => 'Venue';
+  @override
+  String get venueOptional => 'Venue (optional)';
   @override
   String get pick => 'Choose a show';
   @override
@@ -514,6 +494,8 @@ class _TranslationsExpenseEn implements TranslationsExpenseJa {
   String get recorded => 'Recorded';
   @override
   String get note => 'Note';
+  @override
+  String get noteOptional => 'Note (optional)';
   @override
   String get importedNote => 'Imported from Gmail';
   @override
@@ -713,10 +695,6 @@ class _TranslationsSettingsEn implements TranslationsSettingsJa {
   String get overrideSaved => 'Override saved';
   @override
   String get budgetSaved => 'Budget saved';
-  @override
-  String get gmailAccount => 'Connected account';
-  @override
-  String get gmailFailedAt => 'Sync failure';
 }
 
 // Path: onboarding
@@ -790,10 +768,6 @@ class _TranslationsOnboardingEn implements TranslationsOnboardingJa {
   @override
   String get gmailLaterNote =>
       'You can connect or disconnect in Settings anytime';
-  @override
-  String get sampleSubject => 'Payment confirmation';
-  @override
-  String get sampleAuto => 'Auto';
 }
 
 // Path: errors
@@ -835,15 +809,9 @@ extension on TranslationsEn {
       'common.save' => 'Save',
       'common.cancel' => 'Cancel',
       'common.delete' => 'Delete',
-      'common.close' => 'Close',
       'common.back' => 'Back',
-      'common.undo' => 'Undo',
-      'common.optional' => 'Optional',
       'common.skip' => 'Set up later',
-      'common.next' => 'Next',
       'common.today' => 'Today',
-      'common.notSet' => 'Not set',
-      'common.saving' => 'Saving',
       'common.deleteConfirmTitle' => 'Delete this?',
       'common.deleteConfirmBody' => 'This can\'t be undone.',
       'format.weekdays.0' => 'Mon',
@@ -896,7 +864,6 @@ extension on TranslationsEn {
       'format.daysLeft' => ({required Object days}) => 'In ${days} days',
       'format.shots' => ({required Object count}) => '${count} shots',
       'format.people' => ({required Object count}) => '${count}',
-      'format.count' => ({required Object count}) => '${count}',
       'tabs.calendar' => 'Calendar',
       'tabs.list' => 'List',
       'tabs.upcoming' => 'Upcoming',
@@ -940,7 +907,6 @@ extension on TranslationsEn {
       'calendar.nextMonth' => 'Next month',
       'calendar.noRecords' => 'Nothing recorded on this day',
       'calendar.addExpense' => 'Add expense',
-      'calendar.dayLabel' => ({required Object date}) => '${date}',
       'calendar.daySpend' => ({required Object amount}) => 'spent ${amount}',
       'calendar.daySpendHidden' => 'has expenses',
       'calendar.dayHasPerformance' => 'has a show',
@@ -955,7 +921,6 @@ extension on TranslationsEn {
       'list.emptyCategory' => 'No expenses in this category',
       'list.emptyMonth' => 'No expenses this month',
       'list.performanceOn' => ({required Object date}) => 'Show ${date}',
-      'list.overspent' => 'Over',
       'list.filterLabel' => 'Filter by category',
       'upcoming.noPerformances' =>
         'No upcoming shows yet. Record a ticket to see it here.',
@@ -968,9 +933,8 @@ extension on TranslationsEn {
       'performance.editTitle' => 'Edit show',
       'performance.name' => 'Show name',
       'performance.startsAt' => 'Starts at',
-      'performance.date' => 'Date',
-      'performance.time' => 'Start time',
       'performance.venue' => 'Venue',
+      'performance.venueOptional' => 'Venue (optional)',
       'performance.pick' => 'Choose a show',
       'performance.pickOptional' => 'Show (optional)',
       'performance.none' => 'No show',
@@ -1018,6 +982,7 @@ extension on TranslationsEn {
       'expense.recordAndContinue' => 'Record another',
       'expense.recorded' => 'Recorded',
       'expense.note' => 'Note',
+      'expense.noteOptional' => 'Note (optional)',
       'expense.importedNote' => 'Imported from Gmail',
       'expense.delete' => 'Delete this expense',
       'expense.shotCount' => 'Shots',
@@ -1119,8 +1084,6 @@ extension on TranslationsEn {
         'Which day the calendar and list place expenses on by default. The balance always uses the paid date.',
       'settings.overrideSaved' => 'Override saved',
       'settings.budgetSaved' => 'Budget saved',
-      'settings.gmailAccount' => 'Connected account',
-      'settings.gmailFailedAt' => 'Sync failure',
       'onboarding.welcomeTitle' => 'Your fan spending and plans, in one app.',
       'onboarding.welcomeBody' =>
         'Enjoy supporting your favorites within the budget you set.',
@@ -1163,8 +1126,6 @@ extension on TranslationsEn {
       'onboarding.gmailLater' => 'Connect later',
       'onboarding.gmailLaterNote' =>
         'You can connect or disconnect in Settings anytime',
-      'onboarding.sampleSubject' => 'Payment confirmation',
-      'onboarding.sampleAuto' => 'Auto',
       'errors.unexpected' => 'Something went wrong. Please try again.',
       'errors.settingsWrite' => 'Could not save settings. Please try again.',
       'errors.recordStorage' => 'Could not save the record. Please try again.',

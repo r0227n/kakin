@@ -2,6 +2,7 @@ import 'package:app/application/application.dart';
 import 'package:app/core/formatting/kakin_formats.dart';
 import 'package:app/core/gen/slang.g.dart';
 import 'package:app/presentation/dependencies/application_providers.dart';
+import 'package:app/presentation/features/settings/controllers/gmail_action_controller.dart';
 import 'package:app/presentation/shared/controllers/local_data.dart';
 import 'package:app/presentation/shared/feedback/action_feedback.dart';
 import 'package:app/presentation/shared/keys/app_keys.dart';
@@ -23,6 +24,7 @@ class GmailReauthBanner extends ConsumerWidget {
     if (connection?.lastFailureKind != GmailFailureKind.reauthRequired) {
       return const SizedBox.shrink();
     }
+    final busy = ref.watch(gmailActionControllerProvider);
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.l),
       child: SurfaceCard(
@@ -53,7 +55,11 @@ class GmailReauthBanner extends ConsumerWidget {
               ),
             ),
             FilledButton(
-              onPressed: () => _connect(context, ref),
+              onPressed: busy
+                  ? null
+                  : () => ref
+                        .read(gmailActionControllerProvider.notifier)
+                        .run(() => _connect(context, ref)),
               child: Text(t.settings.reconnect),
             ),
           ],
@@ -94,28 +100,11 @@ Future<void> _sync(BuildContext context, WidgetRef ref) async {
 }
 
 /// Gmail 連携の状態と操作。
-class GmailSettings extends ConsumerStatefulWidget {
-  /// 同期中は操作を止める。
+class GmailSettings extends ConsumerWidget {
+  /// 連携・同期・解除の進行中は操作を止める。
   const GmailSettings({super.key});
 
-  @override
-  ConsumerState<GmailSettings> createState() => _GmailSettingsState();
-}
-
-class _GmailSettingsState extends ConsumerState<GmailSettings> {
-  bool _busy = false;
-
-  Future<void> _run(Future<void> Function() action) async {
-    if (_busy) return;
-    setState(() => _busy = true);
-    try {
-      await action();
-    } finally {
-      if (mounted) setState(() => _busy = false);
-    }
-  }
-
-  Future<void> _disconnect() async {
+  Future<void> _disconnect(BuildContext context, WidgetRef ref) async {
     final t = Translations.of(context);
     final confirmed = await confirmDestructive(
       context,
@@ -123,19 +112,25 @@ class _GmailSettingsState extends ConsumerState<GmailSettings> {
       body: t.settings.disconnectNote,
       confirmLabel: t.settings.disconnect,
     );
-    if (!confirmed || !mounted) return;
-    await runWithFeedback(
-      context,
-      ref,
-      ref.read(gmailUseCaseProvider).disconnect,
-      failureLog: 'Disconnecting Gmail failed',
-    );
+    if (!confirmed || !context.mounted) return;
+    await ref
+        .read(gmailActionControllerProvider.notifier)
+        .run(
+          () => runWithFeedback(
+            context,
+            ref,
+            ref.read(gmailUseCaseProvider).disconnect,
+            failureLog: 'Disconnecting Gmail failed',
+          ),
+        );
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final t = Translations.of(context);
     final palette = context.palette;
+    final busy = ref.watch(gmailActionControllerProvider);
+    final actions = ref.read(gmailActionControllerProvider.notifier);
     final status = ref.watch(gmailStatusProvider).value;
     final connection = status?.connection;
     final children = <Widget>[
@@ -190,7 +185,9 @@ class _GmailSettingsState extends ConsumerState<GmailSettings> {
         const SizedBox(height: AppSpacing.m),
         FilledButton.icon(
           key: AppKeys.gmailConnect,
-          onPressed: _busy ? null : () => _run(() => _connect(context, ref)),
+          onPressed: busy
+              ? null
+              : () => actions.run(() => _connect(context, ref)),
           icon: const Icon(Icons.mail_outline),
           label: Text(t.settings.connect),
         ),
@@ -221,20 +218,20 @@ class _GmailSettingsState extends ConsumerState<GmailSettings> {
         const SizedBox(height: AppSpacing.m),
         FilledButton.icon(
           key: AppKeys.gmailSyncNow,
-          onPressed: _busy ? null : () => _run(() => _sync(context, ref)),
-          icon: _busy
+          onPressed: busy ? null : () => actions.run(() => _sync(context, ref)),
+          icon: busy
               ? const SizedBox.square(
                   dimension: 18,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(Icons.sync),
-          label: Text(_busy ? t.settings.syncing : t.settings.syncNow),
+          label: Text(busy ? t.settings.syncing : t.settings.syncNow),
         ),
         const SizedBox(height: AppSpacing.s),
         TextButton(
           key: AppKeys.gmailDisconnect,
           style: TextButton.styleFrom(foregroundColor: palette.negative),
-          onPressed: _busy ? null : _disconnect,
+          onPressed: busy ? null : () => _disconnect(context, ref),
           child: Text(t.settings.disconnect),
         ),
         Text(

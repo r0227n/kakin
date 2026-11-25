@@ -6,15 +6,9 @@
     "save": "Save",
     "cancel": "Cancel",
     "delete": "Delete",
-    "close": "Close",
     "back": "Back",
-    "undo": "Undo",
-    "optional": "Optional",
     "skip": "Set up later",
-    "next": "Next",
     "today": "Today",
-    "notSet": "Not set",
-    "saving": "Saving",
     "deleteConfirmTitle": "Delete this?",
     "deleteConfirmBody": "This can't be undone."
   },
@@ -53,8 +47,7 @@
     "hiddenNumber": "•••",
     "daysLeft": "In ${days} days",
     "shots": "${count} shots",
-    "people": "${count}",
-    "count": "${count}"
+    "people": "${count}"
   },
   "tabs": {
     "calendar": "Calendar",
@@ -107,7 +100,6 @@
     "nextMonth": "Next month",
     "noRecords": "Nothing recorded on this day",
     "addExpense": "Add expense",
-    "dayLabel": "${date}",
     "daySpend": "spent ${amount}",
     "daySpendHidden": "has expenses",
     "dayHasPerformance": "has a show",
@@ -121,7 +113,6 @@
     "emptyCategory": "No expenses in this category",
     "emptyMonth": "No expenses this month",
     "performanceOn": "Show ${date}",
-    "overspent": "Over",
     "filterLabel": "Filter by category"
   },
   "upcoming": {
@@ -135,9 +126,8 @@
     "editTitle": "Edit show",
     "name": "Show name",
     "startsAt": "Starts at",
-    "date": "Date",
-    "time": "Start time",
     "venue": "Venue",
+    "venueOptional": "Venue (optional)",
     "pick": "Choose a show",
     "pickOptional": "Show (optional)",
     "none": "No show",
@@ -175,6 +165,7 @@
     "recordAndContinue": "Record another",
     "recorded": "Recorded",
     "note": "Note",
+    "noteOptional": "Note (optional)",
     "importedNote": "Imported from Gmail",
     "delete": "Delete this expense",
     "shotCount": "Shots"
@@ -264,9 +255,7 @@
     "defaultBasis": "Default accounting basis",
     "defaultBasisNote": "Which day the calendar and list place expenses on by default. The balance always uses the paid date.",
     "overrideSaved": "Override saved",
-    "budgetSaved": "Budget saved",
-    "gmailAccount": "Connected account",
-    "gmailFailedAt": "Sync failure"
+    "budgetSaved": "Budget saved"
   },
   "onboarding": {
     "welcomeTitle": "Your fan spending and plans, in one app.",
@@ -293,9 +282,7 @@
     "gmailBackfill": "After connecting, emails from the past 3 months are imported.",
     "gmailConnected": "Connected to ${email}. Importing continues in the background.",
     "gmailLater": "Connect later",
-    "gmailLaterNote": "You can connect or disconnect in Settings anytime",
-    "sampleSubject": "Payment confirmation",
-    "sampleAuto": "Auto"
+    "gmailLaterNote": "You can connect or disconnect in Settings anytime"
   },
   "errors": {
     "unexpected": "Something went wrong. Please try again.",

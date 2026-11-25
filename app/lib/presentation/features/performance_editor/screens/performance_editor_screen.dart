@@ -204,7 +204,7 @@ class _PerformanceEditorScreenState
                   controller: _venue,
                   maxLength: 100,
                   decoration: InputDecoration(
-                    labelText: '${t.performance.venue}（${t.common.optional}）',
+                    labelText: t.performance.venueOptional,
                     counterText: '',
                   ),
                 ),

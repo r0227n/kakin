@@ -27,7 +27,8 @@ final class FilePartnerIconStore implements PartnerIconStore {
   Future<String> save(String sourcePath) async {
     // 差し替えた画像を古いキャッシュで表示しないよう、毎回新しい名前にする。
     final name = [
-      for (var i = 0; i < 16; i++) _random.nextInt(256).toRadixString(16),
+      for (var i = 0; i < 16; i++)
+        _random.nextInt(256).toRadixString(16).padLeft(2, '0'),
     ].join();
     final fileName = '$name.jpg';
     try {

@@ -13,14 +13,36 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 /// 公演の内容。公演の編集と削除もここから行う。
-class PerformanceDetailScreen extends ConsumerWidget {
+class PerformanceDetailScreen extends ConsumerStatefulWidget {
   /// [performanceId] の公演を表示する。
   const PerformanceDetailScreen({required this.performanceId, super.key});
 
   /// 表示する公演。
   final int performanceId;
 
-  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+  @override
+  ConsumerState<PerformanceDetailScreen> createState() =>
+      _PerformanceDetailScreenState();
+}
+
+class _PerformanceDetailScreenState
+    extends ConsumerState<PerformanceDetailScreen> {
+  bool _deleting = false;
+
+  int get performanceId => widget.performanceId;
+
+  /// 確認と削除が終わるまで、削除のボタンを止める。
+  Future<void> _delete() async {
+    if (_deleting) return;
+    setState(() => _deleting = true);
+    try {
+      await _confirmAndDelete();
+    } finally {
+      if (mounted) setState(() => _deleting = false);
+    }
+  }
+
+  Future<void> _confirmAndDelete() async {
     final t = Translations.of(context);
     final useCase = ref.read(performanceUseCaseProvider);
     final impact = await runWithFeedback(
@@ -29,7 +51,7 @@ class PerformanceDetailScreen extends ConsumerWidget {
       () => useCase.deletionImpact(performanceId),
       failureLog: 'Loading the performance deletion impact failed',
     );
-    if (impact == null || !context.mounted) return;
+    if (impact == null || !mounted) return;
     final confirmed = await confirmDestructive(
       context,
       title: t.performance.deleteTitle,
@@ -38,7 +60,7 @@ class PerformanceDetailScreen extends ConsumerWidget {
         amount: KakinFormats.yen(impact.expenseTotalYen),
       ),
     );
-    if (!confirmed || !context.mounted) return;
+    if (!confirmed || !mounted) return;
     final deleted = await runWithFeedback(
       context,
       ref,
@@ -48,12 +70,12 @@ class PerformanceDetailScreen extends ConsumerWidget {
       },
       failureLog: 'Deleting a performance failed',
     );
-    if (!(deleted ?? false) || !context.mounted) return;
+    if (!(deleted ?? false) || !mounted) return;
     context.pop();
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final t = Translations.of(context);
     final palette = context.palette;
     final performance = ref.watch(performanceProvider(performanceId));
@@ -73,9 +95,9 @@ class PerformanceDetailScreen extends ConsumerWidget {
             ),
         ],
       ),
+      // 読み直しの間は前の内容を出し続ける。削除した後は閉じるまで何も出さない。
       body: switch (performance) {
-        AsyncData(value: null) => Center(child: Text(t.errors.recordStorage)),
-        AsyncData(value: final Performance p) => ListView(
+        AsyncValue(value: final Performance p) => ListView(
           padding: const EdgeInsets.all(AppSpacing.m),
           children: [
             SurfaceCard(
@@ -110,13 +132,14 @@ class PerformanceDetailScreen extends ConsumerWidget {
                 foregroundColor: palette.negative,
                 side: BorderSide(color: palette.border),
               ),
-              onPressed: () => _delete(context, ref),
+              onPressed: _deleting ? null : _delete,
               icon: const Icon(Icons.delete_outline),
               label: Text(t.performance.delete),
             ),
           ],
         ),
         AsyncError() => Center(child: Text(t.errors.recordStorage)),
+        AsyncData() => const SizedBox.shrink(),
         _ => const Center(child: CircularProgressIndicator()),
       },
     );

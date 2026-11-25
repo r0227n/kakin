@@ -26,6 +26,17 @@ class GmailSetupScreen extends ConsumerStatefulWidget {
 class _GmailSetupScreenState extends ConsumerState<GmailSetupScreen> {
   bool _busy = false;
 
+  /// 操作の重なりを防ぎ、終わるまでボタンを止める。
+  Future<void> _guard(Future<void> Function() action) async {
+    if (_busy) return;
+    setState(() => _busy = true);
+    try {
+      await action();
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
+  }
+
   Future<void> _finish() async {
     final completed = await runWithFeedback(
       context,
@@ -43,8 +54,6 @@ class _GmailSetupScreenState extends ConsumerState<GmailSetupScreen> {
   }
 
   Future<void> _connect() async {
-    if (_busy) return;
-    setState(() => _busy = true);
     final gmail = ref.read(gmailUseCaseProvider);
     final reporter = ref.read(errorReporterProvider);
     final connected = await runWithFeedback(
@@ -53,10 +62,7 @@ class _GmailSetupScreenState extends ConsumerState<GmailSetupScreen> {
       gmail.connect,
       failureLog: 'Connecting Gmail during onboarding failed',
     );
-    if (!mounted) return;
-    setState(() => _busy = false);
     if (!(connected ?? false)) return;
-    final status = await gmail.loadStatus();
     // 初回の取り込みは待たずに先へ進め、失敗は同期状態と報告に残す。
     unawaited(
       gmail.sync().catchError((Object error, StackTrace stackTrace) {
@@ -69,14 +75,23 @@ class _GmailSetupScreenState extends ConsumerState<GmailSetupScreen> {
       }),
     );
     if (!mounted) return;
-    final email = status.connection?.accountEmail ?? '';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          Translations.of(context).onboarding.gmailConnected(email: email),
-        ),
-      ),
+    // アドレスは案内に添えるだけなので、読めなくても報告して先へ進める。
+    final status = await runWithFeedback(
+      context,
+      ref,
+      gmail.loadStatus,
+      failureLog: 'Loading the Gmail status during onboarding failed',
     );
+    if (!mounted) return;
+    if (status?.connection?.accountEmail case final email?) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            Translations.of(context).onboarding.gmailConnected(email: email),
+          ),
+        ),
+      );
+    }
     await _finish();
   }
 
@@ -90,13 +105,13 @@ class _GmailSetupScreenState extends ConsumerState<GmailSetupScreen> {
       actions: [
         FilledButton.icon(
           key: AppKeys.onboardingGmailConnect,
-          onPressed: _busy ? null : _connect,
+          onPressed: _busy ? null : () => _guard(_connect),
           icon: const Icon(Icons.mail_outline),
           label: Text(t.settings.connect),
         ),
         TextButton(
           key: AppKeys.onboardingGmailSkip,
-          onPressed: _busy ? null : _finish,
+          onPressed: _busy ? null : () => _guard(_finish),
           child: Text(t.onboarding.gmailLater),
         ),
         OnboardingNote(t.onboarding.gmailLaterNote),

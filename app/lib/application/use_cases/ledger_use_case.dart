@@ -36,6 +36,7 @@ final class LedgerUseCase {
       expenses: placed,
       performances: performances,
       duplicateExpenseIds: duplicateExpenseIds(touching.map((e) => e.facts)),
+      isBudgetConfigured: plan.isConfigured,
       ledger: ledgerFor(plan: plan, spendByMonth: spend, month: month),
     );
   }

@@ -71,8 +71,9 @@ class _CalendarScreenState extends ConsumerState<CalendarScreen> {
               children: [
                 const BasisToggle(),
                 const SizedBox(height: AppSpacing.s + 2),
+                // 読み直しの間は前の値を出し続け、概要が点滅しないようにする。
                 switch (overview) {
-                  AsyncData(:final value) => MonthSummaryCard(
+                  AsyncValue(:final value?) => MonthSummaryCard(
                     overview: value,
                   ),
                   AsyncError() => const _LoadFailed(),

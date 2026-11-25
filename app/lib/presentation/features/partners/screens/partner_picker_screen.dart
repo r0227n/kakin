@@ -56,10 +56,11 @@ class _PartnerPickerScreenState extends ConsumerState<PartnerPickerScreen> {
     final useCase = ref.read(partnerUseCaseProvider);
     final query = _search.text.trim().toLowerCase();
     final byId = {for (final p in partners) p.id: p};
-    List<Widget> tiles(Iterable<Partner> list) => [
+    // 最近撮った相手は所属ごとの一覧にも出るため、key は一覧の側だけに付ける。
+    List<Widget> tiles(Iterable<Partner> list, {bool keyed = true}) => [
       for (final partner in list)
         PartnerTile(
-          key: AppKeys.partnerOption(partner.id),
+          key: keyed ? AppKeys.partnerOption(partner.id) : null,
           partner: partner,
           iconPath: useCase.iconPathOf(partner),
           selected: _selected.contains(partner.id),
@@ -90,7 +91,7 @@ class _PartnerPickerScreenState extends ConsumerState<PartnerPickerScreen> {
       if (recent.isNotEmpty) {
         sections.addAll([
           SectionHeader(title: t.partner.recent),
-          ...tiles(recent.take(5)),
+          ...tiles(recent.take(5), keyed: false),
           const SizedBox(height: AppSpacing.m),
         ]);
       }

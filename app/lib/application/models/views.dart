@@ -10,6 +10,7 @@ final class MonthOverview {
     required this.expenses,
     required this.performances,
     required this.duplicateExpenseIds,
+    required this.isBudgetConfigured,
     this.ledger,
   });
 
@@ -28,7 +29,12 @@ final class MonthOverview {
   /// 二重計上の可能性がある支出。
   final Set<int> duplicateExpenseIds;
 
-  /// 支払日で計算した推し活代・繰越・残高。推し活代が未設定なら null。
+  /// 推し活代を設定済みか。
+  final bool isBudgetConfigured;
+
+  /// 支払日で計算した推し活代・繰越・残高。
+  ///
+  /// 推し活代が未設定のときと、[month] が開始月より前のときは null。
   final LedgerMonth? ledger;
 
   /// 計上基準で集計した支出合計。

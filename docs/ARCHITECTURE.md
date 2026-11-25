@@ -25,7 +25,8 @@ presentation / infrastructure → core（外側の共通処理のみ）
 - `design_system` はテーマとトークンだけを所有し、画面やアプリ固有 Widget を置きません。
 
 feature は別 feature を直接 import しません。遷移には typed route を使います。
-`shared` と `dependencies` から feature への依存、presentation から保存・ロギング実装への依存を禁止します。
+`shared` と `dependencies` から feature と navigation（全 feature の画面を import する）への依存、
+presentation から保存・ロギング実装への依存を禁止します。
 `app/test/architecture/` が package URI・相対 URI・条件付き import/export を構文解析して検証します。
 
 ## 命名と公開入口
@@ -68,7 +69,7 @@ router の定義は navigation、生成・破棄は app が所有します。
 | ------------------- | ----------------------------------------------- | -------------------------------------------------------------------- |
 | 支出・公演など      | `infrastructure/persistence/drift/repositories` | 書き込みは `LocalDataChanges` へ通知し、画面は revision で再読込する |
 | `GmailMailbox`      | `GoogleGmailMailbox` / `DemoGmailMailbox`       | OAuth の `--dart-define` がなければデモを選ぶ                        |
-| `PartnerIconStore`  | `FilePartnerIconStore`                          | アプリのドキュメント領域に保存する                                   |
+| `PartnerIconStore`  | `FilePartnerIconStore`                          | アプリ専用の領域（Application Support）に保存する                    |
 | `PartnerIconPicker` | `PluginPartnerIconPicker`                       | image_picker と image_cropper で正方形に切り抜く                     |
 
 Gmail の検索クエリと MIME の本文抽出は `packages/gmail_ticket_source`、メールの解析はチケットサービスごとの package が所有します。
@@ -80,7 +81,7 @@ root widget は locale と themeMode だけを select し、保存中の更新�
 永続化用 snapshot は Flutter に依存せず、表示用 Locale / ThemeMode は controller で変換します。
 
 連続する変更は Future のキューで直列化し、直前の保存成功状態へ差分を適用します。
-保存中も表示値を維持し、設定 UI の操作を無効にします。失敗は呼び出し元へ返し、後続操作は止めません。
+保存中も表示値を維持し、その間の操作はキューに積んで順に保存します。失敗は呼び出し元へ返し、後続操作は止めません。
 controller が破棄された場合は、完了後の状態更新と未開始の操作を行いません。
 
 設定画面の `saveSettingsWithFeedback` が失敗を一度だけ ErrorReporter へ通知し、翻訳済みのフィードバックを表示します。

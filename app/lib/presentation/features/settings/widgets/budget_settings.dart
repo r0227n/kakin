@@ -48,13 +48,16 @@ class BudgetSettings extends ConsumerWidget {
           SettingsTile(
             key: AppKeys.settingsBudgetMonthly,
             label: t.settings.monthly,
-            value: KakinFormats.yen(plan.monthlyRateAt(current) ?? 0),
+            value: KakinFormats.yen(
+              // 開始月が先の月なら、今月ではなく開始月の月額を出す。
+              plan.monthlyRateAt(current.isBefore(start!) ? start : current)!,
+            ),
             onTap: edit,
           ),
           SettingsTile(
             key: AppKeys.settingsBudgetStart,
             label: t.settings.startMonth,
-            value: KakinFormats.yearMonth(start!.year, start.month),
+            value: KakinFormats.yearMonth(start.year, start.month),
             onTap: edit,
           ),
           SettingsTile(
@@ -137,11 +140,16 @@ class _BudgetSheet extends ConsumerStatefulWidget {
 }
 
 class _BudgetSheetState extends ConsumerState<_BudgetSheet> {
-  late final _amount = TextEditingController(
-    text: '${widget.plan?.monthlyRateAt(widget.current) ?? 30000}',
-  );
   late YearMonth _start = widget.plan?.startMonth ?? widget.current;
+  late final _amount = TextEditingController(text: '${_initialAmount()}');
   bool _saving = false;
+
+  /// 開始月が先の月なら、今月ではなく開始月の月額を初期値にする。
+  int _initialAmount() {
+    final current = widget.current;
+    final month = current.isBefore(_start) ? _start : current;
+    return widget.plan?.monthlyRateAt(month) ?? 30000;
+  }
 
   @override
   void dispose() {
@@ -211,6 +219,7 @@ class _OverridesSheetState extends ConsumerState<_OverridesSheet> {
   late YearMonth _month = widget.current.isBefore(widget.start)
       ? widget.start
       : widget.current;
+  bool _saving = false;
 
   @override
   void dispose() {
@@ -222,16 +231,36 @@ class _OverridesSheetState extends ConsumerState<_OverridesSheet> {
     final amount = int.tryParse(_amount.text);
     if (amount == null) return;
     final t = Translations.of(context);
-    await runWithFeedback(
-      context,
-      ref,
-      () => ref.read(budgetUseCaseProvider).setOverride(_month, amount),
+    final month = _month;
+    final saved = await _guard(
+      () => ref.read(budgetUseCaseProvider).setOverride(month, amount),
       failureLog: 'Saving a budget override failed',
       successMessage: t.settings.overrideSaved,
     );
-    if (!mounted) return;
-    _amount.clear();
-    setState(() {});
+    // 失敗したときは入力を残して、直してやり直せるようにする。
+    if (mounted && saved) setState(_amount.clear);
+  }
+
+  /// 保存と解除の重なりを防ぐ。成功したら true。
+  Future<bool> _guard(
+    Future<void> Function() action, {
+    required String failureLog,
+    String? successMessage,
+  }) async {
+    if (_saving) return false;
+    setState(() => _saving = true);
+    final done = await runWithFeedback(
+      context,
+      ref,
+      () async {
+        await action();
+        return true;
+      },
+      failureLog: failureLog,
+      successMessage: successMessage,
+    );
+    if (mounted) setState(() => _saving = false);
+    return done ?? false;
   }
 
   @override
@@ -243,11 +272,18 @@ class _OverridesSheetState extends ConsumerState<_OverridesSheet> {
         ? const <MapEntry<YearMonth, int>>[]
         : (plan.overrides.entries.toList()
             ..sort((a, b) => a.key.compareTo(b.key)));
+    // 開始月から、今月（開始月が先なら開始月）の1年先までを選べる。
+    final lastMonth = widget.current.isBefore(widget.start)
+        ? widget.start
+        : widget.current;
     final months = [
-      for (var m = widget.start, i = 0; i < 24; m = m.next, i++)
-        if (!m.isBefore(widget.current.previous)) m,
+      for (
+        var m = widget.start, i = 0;
+        i < 12 || !m.isAfter(lastMonth);
+        m = m.next, i++
+      )
+        m,
     ];
-    if (!months.contains(_month)) months.insert(0, _month);
     return _SheetFrame(
       title: t.settings.overrides,
       children: [
@@ -274,13 +310,14 @@ class _OverridesSheetState extends ConsumerState<_OverridesSheet> {
               ),
               IconButton(
                 tooltip: t.settings.removeOverride,
-                onPressed: () => runWithFeedback(
-                  context,
-                  ref,
-                  () =>
-                      ref.read(budgetUseCaseProvider).clearOverride(entry.key),
-                  failureLog: 'Removing a budget override failed',
-                ),
+                onPressed: _saving
+                    ? null
+                    : () => _guard(
+                        () => ref
+                            .read(budgetUseCaseProvider)
+                            .clearOverride(entry.key),
+                        failureLog: 'Removing a budget override failed',
+                      ),
                 icon: const Icon(Icons.close),
               ),
             ],
@@ -321,7 +358,9 @@ class _OverridesSheetState extends ConsumerState<_OverridesSheet> {
         ),
         FilledButton(
           key: AppKeys.overrideSave,
-          onPressed: int.tryParse(_amount.text) == null ? null : _add,
+          onPressed: int.tryParse(_amount.text) == null || _saving
+              ? null
+              : _add,
           child: Text(t.settings.addOverride),
         ),
       ],

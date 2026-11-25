@@ -76,8 +76,6 @@ class PerformancePickerSheet extends ConsumerWidget {
     final t = Translations.of(context);
     final palette = context.palette;
     final performances = ref.watch(performancesProvider).value ?? const [];
-    final sorted = [...performances]
-      ..sort((a, b) => b.startsAt.compareTo(a.startsAt));
     return ListView(
       primary: true,
       padding: const EdgeInsets.fromLTRB(
@@ -119,7 +117,7 @@ class PerformancePickerSheet extends ConsumerWidget {
               performanceId: null,
             )),
           ),
-        if (sorted.isEmpty)
+        if (performances.isEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(vertical: AppSpacing.m),
             child: Text(
@@ -127,7 +125,7 @@ class PerformancePickerSheet extends ConsumerWidget {
               style: TextStyle(color: palette.textSecondary),
             ),
           ),
-        for (final performance in sorted)
+        for (final performance in performances)
           _Option(
             key: AppKeys.performanceOption(performance.id),
             title: performance.title,

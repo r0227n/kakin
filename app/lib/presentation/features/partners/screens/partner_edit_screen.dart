@@ -165,7 +165,8 @@ class _PartnerEditScreenState extends ConsumerState<PartnerEditScreen> {
   Widget build(BuildContext context) {
     final t = Translations.of(context);
     final palette = context.palette;
-    final partners = ref.watch(partnersProvider).value;
+    final loadedPartners = ref.watch(partnersProvider);
+    final partners = loadedPartners.value;
     final partner = _isEditing
         ? partners?.where((p) => p.id == widget.partnerId).firstOrNull
         : null;
@@ -188,7 +189,11 @@ class _PartnerEditScreenState extends ConsumerState<PartnerEditScreen> {
         ),
       ),
       body: loading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(
+              child: loadedPartners.hasError
+                  ? Text(t.errors.recordStorage)
+                  : const CircularProgressIndicator(),
+            )
           : ListView(
               padding: const EdgeInsets.all(AppSpacing.m),
               children: [
@@ -207,6 +212,7 @@ class _PartnerEditScreenState extends ConsumerState<PartnerEditScreen> {
                       key: ValueKey(iconPath),
                       name: _name.text,
                       imagePath: iconPath,
+                      toneIndex: widget.partnerId ?? 0,
                       size: 72,
                     ),
                     Expanded(
@@ -235,7 +241,7 @@ class _PartnerEditScreenState extends ConsumerState<PartnerEditScreen> {
                             ],
                           ),
                           Text(
-                            '${t.partner.iconNote}${t.partner.iconLocal}',
+                            '${t.partner.iconNote}\n${t.partner.iconLocal}',
                             style: TextStyle(
                               fontSize: 11,
                               color: palette.textSecondary,

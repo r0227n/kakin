@@ -35,9 +35,6 @@ class LedgerViewController extends _$LedgerViewController {
   /// 次の月へ移る。
   void showNextMonth() => state = state.copyWith(month: state.month.next);
 
-  /// [month] を表示する。
-  void showMonth(YearMonth month) => state = state.copyWith(month: month);
-
   /// 計上基準を切り替える。
   void setBasis(AccountingBasis basis) => state = state.copyWith(basis: basis);
 }

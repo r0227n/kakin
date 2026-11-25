@@ -114,6 +114,10 @@ export 'package:app/application/models/private.dart';
       'package:app/infrastructure/infrastructure.dart',
     ),
     ('presentation/shared/example.dart', 'package:talker/talker.dart'),
+    (
+      'presentation/shared/example.dart',
+      'package:app/presentation/navigation/routes.dart',
+    ),
     ('presentation/shared/example.dart', 'package:app/app/bootstrap.dart'),
     (
       'presentation/shared/example.dart',

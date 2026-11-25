@@ -101,7 +101,11 @@ class CalendarDayCell extends StatelessWidget {
                         child: Text(
                           spendYen == 0
                               ? ' '
-                              : (hidden ? '•' : KakinFormats.number(spendYen)),
+                              : (hidden
+                                    ? Translations.of(
+                                        context,
+                                      ).format.hiddenNumber
+                                    : KakinFormats.number(spendYen)),
                           style: AppTypography.numeric(
                             fontSize: 9.5,
                             color: sub,

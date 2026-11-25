@@ -102,32 +102,14 @@ class TranslationsCommonJa {
   /// ja: '削除する'
   String get delete => '削除する';
 
-  /// ja: '閉じる'
-  String get close => '閉じる';
-
   /// ja: '戻る'
   String get back => '戻る';
-
-  /// ja: '元に戻す'
-  String get undo => '元に戻す';
-
-  /// ja: '任意'
-  String get optional => '任意';
 
   /// ja: 'あとで設定する'
   String get skip => 'あとで設定する';
 
-  /// ja: '次へ'
-  String get next => '次へ';
-
   /// ja: '今日'
   String get today => '今日';
-
-  /// ja: '未設定'
-  String get notSet => '未設定';
-
-  /// ja: '保存中'
-  String get saving => '保存中';
 
   /// ja: '削除しますか？'
   String get deleteConfirmTitle => '削除しますか？';
@@ -217,9 +199,6 @@ class TranslationsFormatJa {
 
   /// ja: '${count}人'
   String people({required Object count}) => '${count}人';
-
-  /// ja: '${count}件'
-  String count({required Object count}) => '${count}件';
 }
 
 // Path: tabs
@@ -395,9 +374,6 @@ class TranslationsCalendarJa {
   /// ja: '支出を追加'
   String get addExpense => '支出を追加';
 
-  /// ja: '${date}'
-  String dayLabel({required Object date}) => '${date}';
-
   /// ja: '支出 ${amount}'
   String daySpend({required Object amount}) => '支出 ${amount}';
 
@@ -440,9 +416,6 @@ class TranslationsListJa {
 
   /// ja: '公演 ${date}'
   String performanceOn({required Object date}) => '公演 ${date}';
-
-  /// ja: '超過'
-  String get overspent => '超過';
 
   /// ja: 'カテゴリで絞り込む'
   String get filterLabel => 'カテゴリで絞り込む';
@@ -490,14 +463,11 @@ class TranslationsPerformanceJa {
   /// ja: '開始日時'
   String get startsAt => '開始日時';
 
-  /// ja: '日付'
-  String get date => '日付';
-
-  /// ja: '開演時刻'
-  String get time => '開演時刻';
-
   /// ja: '会場'
   String get venue => '会場';
+
+  /// ja: '会場（任意）'
+  String get venueOptional => '会場（任意）';
 
   /// ja: '公演を選ぶ'
   String get pick => '公演を選ぶ';
@@ -615,6 +585,9 @@ class TranslationsExpenseJa {
 
   /// ja: 'メモ'
   String get note => 'メモ';
+
+  /// ja: 'メモ（任意）'
+  String get noteOptional => 'メモ（任意）';
 
   /// ja: 'Gmail から取り込み'
   String get importedNote => 'Gmail から取り込み';
@@ -896,12 +869,6 @@ class TranslationsSettingsJa {
 
   /// ja: '推し活代を保存しました'
   String get budgetSaved => '推し活代を保存しました';
-
-  /// ja: '連携中のアカウント'
-  String get gmailAccount => '連携中のアカウント';
-
-  /// ja: '同期の失敗'
-  String get gmailFailedAt => '同期の失敗';
 }
 
 // Path: onboarding
@@ -989,12 +956,6 @@ class TranslationsOnboardingJa {
 
   /// ja: '連携と解除は設定画面からいつでもできます'
   String get gmailLaterNote => '連携と解除は設定画面からいつでもできます';
-
-  /// ja: '決済に関するご案内'
-  String get sampleSubject => '決済に関するご案内';
-
-  /// ja: '自動'
-  String get sampleAuto => '自動';
 }
 
 // Path: errors
@@ -1044,15 +1005,9 @@ extension on Translations {
       'common.save' => '保存する',
       'common.cancel' => 'キャンセル',
       'common.delete' => '削除する',
-      'common.close' => '閉じる',
       'common.back' => '戻る',
-      'common.undo' => '元に戻す',
-      'common.optional' => '任意',
       'common.skip' => 'あとで設定する',
-      'common.next' => '次へ',
       'common.today' => '今日',
-      'common.notSet' => '未設定',
-      'common.saving' => '保存中',
       'common.deleteConfirmTitle' => '削除しますか？',
       'common.deleteConfirmBody' => 'この操作は元に戻せません。',
       'format.weekdays.0' => '月',
@@ -1105,7 +1060,6 @@ extension on Translations {
       'format.daysLeft' => ({required Object days}) => 'あと${days}日',
       'format.shots' => ({required Object count}) => '${count}枚',
       'format.people' => ({required Object count}) => '${count}人',
-      'format.count' => ({required Object count}) => '${count}件',
       'tabs.calendar' => 'カレンダー',
       'tabs.list' => 'リスト',
       'tabs.upcoming' => '今後の公演',
@@ -1146,7 +1100,6 @@ extension on Translations {
       'calendar.nextMonth' => '次の月',
       'calendar.noRecords' => 'この日の記録はありません',
       'calendar.addExpense' => '支出を追加',
-      'calendar.dayLabel' => ({required Object date}) => '${date}',
       'calendar.daySpend' => ({required Object amount}) => '支出 ${amount}',
       'calendar.daySpendHidden' => '支出あり',
       'calendar.dayHasPerformance' => '公演あり',
@@ -1160,7 +1113,6 @@ extension on Translations {
       'list.emptyCategory' => 'このカテゴリの支出はありません',
       'list.emptyMonth' => 'この月の支出はありません',
       'list.performanceOn' => ({required Object date}) => '公演 ${date}',
-      'list.overspent' => '超過',
       'list.filterLabel' => 'カテゴリで絞り込む',
       'upcoming.noPerformances' => 'これからの公演はまだありません。チケット代を記録すると表示します。',
       'upcoming.startsAt' => ({required Object time}) => '${time} 開演',
@@ -1172,9 +1124,8 @@ extension on Translations {
       'performance.editTitle' => '公演を編集',
       'performance.name' => '公演名',
       'performance.startsAt' => '開始日時',
-      'performance.date' => '日付',
-      'performance.time' => '開演時刻',
       'performance.venue' => '会場',
+      'performance.venueOptional' => '会場（任意）',
       'performance.pick' => '公演を選ぶ',
       'performance.pickOptional' => '公演（任意）',
       'performance.none' => '紐づけない',
@@ -1217,6 +1168,7 @@ extension on Translations {
       'expense.recordAndContinue' => '続けて記録',
       'expense.recorded' => '記録しました',
       'expense.note' => 'メモ',
+      'expense.noteOptional' => 'メモ（任意）',
       'expense.importedNote' => 'Gmail から取り込み',
       'expense.delete' => 'この支出を削除',
       'expense.shotCount' => '撮影枚数',
@@ -1313,8 +1265,6 @@ extension on Translations {
         'カレンダーとリストで支出をどの日に置くかの初期値です。残高は常に支払日で計算します。',
       'settings.overrideSaved' => '上書きを保存しました',
       'settings.budgetSaved' => '推し活代を保存しました',
-      'settings.gmailAccount' => '連携中のアカウント',
-      'settings.gmailFailedAt' => '同期の失敗',
       'onboarding.welcomeTitle' => '推し活のお金と予定を、ひとつのアプリで。',
       'onboarding.welcomeBody' => '決めた予算の中で、安心して推し活を楽しむためのアプリです。',
       'onboarding.featureBudgetTitle' => '毎月の推し活代で予算を立てる',
@@ -1346,8 +1296,6 @@ extension on Translations {
         ({required Object email}) => '${email} と連携しました。取り込みはバックグラウンドで続きます。',
       'onboarding.gmailLater' => 'あとで連携する',
       'onboarding.gmailLaterNote' => '連携と解除は設定画面からいつでもできます',
-      'onboarding.sampleSubject' => '決済に関するご案内',
-      'onboarding.sampleAuto' => '自動',
       'errors.unexpected' => '予期しないエラーが発生しました。もう一度お試しください。',
       'errors.settingsWrite' => '設定を保存できませんでした。もう一度お試しください。',
       'errors.recordStorage' => '記録を保存できませんでした。もう一度お試しください。',

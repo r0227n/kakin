@@ -90,7 +90,11 @@ final class GmailConnection {
     final watermark = lastMessageReceivedAt;
     if (watermark != null) return watermark.subtract(const Duration(days: 3));
     final c = connectedAt.toUtc();
-    return DateTime.utc(c.year, c.month - 3, c.day, c.hour, c.minute);
+    // 3ヶ月前に同じ日がない（5/31 → 2/31 など）ときは、翌月へあふれて範囲が
+    // 短くならないよう、その月の末日にする。
+    final lastDay = DateTime.utc(c.year, c.month - 2, 0).day;
+    final day = c.day < lastDay ? c.day : lastDay;
+    return DateTime.utc(c.year, c.month - 3, day, c.hour, c.minute);
   }
 }
 

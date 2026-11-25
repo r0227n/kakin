@@ -18,7 +18,8 @@ class UpcomingScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: Text(t.tabs.upcoming)),
       body: switch (performances) {
-        AsyncData(:final value) => ListView(
+        // 読み直しの間は前の一覧を出し続ける。
+        AsyncValue(:final value?) => ListView(
           key: AppKeys.upcomingScroll,
           padding: const EdgeInsets.fromLTRB(
             AppSpacing.m,

@@ -80,6 +80,12 @@ String? dependencyViolation(String owner, String dependency) {
       return 'Presentation must use injected use cases and ErrorReporter';
     }
     const features = 'package:app/presentation/features/';
+    // routes は全 feature の画面を import するため、feature への依存と同じに扱う。
+    if (dependency.startsWith('package:app/presentation/navigation/') &&
+        (owner.startsWith('package:app/presentation/shared/') ||
+            owner.startsWith('package:app/presentation/dependencies/'))) {
+      return 'Shared state and dependency tokens must not depend on navigation';
+    }
     if (dependency.startsWith(features)) {
       if (owner.startsWith('package:app/presentation/shared/') ||
           owner.startsWith('package:app/presentation/dependencies/')) {

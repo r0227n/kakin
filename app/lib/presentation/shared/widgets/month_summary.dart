@@ -192,7 +192,9 @@ class MonthSummaryCard extends ConsumerWidget {
               child: ledger == null
                   ? _UnconfiguredSummary(
                       spend: yen(overview.spendTotalYen),
-                      note: t.summary.unconfigured,
+                      note: overview.isBudgetConfigured
+                          ? t.summary.beforeStart
+                          : t.summary.unconfigured,
                     )
                   : _LedgerSummary(
                       ledger: ledger,

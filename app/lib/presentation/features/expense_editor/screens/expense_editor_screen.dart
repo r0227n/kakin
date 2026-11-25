@@ -10,11 +10,11 @@ import 'package:app/presentation/features/expense_editor/widgets/amount_keypad.d
 import 'package:app/presentation/features/expense_editor/widgets/category_grid.dart';
 import 'package:app/presentation/features/expense_editor/widgets/cheki_partner_rows.dart';
 import 'package:app/presentation/features/expense_editor/widgets/editor_header.dart';
+import 'package:app/presentation/features/expense_editor/widgets/performance_picker_sheet.dart';
 import 'package:app/presentation/navigation/routes.dart';
 import 'package:app/presentation/shared/controllers/local_data.dart';
 import 'package:app/presentation/shared/feedback/action_feedback.dart';
 import 'package:app/presentation/shared/keys/app_keys.dart';
-import 'package:app/presentation/shared/widgets/performance_picker_sheet.dart';
 import 'package:app/presentation/shared/widgets/visuals.dart';
 import 'package:design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +50,7 @@ class ExpenseEditorScreen extends ConsumerStatefulWidget {
 }
 
 /// 支出ごとのよく使う金額。
-const Map<ExpenseCategory, List<int>> quickAmounts = {
+const Map<ExpenseCategory, List<int>> _quickAmounts = {
   ExpenseCategory.drink: [500, 600, 700, 1000],
   ExpenseCategory.cheki: [1000, 1500, 2000, 3000],
   ExpenseCategory.goods: [1000, 3000, 5000],
@@ -78,6 +78,32 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
   bool get _isEditing => widget.expenseId != null;
 
   int? get _amount => _digits.isEmpty ? null : int.parse(_digits);
+
+  /// チェキ代の追加では入力欄が単価になる。編集では支出の金額そのものを直す。
+  bool get _entersUnitPrice =>
+      _category == ExpenseCategory.cheki && !_isEditing;
+
+  /// 選んでいる公演。自分で選ぶまでは、支払日に公演があればその公演にする。
+  int? get _selectedPerformanceId {
+    if (_performanceTouched || _isEditing) return _performanceId;
+    final performances = ref.read(performancesProvider).value ?? const [];
+    return performances.where((p) => p.startsOn == _paidOn).firstOrNull?.id;
+  }
+
+  /// 選んだチェキ相手のうち、登録が残っている相手と枚数。
+  List<ChekiEntry> get _chekiEntries {
+    final partners = ref.read(partnersProvider).value ?? const [];
+    final partnerUseCase = ref.read(partnerUseCaseProvider);
+    return [
+      for (final MapEntry(key: id, value: count) in _chekiCounts.entries)
+        if (partners.where((p) => p.id == id).firstOrNull case final partner?)
+          (
+            partner: partner,
+            iconPath: partnerUseCase.iconPathOf(partner),
+            count: count,
+          ),
+    ];
+  }
 
   @override
   void initState() {
@@ -111,7 +137,6 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
       context.pop();
       return;
     }
-    final shots = expense.shotCount ?? 1;
     setState(() {
       _editing = expense;
       _loading = false;
@@ -119,11 +144,9 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
       _paidOn = expense.paidOn;
       _performanceId = expense.performance?.id;
       _performanceTouched = true;
-      _digits = expense.category == ExpenseCategory.cheki
-          ? '${expense.amountYen ~/ shots}'
-          : '${expense.amountYen}';
+      _digits = '${expense.amountYen}';
       if (expense.partner case final partner?) {
-        _chekiCounts[partner.id] = shots;
+        _chekiCounts[partner.id] = expense.shotCount ?? 1;
       }
       _note.text = expense.note ?? '';
     });
@@ -159,7 +182,8 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
 
   void _appendDigits(String digits) {
     _amountFocus.requestFocus();
-    final next = (_digits + digits).replaceFirst(RegExp('^0+'), '');
+    // 0円も記録できるよう、先頭の 0 は後ろに数字が続くときだけ除く。
+    final next = (_digits + digits).replaceFirst(RegExp(r'^0+(?=\d)'), '');
     if (next.length > _maxDigits) return;
     setState(() {
       _digits = next;
@@ -179,7 +203,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
   Future<void> _pickPerformance() async {
     final choice = await PerformancePickerSheet.show(
       context,
-      selectedId: _performanceId,
+      selectedId: _selectedPerformanceId,
       allowNone: !_category.requiresPerformance,
     );
     if (choice == null || !mounted) return;
@@ -206,7 +230,10 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
     ).push<List<int>>(context);
     if (selected == null || !mounted) return;
     setState(() {
-      final ids = _isEditing ? selected.take(1).toList() : selected;
+      // 編集する支出の相手は1人。最後に選んだ相手に置き換える。
+      final ids = _isEditing && selected.isNotEmpty
+          ? [selected.last]
+          : selected;
       _chekiCounts.removeWhere((id, _) => !ids.contains(id));
       for (final id in ids) {
         _chekiCounts.putIfAbsent(id, () => 1);
@@ -227,14 +254,14 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
     final note = _note.text.trim();
     if (_category == ExpenseCategory.cheki) {
       return [
-        for (final entry in _chekiCounts.entries)
+        for (final entry in _chekiEntries)
           ExpenseDraft(
             category: _category,
-            amountYen: amount * entry.value,
+            amountYen: _entersUnitPrice ? amount * entry.count : amount,
             paidOn: _paidOn,
-            performanceId: _performanceId,
-            partnerId: entry.key,
-            shotCount: entry.value,
+            performanceId: _selectedPerformanceId,
+            partnerId: entry.partner.id,
+            shotCount: entry.count,
             note: note,
           ),
       ];
@@ -244,7 +271,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
         category: _category,
         amountYen: amount,
         paidOn: _paidOn,
-        performanceId: _performanceId,
+        performanceId: _selectedPerformanceId,
         note: note,
       ),
     ];
@@ -293,7 +320,8 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
       title: t.common.deleteConfirmTitle,
       body: t.common.deleteConfirmBody,
     );
-    if (!confirmed || !mounted) return;
+    if (!confirmed || !mounted || _saving) return;
+    setState(() => _saving = true);
     final deleted = await runWithFeedback(
       context,
       ref,
@@ -303,18 +331,20 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
       },
       failureLog: 'Deleting an expense failed',
     );
-    if ((deleted ?? false) && mounted) context.pop();
+    if (!mounted) return;
+    setState(() => _saving = false);
+    if (deleted ?? false) context.pop();
   }
 
   /// 保存できないときの CTA の文言。保存できるなら null。
   String? _blocker(Translations t) {
-    if (_category.requiresPerformance && _performanceId == null) {
+    if (_category.requiresPerformance && _selectedPerformanceId == null) {
       return t.expense.selectPerformanceCta;
     }
-    if (_category == ExpenseCategory.cheki && _chekiCounts.isEmpty) {
+    if (_category == ExpenseCategory.cheki && _chekiEntries.isEmpty) {
       return t.expense.selectPartnerCta;
     }
-    if (_amount == null || _amount == 0) return t.expense.enterAmount;
+    if (_amount == null) return t.expense.enterAmount;
     return null;
   }
 
@@ -323,44 +353,33 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
     final t = Translations.of(context);
     final palette = context.palette;
     final performances = ref.watch(performancesProvider).value ?? const [];
-    if (!_performanceTouched && !_isEditing) {
-      // 支払日に公演があれば、その公演を初期値にする。
-      final sameDay = performances.where((p) => p.startsOn == _paidOn);
-      if (sameDay.isNotEmpty) _performanceId = sameDay.first.id;
-    }
+    final selectedPerformanceId = _selectedPerformanceId;
     final performance = performances
-        .where((p) => p.id == _performanceId)
+        .where((p) => p.id == selectedPerformanceId)
         .firstOrNull;
-    final partners = ref.watch(partnersProvider).value ?? const [];
-    final partnerUseCase = ref.read(partnerUseCaseProvider);
-    final entries = <ChekiEntry>[
-      for (final id in _chekiCounts.keys)
-        if (partners.where((p) => p.id == id).firstOrNull case final partner?)
-          (
-            partner: partner,
-            iconPath: partnerUseCase.iconPathOf(partner),
-            count: _chekiCounts[id]!,
-          ),
-    ];
+    ref.watch(partnersProvider);
+    final entries = _chekiEntries;
     final isCheki = _category == ExpenseCategory.cheki;
+    final entersUnitPrice = _entersUnitPrice;
     final amount = _amount ?? 0;
-    final shots = _chekiCounts.values.fold(0, (a, b) => a + b);
+    final shots = entries.fold(0, (total, entry) => total + entry.count);
     final blocker = _blocker(t);
     final cta =
         blocker ??
-        (isCheki && !_isEditing
+        (_isEditing
+            ? t.common.save
+            : isCheki
             ? t.expense.recordCheki(
                 count: entries.length,
                 amount: KakinFormats.yen(amount * shots),
               )
-            : _isEditing
-            ? t.common.save
-            : t.expense.recordAmount(
-                amount: KakinFormats.yen(isCheki ? amount * shots : amount),
-              ));
-    final hint = isCheki
+            : t.expense.recordAmount(amount: KakinFormats.yen(amount)));
+    final hint = entersUnitPrice
         ? t.expense.chekiTotal(amount: KakinFormats.yen(amount * shots))
         : (_drinkPrefilled ? t.expense.drinkPrefilled : null);
+    final amountLabel = entersUnitPrice
+        ? t.expense.unitPrice
+        : t.expense.amount;
     final canSave = blocker == null && !_saving && !_loading;
 
     final header = EditorHeader(
@@ -398,12 +417,12 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
             if (isCheki)
               ChekiPartnerRows(
                 entries: entries,
-                unitPriceYen: amount,
+                amountFor: (count) => entersUnitPrice ? amount * count : amount,
                 onPick: _pickPartners,
                 onCountChanged: _setCount,
               ),
             Text(
-              isCheki ? t.expense.unitPrice : t.expense.amount,
+              amountLabel,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
@@ -414,7 +433,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
               text: KakinFormats.yen(amount),
               isEmpty: _amount == null,
               fontSize: isCheki ? 30 : 44,
-              label: isCheki ? t.expense.unitPrice : t.expense.amount,
+              label: amountLabel,
               focusNode: _amountFocus,
               onDigits: _appendDigits,
               onBackspace: _backspace,
@@ -424,7 +443,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
                 hint,
                 style: TextStyle(fontSize: 12, color: palette.textSecondary),
               ),
-            if (quickAmounts[_category] case final presets?)
+            if (_quickAmounts[_category] case final presets?)
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
@@ -452,7 +471,7 @@ class _ExpenseEditorScreenState extends ConsumerState<ExpenseEditorScreen> {
               controller: _note,
               maxLength: 200,
               decoration: InputDecoration(
-                labelText: '${t.expense.note}（${t.common.optional}）',
+                labelText: t.expense.noteOptional,
                 counterText: '',
                 isDense: true,
               ),
